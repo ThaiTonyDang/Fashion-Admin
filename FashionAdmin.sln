@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Utilities", "FashionWeb.Utilities\FashionWeb.Utilities.csproj", "{A6D87B9C-A169-4838-998B-3387E6727C09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionWeb.Admin", "FashionWeb.Admin\FashionWeb.Admin.csproj", "{3DD301C5-3A02-40E2-870F-F83D10CFA18F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionWeb.Admin", "FashionWeb.Admin\FashionWeb.Admin.csproj", "{310D88A1-3389-4744-9A76-C2BD0DF185FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{A6D87B9C-A169-4838-998B-3387E6727C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6D87B9C-A169-4838-998B-3387E6727C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6D87B9C-A169-4838-998B-3387E6727C09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{310D88A1-3389-4744-9A76-C2BD0DF185FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{310D88A1-3389-4744-9A76-C2BD0DF185FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{310D88A1-3389-4744-9A76-C2BD0DF185FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310D88A1-3389-4744-9A76-C2BD0DF185FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
