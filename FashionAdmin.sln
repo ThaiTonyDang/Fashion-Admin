@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Utilities", "FashionWeb.Utilities\FashionWeb.Utilities.csproj", "{A6D87B9C-A169-4838-998B-3387E6727C09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionWeb.Admin", "FashionWeb.Admin\FashionWeb.Admin.csproj", "{3DD301C5-3A02-40E2-870F-F83D10CFA18F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Admin", "FashionWeb.Admin\FashionWeb.Admin.csproj", "{3DD301C5-3A02-40E2-870F-F83D10CFA18F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pieline", "Pieline", "{5D883279-0501-49E7-868B-FF3EAC98F433}"
+	ProjectSection(SolutionItems) = preProject
+		bitbucket-pipelines.yml = bitbucket-pipelines.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
