@@ -1,198 +1,187 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - FashionWeb.Admin</title>	
-	<link rel="icon"
-		  type="image/png"
-		  sizes="32x32"
-		  href="~/vendors/images/snake_38881.png" />
-	
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-		  rel="stylesheet" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
-	<link href="~/vendors/styles/core.css" rel="stylesheet" type="text/css" />
-	<link href="~/vendors/styles/icon-font.min.css" rel="stylesheet" type="text/css" />
-	<link href="~/vendors/styles/style.css" rel="stylesheet" />
-	
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FashionWeb.Admin</title>
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="~/vendors/images/snake_38881.png" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <link href="~/vendors/styles/core.css" rel="stylesheet" type="text/css" />
+    <link href="~/vendors/styles/icon-font.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/vendors/styles/style.css" rel="stylesheet" />
+
 </head>
 <body class="header-dark sidebar-dark">
-	
-	<div class="header">
-		<div class="header-left">
-			<div class="menu-icon bi bi-list"></div>
-			<div class="search-toggle-icon bi bi-search" data-toggle="header_search"></div>
-			<div class="header-search">
-				<form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="header-right">
-			<div class="dashboard-setting user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-						<i class="dw dw-settings2"></i>
-					</a>
-				</div>
-			</div>
-			<div class="user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-						<i class="icon-copy dw dw-notification"></i>
-						<span class="badge notification-active"></span>
-					</a>
-				</div>
-			</div>
-			<div class="user-info-dropdown">
-				<div class="dropdown">
-					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
-						</span>
-						<span class="user-name">Ross C. Lopez</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
-						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
-					</div>
-				</div>
-			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
-			</div>
-		</div>
-	</div>
 
-	<div class="left-side-bar">
-		<div class="brand-logo">
-			<a href="index.html">
-				<img src="~/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
-				<img src="~/vendors/images/DirectAdminLogo.svg.png"alt="" class="light-logo">
-			</a>
-			<div class="close-sidebar" data-toggle="left-sidebar-close">
-				<i class="ion-close-round"></i>
-			</div>
-		</div>
-		<div class="menu-block customscroll mCustomScrollbar _mCS_3">
-			<div id="mCSB_3" class="mCustomScrollBox mCS-dark-2 mCSB_vertical mCSB_inside" tabindex="0" style="max-height: none;">
-				<div id="mCSB_3_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
-					<div class="sidebar-menu icon-style-1 icon-list-style-1">
-						<ul id="accordion-menu" style="style">
-							<li class="dropdown show">
-								<a href="javascript:;" class="dropdown-toggle" data-option="on">
-									<span class="micon bi bi-house"></span><span class="mtext">Home</span>
-								</a>
-								<ul class="submenu" style="display: block; list-style:none">
-									<li><a href="~/Home/Index" class="active dropdown-toggle no-arrow">
-											<span class="micon bi bi-house-gear"></span>HOME PAGE
-										</a>
-									</li>
-									<li>
-										<a href="~/Home/Index" class="dropdown-toggle no-arrow">
-											<span class="micon bi bi-cart4"></span><span class="mtext">Product</span>
-										</a>
-									</li>
-									<li>
-										<a href="~/Category/Index" class="dropdown-toggle no-arrow">
-											<span class="micon bi bi-amd"></span><span class="mtext">Category</span>
-										</a>
-									</li>
-									<li>
-										<a href="chat.html" class="dropdown-toggle no-arrow">
-											<span class="micon bi bi-chat-right-dots"></span><span class="mtext">Chat</span>
-										</a>
-									</li>
-									<li>
-										<a href="invoice.html" class="dropdown-toggle no-arrow">
-											<span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
-										</a>
-									</li>
-								</ul>
-							</li>
-					
-							<li>
-								<div class="dropdown-divider"></div>
-							</li>
-							<li>
-								<div class="sidebar-small-cap">Extra</div>
-							</li>
-							<li>
-								<a href="javascript:;" class="dropdown-toggle" data-option="off">
-									<span class="micon bi bi-file-pdf"></span><span class="mtext">Documentation</span>
-								</a>
-								<ul class="submenu">
-									<li><a href="introduction.html">Introduction</a></li>
-									<li><a href="getting-started.html">Getting Started</a></li>
-									<li><a href="color-settings.html">Color Settings</a></li>
-									<li>
-										<a href="third-party-plugins.html">Third Party Plugins</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</div><div id="mCSB_3_scrollbar_vertical" class="mCSB_scrollTools mCSB_3_scrollbar mCS-dark-2 mCSB_scrollTools_vertical mCSB_scrollTools_onDrag_expand" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_3_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; display: block; height: 628px; max-height: 837px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
-			</div>
-		</div>
-	</div>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon bi bi-list"></div>
+            <div class="search-toggle-icon bi bi-search" data-toggle="header_search"></div>
+            <div class="header-search">
+                <form>
+                    <div class="form-group mb-0">
+                        <i class="dw dw-search2 search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Search Here">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                                <i class="ion-arrow-down-c"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-2 col-form-label">From</label>
+                                    <div class="col-sm-12 col-md-10">
+                                        <input class="form-control form-control-sm form-control-line" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-2 col-form-label">To</label>
+                                    <div class="col-sm-12 col-md-10">
+                                        <input class="form-control form-control-sm form-control-line" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-2 col-form-label">Subject</label>
+                                    <div class="col-sm-12 col-md-10">
+                                        <input class="form-control form-control-sm form-control-line" type="text">
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                        <i class="dw dw-settings2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            <img src="~/vendors/images/photo1.jpg" alt="">
+                        </span>
+                        <span class="user-name">Tony Đặng</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
+                        <a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+                    </div>
+                </div>
+            </div>
+            <div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
+            </div>
+        </div>
+    </div>
 
-	<div class="mobile-menu-overlay"></div>
+    <div class="left-side-bar">
+        <div class="brand-logo">
+            <a href="~/Home/Index">
+                <img src="~/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
+                <img src="~/vendors/images/DirectAdminLogo.svg.png" alt="" class="light-logo">
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll mCustomScrollbar _mCS_3">
+            <div id="mCSB_3" class="mCustomScrollBox mCS-dark-2 mCSB_vertical mCSB_inside" tabindex="0" style="max-height: none;">
+                <div id="mCSB_3_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
+                    <div class="sidebar-menu icon-style-1 icon-list-style-1">
+                        <ul id="accordion-menu" style="">
+                            <li class="dropdown show">
+                                <a href="javascript:;" class="dropdown-toggle" data-option="on">
+                                    <span class="micon bi bi-house"></span><span class="mtext">HOME</span>
+                                </a>
+                                <ul class="submenu" style="display: block; list-style:none">
+                                    <li>
+                                        <a href="~/Home/Index" class="active dropdown-toggle no-arrow">
+                                            <span class="micon bi bi-house-gear"></span>Home Page
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Product/Index" class="dropdown-toggle no-arrow">
+                                            <span class="micon bi bi-amd"></span><span class="mtext">Product</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Product/Index" target="_blank" class="dropdown-toggle no-arrow">
+                                            <span class="micon bi bi-layout-text-window-reverse"></span>
+                                            <span class="mtext">
+                                                Orders
+                                                <img src="vendors/images/coming-soon.png" alt="" width="25" class="mCS_img_loaded">
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="~/chat.html" class="dropdown-toggle no-arrow">
+                                            <span class="micon bi bi-chat-right-dots"></span><span class="mtext">Chat</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-	<div class="main-container">
-		<div class="footer-wrap pd-20 mb-20 card-box">
-			ADMIN - Admin Template By
-			<a href="https://bitbucket.org/dtranthai/fashion-admin/src/develop/" target="_blank" style="text-decoration:none">
-				TONY ĐẶNG AND APTECH TEAM</a>
-		</div>
-	</div>
+                            <li>
+                                <div class="dropdown-divider"></div>
+                            </li>
+                            <li>
+                                <div class="sidebar-small-cap">Extra</div>
+                            </li>                      
+                        </ul>
+                    </div>
+                </div>
+                <div id="mCSB_3_scrollbar_vertical"
+                     class="mCSB_scrollTools mCSB_3_scrollbar mCS-dark-2 mCSB_scrollTools_vertical mCSB_scrollTools_onDrag_expand"
+                     style="display: block;">
+                    <div class="mCSB_draggerContainer">
+                        <div id="mCSB_3_dragger_vertical" class="mCSB_dragger"
+                             style="position: absolute; min-height: 30px; display: block; height: 628px; max-height: 837px; top: 0px;">
+                            <div class="mCSB_dragger_bar" style="line-height: 30px;">
+                            </div>
+                        </div>
+                        <div class="mCSB_draggerRail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	@RenderBody()
+    <div class="mobile-menu-overlay"></div>
+    @RenderBody()
 
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/vendors/scripts/core.js"></script>
-	<script src="~/vendors/scripts/script.min.js"></script>
-	<script src="~/vendors/scripts/layout-settings.js"></script>
-	<script src="~/src/plugins/apexcharts/apexcharts.min.js"></script>
-	<script src="~/src/plugins/datatables/js/jquery.datatables.min.js"></script>
-	<script src="~/src/plugins/datatables/js/datatables.bootstrap4.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendors/scripts/core.js"></script>
+    <script src="~/vendors/scripts/script.min.js"></script>
+    <script src="~/vendors/scripts/layout-settings.js"></script>
+    <script src="~/src/plugins/apexcharts/apexcharts.min.js"></script>
 
-	@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
