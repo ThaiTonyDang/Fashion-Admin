@@ -113,13 +113,16 @@
 			<div id="mCSB_3" class="mCustomScrollBox mCS-dark-2 mCSB_vertical mCSB_inside" tabindex="0" style="max-height: none;">
 				<div id="mCSB_3_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
 					<div class="sidebar-menu icon-style-1 icon-list-style-1">
-						<ul id="accordion-menu">
+						<ul id="accordion-menu" style="style">
 							<li class="dropdown show">
 								<a href="javascript:;" class="dropdown-toggle" data-option="on">
 									<span class="micon bi bi-house"></span><span class="mtext">Home</span>
 								</a>
-								<ul class="submenu" style="display: block;">
-									<li><a href="~/Home/Index" class="active">HOME PAGE</a></li>
+								<ul class="submenu" style="display: block; list-style:none">
+									<li><a href="~/Home/Index" class="active dropdown-toggle no-arrow">
+											<span class="micon bi bi-house-gear"></span>HOME PAGE
+										</a>
+									</li>
 									<li>
 										<a href="~/Home/Index" class="dropdown-toggle no-arrow">
 											<span class="micon bi bi-cart4"></span><span class="mtext">Product</span>
@@ -130,19 +133,19 @@
 											<span class="micon bi bi-amd"></span><span class="mtext">Category</span>
 										</a>
 									</li>
+									<li>
+										<a href="chat.html" class="dropdown-toggle no-arrow">
+											<span class="micon bi bi-chat-right-dots"></span><span class="mtext">Chat</span>
+										</a>
+									</li>
+									<li>
+										<a href="invoice.html" class="dropdown-toggle no-arrow">
+											<span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
+										</a>
+									</li>
 								</ul>
 							</li>
-
-							<li>
-								<a href="chat.html" class="dropdown-toggle no-arrow">
-									<span class="micon bi bi-chat-right-dots"></span><span class="mtext">Chat</span>
-								</a>
-							</li>
-							<li>
-								<a href="invoice.html" class="dropdown-toggle no-arrow">
-									<span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
-								</a>
-							</li>
+					
 							<li>
 								<div class="dropdown-divider"></div>
 							</li>
