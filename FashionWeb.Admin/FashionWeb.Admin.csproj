@@ -3,17 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\FashionWeb.Domain\FashionWeb.Domain.csproj" />
-    <ProjectReference Include="..\FashionWeb.Infrastructure\FashionWeb.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

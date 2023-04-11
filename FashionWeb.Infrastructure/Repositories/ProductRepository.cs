@@ -19,7 +19,7 @@ namespace FashionWeb.Infrastructure.Repositories
 
         public async Task<bool> AddAsync(Product product)
         {
-            if (product.CategoryId == default || product.CategoryId == default(Guid))
+            if (product.Id == default(Guid) || product.CategoryId == default(Guid))
                 return false;
 
             var productEntity = _appDbContext.Products
