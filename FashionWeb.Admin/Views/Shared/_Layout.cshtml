@@ -118,7 +118,7 @@
                                 <a href="javascript:;" class="dropdown-toggle" data-option="on">
                                     <span class="micon bi bi-house"></span><span class="mtext">HOME</span>
                                 </a>
-                                <ul class="submenu" style="display: block; list-style:none">
+                                <ul class="submenu" style="display: block">
                                     <li>
                                         <a href="~/Home/Index" class="active dropdown-toggle no-arrow">
                                             <span class="micon bi bi-house-gear"></span>Home Page
@@ -130,7 +130,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="~/Product/Index" target="_blank" class="dropdown-toggle no-arrow">
+                                        <a href="~/Order/Index" target="_blank" class="dropdown-toggle no-arrow">
                                             <span class="micon bi bi-layout-text-window-reverse"></span>
                                             <span class="mtext">
                                                 Orders
@@ -180,6 +180,7 @@
     <script src="~/vendors/scripts/core.js"></script>
     <script src="~/vendors/scripts/script.min.js"></script>
     <script src="~/vendors/scripts/layout-settings.js"></script>
+    <script src="~/vendors/scripts/script.js"></script>
     <script src="~/src/plugins/apexcharts/apexcharts.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

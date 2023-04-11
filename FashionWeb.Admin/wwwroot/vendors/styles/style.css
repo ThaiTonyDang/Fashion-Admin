@@ -1961,10 +1961,6 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before
         padding-left: 15px
     }
 
-    .sidebar-menu .submenu li:hover > a:before {
-        left: 18px
-    }
-
     .sidebar-menu .submenu li a.active, .sidebar-menu .submenu li a:hover {
         color: #fff;
         background-color: rgba(0,0,0,.4)
