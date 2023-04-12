@@ -10,5 +10,6 @@ namespace FashionWeb.Infrastructure.Repositories
     public interface IProductRepository
     {
         public Task<bool> AddAsync(Product product);
+        public Task<List<Product>> Products();
     }
 }

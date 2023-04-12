@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.Internal;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,12 @@ namespace FashionWeb.Utilities.GlobalHelpers
                 await formFile.CopyToAsync(memoryStream);
                 return memoryStream.ToArray();
             }
+        }
+
+        public static string GetPriceFormat(this decimal price)
+        {
+            CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+            return string.Format(cultureInfo, "{0:C}", price);
         }
     }
 }

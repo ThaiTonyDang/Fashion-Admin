@@ -90,5 +90,34 @@ namespace FashionWeb.Tests.ServicesTest
             // Assert
             Assert.False(isSuccess);
         }
+
+
+        [Fact]
+        public async Task Should_GetListProductAsync_Return_Success()
+        {
+            // Arrage
+            var productExpect = new Product()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Quần Kaki",
+                CategoryId = Guid.NewGuid()
+            };
+
+            var productsExpect = new List<Product>() { productExpect};
+            _productRepoMock.Setup(mbox => mbox.Products()).ReturnsAsync(productsExpect);
+
+            // Act
+            var productService = new ProductService(_productRepoMock.Object, _fileService.Object);
+            var productsAct = await productService.GetListProducts();
+
+            // Assert
+            Assert.Equal(productsExpect.Count, productsAct.Count);
+
+            var productFirtItemAct = productsAct.FirstOrDefault();
+
+            Assert.NotNull(productFirtItemAct!.Name);
+            Assert.Equal(productExpect.Name, productFirtItemAct!.Name);
+            Assert.Equal(productExpect.Id, productFirtItemAct!.Id);
+        }
     }
 }

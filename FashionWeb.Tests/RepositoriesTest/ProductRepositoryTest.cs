@@ -98,6 +98,24 @@ namespace ChelseaWeb.Tests.RepositoriesTest
             Assert.Equal(countExpext, _dbContext.Products.ToList().Count());
         }
 
+        [Fact]
+        public async Task Should_GetListProduct_Return_Success()
+        {
+            // Arrage
+            var productListExpect = LoadProducSampletData();
+
+            // Act
+            var productListAct = await _productRepository.Products();
+
+            // Assert
+            Assert.Equal(productListExpect.Count, productListAct.Count);
+
+            var firtItemExpect = productListExpect.FirstOrDefault();
+            var firtItemAct = productListAct.FirstOrDefault();
+
+            Assert.Equal(firtItemExpect!.Name, firtItemAct!.Name);
+        }
+
         private List<Product> LoadProducSampletData()
         {
             var listCates = LoadCategorySampleData();

@@ -10,5 +10,7 @@ namespace FashionWeb.Domain.Services
     public interface IProductService
     {
         public Task<bool> AddProductAsync(ProductItemViewModel productItemViewModel);
+        public Task<List<ProductItemViewModel>> GetListProducts();
+        public Task<ProductViewModel> GetProductViewModel();
     }
 }

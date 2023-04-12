@@ -1,6 +1,7 @@
 ﻿using FashionWeb.Infrastructure.DataContext;
 using FashionWeb.Infrastructure.Models;
 using FashionWeb.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,11 @@ namespace FashionWeb.Infrastructure.Repositories
             }
 
             return false;
+        }
+
+        public Task<List<Product>> Products()
+        {
+            return _appDbContext.Products.ToListAsync();
         }
     }
 }
