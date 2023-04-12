@@ -1,4 +1,7 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).on("click", "#closemodal", function () {
+    $('#success-modal').hide();
+})
 
-// Write your JavaScript code.
+function loadImage(event) {
+    document.getElementById('previewImage').src = window.URL.createObjectURL(event.target.files[0]);
+}
