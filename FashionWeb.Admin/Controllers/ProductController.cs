@@ -2,6 +2,7 @@
 using FashionWeb.Domain.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FashionWeb.Admin.Controllers
@@ -16,9 +17,23 @@ namespace FashionWeb.Admin.Controllers
 			_categoryService = categoryService;
 			_productService = productService;
 		}
-		public IActionResult Index()
+
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			var productViewModel = await _productService.GetProductViewModel();
+			foreach (var productItem in productViewModel.ListProduct)
+			{
+				productItem.Categories = await _categoryService.GetListCategoryAsync();
+				var productCategory = productItem.Categories.Where(c => c.CategoryId == productItem.CategoryId)
+													  .FirstOrDefault();
+				if (productCategory != null)
+				{
+					productItem.CategoryName = productCategory.Name;
+				}
+
+			}
+
+				return View(productViewModel);			
 		}
 
 		[HttpGet]

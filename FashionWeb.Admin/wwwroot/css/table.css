@@ -1,0 +1,37 @@
+﻿.tm-product-delete-link {
+    position: relative;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: #394e64;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.bi-trash-fill::before {
+    content: "\f5dd"
+}
+
+.bi::before, [class*=" bi-"]::before, [class^=bi-]::before {
+    display: inline-block;
+    font-display: block;
+    font-family: bootstrap-icons !important;
+    font-style: normal;
+    font-weight: 400 !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: -.125em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.bi-trash-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 2px;
+    font-size: 1.5rem;
+    color: white;
+}

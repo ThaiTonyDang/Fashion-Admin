@@ -1,7 +1,17 @@
-﻿@{
+﻿@using FashionWeb.Domain.ViewModels;
+@model ProductViewModel
+
+@{
 	ViewData["Title"] = "Product Page";
 	Layout = "_Layout";
 }
+
+@{
+	var index = 0;
+}
+
+<link href="~/css/table.css" rel="stylesheet" />
+
 <div class="main-container">
 	<div class="pd-ltr-20 xs-pd-20-10"> 
 		<div class="pd-20 card-box mb-30">
@@ -20,20 +30,63 @@
 			</div>
 			<table class="table table-bordered">
 				<thead>
-					<tr style="text-align:center">
-						<th scope="col">#</th>
-						<th scope="col">Product Name</th>
-						<th scope="col">Image</th>
-						<th scope="col">Category</th>
+					<tr style="text-align:center; font-weight:700">
+						<th scope="col">
+							<input type="checkbox" name="select_all" value="1" class="checkBoxAll">
+						</th>
+						<th scope="col">Name</th>					
 						<th scope="col">Provider</th>
 						<th scope="col">Price</th>
 						<th scope="col">Quantity In Stock</th>
+						<th scope="col">Type</th>
+						<th scope="col">Category</th>
+						<th scope="col">Image</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
 					</tr>
 				</thead>
-				<tbody>
-
+				<tbody style="text-align:center; font-size:15px">
+					@foreach (var product in Model.ListProduct)
+					{
+						<tr>
+							<th scope="row">
+								<input asp-for="@Model.ListProduct[index].IsCheck" type="checkbox" class="product__checkbox" />
+								<input asp-for="@Model.ListProduct[index].Id" id="product-id__@index" type="hidden" class="product__id" />
+							</th>
+							<td class="table-plus sorting_1" tabindex="0">@product.Name</td>
+							<td>@product.Provider</td>
+							<td>@product.Price</td>
+							<td>@product.UnitsInStock</td>
+							<td>@product.Type</td>
+							<td>@product.CategoryName</td>
+							<td>
+								@if (string.IsNullOrEmpty(product.ImagePath))
+								{
+									<img src="~/img/product-defaut.png" class="product-image" style="height:100px; width:100px">
+								}
+								else
+								{
+									<img src="~/Product/@product.ImagePath" clas="product-image" style="height:100px; width:100px">
+									<input type="hidden" asp-for="@product.ImagePath">
+								}
+							</td>
+							<td>
+								<a href="~/Product/Edit/@product.Id" class="btn btn-primary" style=" border-radius:20%">
+									<i class="bi bi-pen"></i>
+									Edit
+								</a>
+							</td>
+							<td>
+								<a class="tm-product-delete-link"
+								   data-toggle="modal"
+								   data-target="#DeleteModal"
+								   data-productid="@Model.ListProduct[index].Id">
+								   <i class="icon-copy bi bi-trash-fill"></i>
+								</a>
+							</td>
+						</tr>
+						index++;
+					}
 				</tbody>
 			</table>
 

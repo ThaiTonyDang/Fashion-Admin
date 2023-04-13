@@ -6,6 +6,7 @@ using FashionWeb.Utilities.GlobalHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,6 +66,33 @@ namespace FashionWeb.Domain.Services
             }
 
             return false;
+        }
+
+        public async Task<ProductViewModel> GetProductViewModel()
+        {
+            var productViewModel = new ProductViewModel();
+            productViewModel.ListProduct = await GetListProducts();
+            return productViewModel;
+        }
+
+        public async Task<List<ProductItemViewModel>> GetListProducts()
+        {
+            var products = await _productRepository.Products();
+            var listProducts = products.Select(p => new ProductItemViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price.GetPriceFormat(),
+                Provider = p.Provider,
+                Description = p.Description,
+                ImagePath = p.ImagePath,
+                UnitsInStock = p.UnitsInStock,
+                Enable = p.Enable,
+                Type = p.Type,
+                CategoryId = p.CategoryId
+            }).ToList();
+
+            return listProducts;
         }
     }
 }
