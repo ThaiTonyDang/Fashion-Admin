@@ -41,7 +41,7 @@ namespace FashionWeb.Domain.Services
                         Id = productItemViewModel.Id,
                         Name = productItemViewModel.Name,
                         Provider = productItemViewModel.Provider,
-                        Price = decimal.Parse(productItemViewModel.Price),
+                        Price = productItemViewModel.Price,
                         Description = productItemViewModel.Description,
                         CategoryId = productItemViewModel.CategoryId,
                         ImagePath = imagePath,
@@ -82,7 +82,7 @@ namespace FashionWeb.Domain.Services
             {
                 Id = p.Id,
                 Name = p.Name,
-                Price = p.Price.GetPriceFormat(),
+                Price = p.Price,
                 Provider = p.Provider,
                 Description = p.Description,
                 ImagePath = p.ImagePath,
@@ -93,6 +93,78 @@ namespace FashionWeb.Domain.Services
             }).ToList();
 
             return listProducts;
+        }
+
+        public async Task<bool> EditProductAsync(ProductItemViewModel productItemViewModel)
+        {
+            try
+            {
+                var imagePath = DISPLAY.IMAGE_PATH;
+
+                if (productItemViewModel.ImagePath != null)
+                {
+                    imagePath = productItemViewModel.ImagePath;
+                }    
+
+                if (productItemViewModel.Image != null )
+                {
+                    var fileName = productItemViewModel.Image.FileName;
+                    imagePath = _fileService.RefactorFileName(fileName);
+                }
+
+                var product = new Product
+                {
+                    Id = productItemViewModel.Id,
+                    Name = productItemViewModel.Name,
+                    Price = productItemViewModel.Price,
+                    Provider = productItemViewModel.Provider,
+                    CategoryId = productItemViewModel.CategoryId,
+                    Description = productItemViewModel.Description,
+                    UnitsInStock = productItemViewModel.UnitsInStock,
+                    Type = productItemViewModel.Type,
+                    Enable = productItemViewModel.GetEnable(),
+                    ImagePath = imagePath
+                };
+
+                var result = await _productRepository.EditAsync(product);
+                if (result)
+                {
+                    if (productItemViewModel.Image != null)
+                    {                     
+                        var data = await productItemViewModel.Image.GetBytes();
+                        var folderExtra = nameof(Product);
+                        await this._fileService.SaveFile(folderExtra, imagePath, data);           
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        public async Task<ProductItemViewModel> GetProductItemByIdAsync(Guid id)
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+            var productItem = new ProductItemViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Provider = product.Provider,
+                CategoryId = product.CategoryId,
+                Description = product.Description,
+                UnitsInStock = product.UnitsInStock,
+                Type = product.Type,
+                Enable = product.Enable,
+                ImagePath = product.ImagePath
+            };
+
+            return productItem;
         }
     }
 }

@@ -1,0 +1,162 @@
+﻿@using FashionWeb.Utilities.GlobalHelpers;
+@model FashionWeb.Domain.ViewModels.ProductItemViewModel
+
+@{
+    ViewData["Title"] = "Product Add";
+    Layout = "_Layout";
+
+    var selectList = Model.Categories.Select(c => new SelectListItem
+                    {
+                        Value = c.CategoryId.ToString(),
+                        Text = c.Name.ToString(),
+                        Selected = (c.CategoryId == Model.CategoryId)
+                    }).ToList();
+
+    var listPermission = new Dictionary<bool, string>()
+    {
+        {true,  DISPLAY.ENABLE},
+        {false,  DISPLAY.DISABLE},
+    };
+
+    var listPer = listPermission.Select(s => new SelectListItem
+            {
+                Value =s.Key.ToString(),
+                Text = s.Value.ToString(),
+    }).ToList();
+}
+
+<partial name="_Alert" />
+
+@section Scripts {
+        <script src="@Url.Content("~/js/site.js")"></script>
+        <script src="@Url.Content("~/js/validation.js")"></script>
+}
+
+<div class="main-container">
+   <div class="page-header">
+      <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="title">
+                            <h4>EDIT PRODUCT</h4>
+                        </div>
+                        <nav aria-label="breadcrumb" role="navigation">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="~/Home/Index">Home</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <a href="~/Product/Index">Product Table</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                April 11, 2023
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">Export List</a>
+                                <a class="dropdown-item" href="#">Policies</a>
+                                <a class="dropdown-item" href="#">View Assets</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+   </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title">PRODUCT INFORMATION</h4>
+                    <p class="card-title-desc" style="color:firebrick">Fill all information below</p>
+
+                    <form asp-action="Edit" asp-controller="Product" id="frmProductEdit"
+                    method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label asp-for="Name" class="control-label"></label>
+                                    <input asp-for="Name" class="form-control" placeholder="Product Name" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Provider"></label>
+                                    <input asp-for="Provider" class="form-control" />
+                                    <span asp-validation-for="Provider" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="productdesc">Product Description</label>
+                                    <textarea asp-for="Description" class="form-control" id="productdesc" rows="5"
+                                    style="height:146px">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label asp-for="Type" class="control-label"></label>
+                                    <input asp-for="Type" class="form-control" placeholder="Product Type" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Price" class="control-label"></label>
+                                    <input asp-for=Price class="form-control" placeholder="Price" />
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="UnitsInStock" class="control-label"></label>
+                                    <input asp-for=UnitsInStock class="form-control" placeholder="Quantity In Stock" />
+                                    <span asp-validation-for="UnitsInStock" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CategoryId" class="control-label">Category</label>
+                                    <select asp-for="CategoryId" asp-items="@selectList"
+                                    class="custom-select  mr-sm-2">
+                                        
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="EnableDisplay" class="control-label"></label>
+                                    <select asp-for="Enable" class="custom-select mr-sm-2" asp-items="@listPer">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input asp-for="@Model.ImagePath" type="hidden" />
+                                    <label>Product Image</label> <br>
+                                    @if (Model.ImagePath == null)
+                                    {
+                                        <img src="~/vendors/images/product-defaut.png" alt="Logo Image"
+                                         style=" width:277px; height:277px; margin-top:20px"/>
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Product/@Model.ImagePath" alt="Logo Image"
+                                             style=" width:277px; height:277px; margin-top:20px"
+                                             id="previewImage" />
+                                    }
+                                    <br>
+                                    <input asp-for=Image type="file"
+                                    class="btn btn-info mt-2 waves-effect waves-light
+                                    form-control-file form-control height-auto"
+                                    onchange="loadImage(event)" />
+                                    <span asp-validation-for="Image" class="text-danger"></span>                                  
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">SAVE CHANGES</button>
+                        <a href="@Url.ActionLink("Index", "Product")" class="btn btn-secondary waves-effect">CANCEL</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -30,10 +30,9 @@ namespace FashionWeb.Admin.Controllers
 				{
 					productItem.CategoryName = productCategory.Name;
 				}
-
 			}
 
-				return View(productViewModel);			
+			return View(productViewModel);			
 		}
 
 		[HttpGet]
@@ -60,6 +59,33 @@ namespace FashionWeb.Admin.Controllers
 			}
 
 			TempData["StatusWarning"] = "FAIL! ADDING PRODUCT HAS BEEN FAILED";
+			return RedirectToAction("Index", "Product");
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(string Id)
+		{
+			var productItemViewModel =  await _productService.GetProductItemByIdAsync(new Guid(Id));
+			productItemViewModel.Categories = await _categoryService.GetListCategoryAsync();
+			return View(productItemViewModel);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(ProductItemViewModel productItemViewModel)
+		{
+			ModelState.Remove("Image");
+			if (ModelState.IsValid)
+			{
+				var result = await _productService.EditProductAsync(productItemViewModel);
+
+				if (result)
+				{
+					TempData["StatusMessage"] = "THIS PRODUCT HAS BEEN EDIT";
+					return RedirectToAction("Edit", "Product", new {id= productItemViewModel.Id});
+				}
+			}
+
+			TempData["StatusWarning"] = "EDITING PRODUCT HAS BEEN FAILED";
 			return RedirectToAction("Index", "Product");
 		}
 	}

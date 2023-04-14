@@ -11,5 +11,7 @@ namespace FashionWeb.Infrastructure.Repositories
     {
         public Task<bool> AddAsync(Product product);
         public Task<List<Product>> Products();
+        public Task<Product> GetProductByIdAsync(Guid id);
+        public Task<bool> EditAsync(Product product);
     }
 }

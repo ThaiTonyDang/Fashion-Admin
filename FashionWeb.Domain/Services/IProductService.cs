@@ -12,5 +12,7 @@ namespace FashionWeb.Domain.Services
         public Task<bool> AddProductAsync(ProductItemViewModel productItemViewModel);
         public Task<List<ProductItemViewModel>> GetListProducts();
         public Task<ProductViewModel> GetProductViewModel();
+        public Task<bool> EditProductAsync(ProductItemViewModel productItemViewModel);
+        public Task<ProductItemViewModel> GetProductItemByIdAsync(Guid id);
     }
 }
