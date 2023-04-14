@@ -1,6 +1,8 @@
 ﻿using FashionWeb.Domain.Services;
 using FashionWeb.Domain.ViewModels;
+using FashionWeb.Utilities.GlobalHelpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace FashionWeb.Admin.Controllers
 			_productService = productService;
 		}
 
+		[Route("Product/Products")]
 		public async Task<IActionResult> Index()
 		{
 			var productViewModel = await _productService.GetProductViewModel();
@@ -63,9 +66,9 @@ namespace FashionWeb.Admin.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Edit(string Id)
+		public async Task<IActionResult> Edit(string id)
 		{
-			var productItemViewModel =  await _productService.GetProductItemByIdAsync(new Guid(Id));
+			var productItemViewModel =  await _productService.GetProductItemByIdAsync(new Guid(id));
 			productItemViewModel.Categories = await _categoryService.GetListCategoryAsync();
 			return View(productItemViewModel);
 		}
@@ -87,6 +90,20 @@ namespace FashionWeb.Admin.Controllers
 
 			TempData["StatusWarning"] = "EDITING PRODUCT HAS BEEN FAILED";
 			return RedirectToAction("Index", "Product");
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(ProductItemViewModel productItemViewModel)
+		{ 
+			var isSuccess = await _productService.DeleteProductAsync(productItemViewModel.Id);
+			if (isSuccess)
+			{
+				TempData["StatusMessage"] = "THIS PRODUCT HAS BEEN DELETED";
+				return RedirectToAction("Index", "Product");
+			}
+
+			TempData["StatusWarning"] = "FAIL! DELETING PRODUCT HAS BEEN FAILED";
+			return RedirectToAction("Index", "PRODUCT");
 		}
 	}
 }
