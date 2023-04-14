@@ -125,7 +125,7 @@ namespace FashionWeb.Tests.ServicesTest
 
             var productViewModel = new ProductItemViewModel()
             {
-                Id = Guid.Parse("561232ff-efc8-4580-b681-4ec31beb79b8"),
+                Id = new Guid(),
                 Name = "ABC"
             };
 
