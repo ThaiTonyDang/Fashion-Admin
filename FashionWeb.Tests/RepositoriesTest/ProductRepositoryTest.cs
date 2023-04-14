@@ -116,43 +116,91 @@ namespace ChelseaWeb.Tests.RepositoriesTest
             Assert.Equal(firtItemExpect!.Name, firtItemAct!.Name);
         }
 
+        [Fact]
+        public async Task Should_EditProductAsync_Return_Succsess()
+        {
+            // Arrange
+
+            var product = LoadProducSampletData()[0];
+
+            // Act
+            string name = "ABC";
+            var enable = true;
+
+            product.Name = name;
+            product.Enable = enable;
+
+            var isEditSuccess = await _productRepository.EditAsync(product);
+
+            // Assert
+
+            Assert.True(isEditSuccess);
+            Assert.Equal(name, product.Name);
+            Assert.Equal(enable, product.Enable);
+        }
+
+        [Fact]
+        public async Task Should_EditProductAsync_Return_Fail_When_Id_Null()
+        {
+            // Arrange
+
+            var product = LoadProducSampletData()[0];
+            product.Id = default(Guid);
+
+            // Act
+            string name = "ABC";
+            var enable = true;
+
+            product.Name = name;
+            product.Enable = enable;
+
+            var isEditSuccess = await _productRepository.EditAsync(product);
+
+            // Assert
+
+            Assert.False(isEditSuccess);
+        }
+
         private List<Product> LoadProducSampletData()
         {
             var listCates = LoadCategorySampleData();
-        
-            return  new List<Product>()
+
+            return new List<Product>()
             {
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("561232ff-efc8-4580-b681-4ec31beb79b8"),
                     Name = "Đồng Hồ",
                     Provider = "Chelsea Fc",
                     Price = 10,
                     CategoryId = listCates[0].Id,
                     Description = "Đồng Hồ Chelsea Chính Hãng",
-                    ImagePath = "Pepsi20230216034120.jpg"
+                    ImagePath = "Pepsi20230216034120.jpg",
+                    Enable = false
                 },
 
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("2c4b115e-ad9a-4259-8732-1f23e019802b"),
                     Name = "Áo Choàng Mùa Đông Chelsea",
                     Provider = "Fashion VN",
                     Price = 100,
                     CategoryId = listCates[1].Id,
                     Description = "Áo Choàng Thời Trang",
-                    ImagePath = "pho-bo20230216053008.jpg"
+                    ImagePath = "pho-bo20230216053008.jpg",
+                    Enable = true
                 },
 
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("f4a55c69-46db-499b-998e-2bdeb01166e0"),
                     Name = "Mũ Lưỡi Trai",
                     Provider = "Valve",
                     Price = 10,
                     CategoryId = listCates[2].Id,
                     Description = "Mũ",
                     ImagePath = "pho-bo20230216053008.jpg",
+                    Enable = true
                 }
             };
         }

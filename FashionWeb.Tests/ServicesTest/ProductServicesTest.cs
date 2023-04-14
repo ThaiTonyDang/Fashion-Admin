@@ -36,7 +36,7 @@ namespace FashionWeb.Tests.ServicesTest
             var productViewModel = new ProductItemViewModel()
             {
                 Id = Guid.NewGuid(),
-                Price = "100",
+                Price = 100,
                 CategoryId = Guid.Parse("46a023f4-549b-4f45-8242-a94a2f5e5eb8"),
                 Image = _image.Object
             };
@@ -58,7 +58,7 @@ namespace FashionWeb.Tests.ServicesTest
             var productViewModel = new ProductItemViewModel()
             {
                 Id = default(Guid),
-                Price = "100",
+                Price = 100,
             };
 
             _productRepoMock.Setup(m => m.AddAsync(It.IsAny<Product>())).ReturnsAsync(true);
@@ -78,7 +78,6 @@ namespace FashionWeb.Tests.ServicesTest
             var productViewModel = new ProductItemViewModel()
             {
                 Id = default(Guid),
-                Price = null,
             };
 
             _productRepoMock.Setup(m => m.AddAsync(It.IsAny<Product>())).ReturnsAsync(true);
@@ -90,7 +89,6 @@ namespace FashionWeb.Tests.ServicesTest
             // Assert
             Assert.False(isSuccess);
         }
-
 
         [Fact]
         public async Task Should_GetListProductAsync_Return_Success()
@@ -118,6 +116,47 @@ namespace FashionWeb.Tests.ServicesTest
             Assert.NotNull(productFirtItemAct!.Name);
             Assert.Equal(productExpect.Name, productFirtItemAct!.Name);
             Assert.Equal(productExpect.Id, productFirtItemAct!.Id);
+        }
+
+        [Fact]
+        public async Task Should_EditProductAsync_Return_Success()
+        {
+            // Arrange
+
+            var productViewModel = new ProductItemViewModel()
+            {
+                Id = Guid.Parse("561232ff-efc8-4580-b681-4ec31beb79b8"),
+                Name = "ABC"
+            };
+
+            _productRepoMock.Setup(m => m.EditAsync(It.IsAny<Product>())).ReturnsAsync(true);
+
+            // Act
+            var productService = new ProductService(_productRepoMock.Object, _fileService.Object);
+            var isSuccess = await productService.EditProductAsync(productViewModel);
+
+            // Assert
+            Assert.True(isSuccess);
+        }
+
+        [Fact]
+        public async Task Should_EditProductAsync_Return_Fail_When_Id_Default()
+        {
+            // Arrange
+
+            var productViewModel = new ProductItemViewModel()
+            {
+                Id = default(Guid)
+            };
+
+            _productRepoMock.Setup(m => m.EditAsync(It.IsAny<Product>())).ReturnsAsync(false);
+
+            // Act
+            var productService = new ProductService(_productRepoMock.Object, _fileService.Object);
+            var isSuccess = await productService.EditProductAsync(productViewModel);
+
+            // Assert
+            Assert.False(isSuccess);
         }
     }
 }

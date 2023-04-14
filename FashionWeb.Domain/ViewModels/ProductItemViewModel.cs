@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FashionWeb.Utilities.GlobalHelpers;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,7 +25,9 @@ namespace FashionWeb.Domain.ViewModels
         public string Provider { set; get; }
 
         [Range(0, Double.MaxValue, ErrorMessage = "PRICE IS REQUIRED")]
-        public string Price { set; get; }
+        public decimal Price { set; get; }
+
+        public string PriceDisplay { get => this.Price.GetPriceFormat(); }
 
         [RegularExpression($"{requiredString}",
         ErrorMessage = "CATEGORY IS REQUIRED")]
@@ -34,12 +37,29 @@ namespace FashionWeb.Domain.ViewModels
         public IFormFile Image { get; set; }
 
         public string ImagePath { get; set; }
+
+        [Range(0, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
         public int UnitsInStock { get; set; }
+
         public bool Enable { get; set; }
+        public string EnableDisplay { get => GetEnableDisPlay(); }
+
         public string Type { get; set; }
         public string Description { get; set; }
         public List<CategoryItemViewModel> Categories { get; set; }
         public string CategoryName { get; set; }
+
+        public bool GetEnable()
+        {
+            var value = this.EnableDisplay.GetBoolenFromStringFormat(DISPLAY.ENABLE);
+            return value;
+        }
+
+        public string GetEnableDisPlay()
+        {
+            var value = this.Enable.GetStringFromBoolenFormat(DISPLAY.ENABLE, DISPLAY.DISABLE);
+            return value;
+        }      
     }
 
     public class ProductViewModel

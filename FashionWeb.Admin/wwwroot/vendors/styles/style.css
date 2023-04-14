@@ -747,8 +747,8 @@ p {
 }
 
     .form-group > label {
-        font-weight: 500;
-        font-size: 15px
+        font-weight: 600;
+        font-size: 19px
     }
 
 .custom-file-input, .custom-file-label, .custom-select, .form-control {
@@ -762,8 +762,9 @@ p {
 }
 
 .custom-file-input, .custom-select, .form-control {
-    font-size: 14px;
-    border-radius: 8px
+    font-size: 16px;
+    border-radius: 8px;
+    font-weight:500
 }
 
     .form-control.form-control-sm {

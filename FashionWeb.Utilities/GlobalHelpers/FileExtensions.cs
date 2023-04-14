@@ -22,8 +22,23 @@ namespace FashionWeb.Utilities.GlobalHelpers
 
         public static string GetPriceFormat(this decimal price)
         {
-            CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-            return string.Format(cultureInfo, "{0:C}", price);
+            CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-GB");
+            return string.Format(cultureInfo, "{0:C0}", price);
+        }
+
+        public static string GetStringFromBoolenFormat(this bool value, string strTrue, string strFalse)
+        {
+            if (!value) return strFalse.Replace(" ", "").Trim();
+            return strTrue.Replace(" ", "").Trim();
+        }
+
+        public static bool GetBoolenFromStringFormat(this string value, string strTrue)
+        {
+            value = value.Replace(" ", "").Trim().ToLower();
+            strTrue = strTrue.Replace(" ", "").Trim().ToLower();
+
+            if (value.Equals(strTrue)) return true;
+            return false;
         }
     }
 }
