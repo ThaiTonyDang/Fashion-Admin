@@ -40,5 +40,11 @@ namespace FashionWeb.Utilities.GlobalHelpers
             if (value.Equals(strTrue)) return true;
             return false;
         }
+
+        public static bool IsParseToGuidSuccess(this string str)
+        {
+            Guid output;
+            return Guid.TryParse(str, out output);
+        }
     }
 }

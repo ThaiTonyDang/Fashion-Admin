@@ -13,5 +13,6 @@ namespace FashionWeb.Infrastructure.Repositories
         public Task<List<Product>> Products();
         public Task<Product> GetProductByIdAsync(Guid id);
         public Task<bool> EditAsync(Product product);
+        public Task<bool> DeleteAsync(Guid id);
     }
 }

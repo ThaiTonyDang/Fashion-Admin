@@ -1215,8 +1215,8 @@ textarea.form-control {
     }
 
 .table thead th {
-    font-weight: 600;
-    font-size: 15px;
+    font-weight: 800;
+    font-size: 17px;
     border-bottom: 0;
     padding-left: 1rem
 }
@@ -1226,8 +1226,8 @@ textarea.form-control {
 }
 
 .table td {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     padding: 1rem
 }
 

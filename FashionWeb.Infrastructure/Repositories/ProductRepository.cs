@@ -67,6 +67,20 @@ namespace FashionWeb.Infrastructure.Repositories
             return false;
         }
 
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var product = await GetProductByIdAsync(id);
+
+            if (product != null)
+            {
+                _appDbContext.Remove(product);
+                var result = await _appDbContext.SaveChangesAsync();
+                return (result > 0);
+            }
+
+            return false;
+        }
+
         public async Task<Product> GetProductByIdAsync(Guid id)
         {
             var product = await _appDbContext.Products.Where(p => p.Id == id).FirstOrDefaultAsync();

@@ -75,19 +75,21 @@
 								}
 							</td>
 							<td>
-								<a href="@Url.ActionLink("Edit", "Product", new {id = product.Id})" class="btn btn-primary" style=" border-radius:20%">
+								<a href="@Url.ActionLink("Edit", "Product", new {id = product.Id})"
+								class="btn btn-primary" style=" border-radius:20%">
 									<i class="bi bi-pen"></i>
 									Edit
 								</a>
 							</td>
 							<td>
-								<a class="tm-product-delete-link"
+								<button class="tm-product-delete-link"
 								   data-toggle="modal"
-								   data-target="#DeleteModal"
-								   data-productid="@Model.ListProduct[index].Id">
-								   <i class="icon-copy bi bi-trash-fill"></i>
-								</a>
+								   data-target="@("#delete-product-"+product.Id)"
+								   type="button">
+								   <i class="icon-copy bi bi-trash-fill" style="cursor:pointer"></i>
+								</button>
 							</td>
+							@await Html.PartialAsync("_DeleteConfirmPartialView", product)
 						</tr>
 						index++;
 					}
@@ -102,5 +104,4 @@
 			</a>
 		</div>
 	</div>
-	
 </div>
