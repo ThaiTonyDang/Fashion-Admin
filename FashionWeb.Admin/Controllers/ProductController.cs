@@ -20,90 +20,12 @@ namespace FashionWeb.Admin.Controllers
 			_productService = productService;
 		}
 
-		[Route("Product/Products")]
+		[HttpGet]
+		[Route("/products")]
 		public async Task<IActionResult> Index()
 		{
 			var productViewModel = await _productService.GetProductViewModel();
-			foreach (var productItem in productViewModel.ListProduct)
-			{
-				productItem.Categories = await _categoryService.GetListCategoryAsync();
-				var productCategory = productItem.Categories.Where(c => c.CategoryId == productItem.CategoryId)
-													  .FirstOrDefault();
-				if (productCategory != null)
-				{
-					productItem.CategoryName = productCategory.Name;
-				}
-			}
-
-			return View(productViewModel);			
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> Add()
-		{
-			var productItemViewModel = new ProductItemViewModel();
-			productItemViewModel.Categories = await _categoryService.GetListCategoryAsync();
-			return View(productItemViewModel);
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> Add(ProductItemViewModel productItemViewModel)
-		{
-			if (ModelState.IsValid)
-			{
-				productItemViewModel.Id = Guid.NewGuid();
-				var result = await _productService.AddProductAsync(productItemViewModel);
-
-				if (result)
-				{
-					TempData["StatusMessage"] = "SUCCESS! THIS PRODUCT HAS BEEN ADDED";
-					return RedirectToAction("Add", "Product");
-				}
-			}
-
-			TempData["StatusWarning"] = "FAIL! ADDING PRODUCT HAS BEEN FAILED";
-			return RedirectToAction("Index", "Product");
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> Edit(string id)
-		{
-			var productItemViewModel =  await _productService.GetProductItemByIdAsync(new Guid(id));
-			productItemViewModel.Categories = await _categoryService.GetListCategoryAsync();
-			return View(productItemViewModel);
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> Edit(ProductItemViewModel productItemViewModel)
-		{
-			ModelState.Remove("Image");
-			if (ModelState.IsValid)
-			{
-				var result = await _productService.EditProductAsync(productItemViewModel);
-
-				if (result)
-				{
-					TempData["StatusMessage"] = "THIS PRODUCT HAS BEEN EDIT";
-					return RedirectToAction("Edit", "Product", new {id= productItemViewModel.Id});
-				}
-			}
-
-			TempData["StatusWarning"] = "EDITING PRODUCT HAS BEEN FAILED";
-			return RedirectToAction("Index", "Product");
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> Delete(ProductItemViewModel productItemViewModel)
-		{ 
-			var isSuccess = await _productService.DeleteProductAsync(productItemViewModel.Id);
-			if (isSuccess)
-			{
-				TempData["StatusMessage"] = "THIS PRODUCT HAS BEEN DELETED";
-				return RedirectToAction("Index", "Product");
-			}
-
-			TempData["StatusWarning"] = "FAIL! DELETING PRODUCT HAS BEEN FAILED";
-			return RedirectToAction("Index", "PRODUCT");
+			return View(productViewModel);
 		}
 	}
 }

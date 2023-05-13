@@ -14,6 +14,25 @@
 
 <link href="~/css/table.css" rel="stylesheet" />
 
+@if (Model.ListProduct == null)
+{
+<div class="main-container">
+	<div class="pd-ltr-20 xs-pd-20-10"> 
+		<div class="pd-20 card-box mb-30">
+			<div class="clearfix mb-20">
+				<div class="pull-left">
+						<h1 class="alert alert-primary" style="font-size:30px" role="alert">
+							@Model.ExceptionMessage
+						</h1>
+				</div>
+				</div>
+			</div>
+		</div>
+</div>
+	
+}
+else
+{	
 <div class="main-container">
 	<div class="pd-ltr-20 xs-pd-20-10"> 
 		<div class="pd-20 card-box mb-30">
@@ -41,8 +60,6 @@
 						<th scope="col">Provider</th>
 						<th scope="col">Price</th>
 						<th scope="col">Quantity In Stock</th>
-						<th scope="col">Type</th>
-						<th scope="col">Category</th>
 						<th scope="col">Image</th>
 						<th scope="col">Edit</th>
 						<th scope="col">Delete</th>
@@ -60,18 +77,16 @@
 							<td >@product.EnableDisplay</td>
 							<td>@product.Provider</td>
 							<td>@product.PriceDisplay</td>
-							<td>@product.UnitsInStock</td>
-							<td>@product.Type</td>
-							<td>@product.CategoryName</td>
+							<td>@product.QuantityInStock</td>
 							<td>
-								@if (string.IsNullOrEmpty(product.ImagePath))
+								@if (string.IsNullOrEmpty(product.ImageName))
 								{
 									<img src="~/img/product-defaut.png" class="product-image" style="height:100px; width:100px">
 								}
 								else
 								{
-									<img src="~/Product/@product.ImagePath" clas="product-image" style="height:100px; width:100px">
-									<input type="hidden" asp-for="@product.ImagePath">
+									<img src="@product.ImageUrl" clas="product-image" style="height:100px; width:100px">
+									<input type="hidden" asp-for="@product.ImageName">
 								}
 							</td>
 							<td>
@@ -105,3 +120,4 @@
 		</div>
 	</div>
 </div>
+}

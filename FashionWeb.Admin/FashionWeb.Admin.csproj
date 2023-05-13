@@ -11,5 +11,4 @@
   <ItemGroup>
     <Folder Include="wwwroot\css\PicCSS\" />
   </ItemGroup>
-
 </Project>
