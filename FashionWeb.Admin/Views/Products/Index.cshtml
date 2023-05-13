@@ -1,0 +1,169 @@
+﻿@using FashionWeb.Domain.ViewModels;
+@model ProductViewModel
+
+@{
+    ViewData["Title"] = "Product Page";
+    Layout = "_Layout";
+}
+
+@{
+    var index = 0;
+}
+
+<partial name="_Alert" />
+
+<link href="~/css/table.css" rel="stylesheet" />
+
+@if (Model.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+{
+   <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="error-page d-flex align-items-center flex-wrap justify-content-center pd-20">
+                <div class="pd-10">
+                    <div class="error-page-wrap text-center">
+                        <h1>500</h1>
+                        <h3>Error: 500 Internal Server</h3>
+                        @for (int i = 0; i < @Model.ExceptionMessage.Length; i++)
+                        {
+                            <p style="font-size:20px">
+                                @Model.ExceptionMessage[i]..<br />
+                            </p>
+                        }
+                        <p>
+
+                        </p>
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+                               class="btn btn-primary btn-block btn-lg">Check error by link</a>
+                        </div>
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="~/Home/Index" class="btn btn-primary btn-block btn-lg">Back To Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@if (Model.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+{
+   <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="error-page d-flex align-items-center flex-wrap justify-content-center pd-20">
+                <div class="pd-10">
+                    <div class="error-page-wrap text-center">
+                        <h1>503</h1>
+                        <h3>Error: 503 Service Unavailable</h3>
+                        @for (int i = 0; i < @Model.ExceptionMessage.Length; i++)
+                        {
+                            <p style="font-size:20px">
+                                @Model.ExceptionMessage[i]..<br />
+                            </p>
+                        }
+                        <p>
+                            The server is currently unable to handle the request due to a temporary overloading or maintenance of the server.
+                            Common causes are a server that is down for maintenance or that is overloaded
+                        </p>
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503"
+                               class="btn btn-primary btn-block btn-lg">Check error by link</a>
+                        </div>
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="~/Home/Index" class="btn btn-primary btn-block btn-lg">Back To Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+   <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix mb-20">
+                    <div class="pull-left">
+                        <h4 class="text-blue h4">PRODUCT TABLE</h4>
+
+                        <div class="pull-left">
+                            <a href="~/Product/Add" class="btn btn-primary btn-sm" role="button">Add Product</a>
+                        </div>
+
+                    </div>
+                    <div class="pull-right">
+                        <a href="#border-table" class="btn btn-primary btn-sm scroll-click" role="button">Save File To Excel</a>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="text-align:center; font-weight:700">
+                            <th scope="col">
+                                <input type="checkbox" name="select_all" value="1" class="checkBoxAll">
+                            </th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Provider</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity In Stock</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align:center; font-size:15px">
+                        @foreach (var product in Model.ListProduct)
+                        {
+                            <tr>
+                                <th scope="row">
+                                    <input asp-for="@Model.ListProduct[index].IsCheck" type="checkbox" class="product__checkbox" />
+                                    <input asp-for="@Model.ListProduct[index].Id" id="product-id__@index" type="hidden" class="product__id" />
+                                </th>
+                                <td class="table-plus sorting_1" tabindex="0">@product.Name</td>
+                                <td>@product.Provider</td>
+                                <td>@product.PriceDisplay</td>
+                                <td>@product.QuantityInStock</td>
+                                <td>
+                                    @if (string.IsNullOrEmpty(product.ImageName))
+                                    {
+                                        <img src="~/img/product-defaut.png" class="product-image" style="height:100px; width:100px">
+                                    }
+                                    else
+                                    {
+                                        <img src="@product.ImageUrl" clas="product-image" style="height:100px; width:100px">
+                                        <input type="hidden" asp-for="@product.ImageName">
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.ActionLink("Edit", "Product", new {id = product.Id})"
+                                       class="btn btn-primary" style=" border-radius:20%">
+                                        <i class="bi bi-pen"></i>
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <button class="tm-product-delete-link"
+                                            data-toggle="modal"
+                                            data-target="@("#delete-product-" + product.Id)"
+                                            type="button">
+                                        <i class="icon-copy bi bi-trash-fill" style="cursor:pointer"></i>
+                                    </button>
+                                </td>
+                                @await Html.PartialAsync("_DeleteConfirmPartialView", product)
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="footer-wrap pd-20 mb-20 card-box">
+                ADMIN - Admin Template By
+                <a href="https://bitbucket.org/dtranthai/fashion-admin/src/develop/" target="_blank" style="text-decoration:none">
+                    TONY ĐẶNG AND APTECH TEAM
+                </a>
+            </div>
+        </div>
+    </div>
+}

@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Domain", "FashionWeb.Domain\FashionWeb.Domain.csproj", "{8E8A78E2-47CC-4429-B236-4777CED3D453}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Infrastructure", "FashionWeb.Infrastructure\FashionWeb.Infrastructure.csproj", "{5695131D-0B0A-4140-B551-87D190D07790}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Utilities", "FashionWeb.Utilities\FashionWeb.Utilities.csproj", "{A6D87B9C-A169-4838-998B-3387E6727C09}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionWeb.Admin", "FashionWeb.Admin\FashionWeb.Admin.csproj", "{3DD301C5-3A02-40E2-870F-F83D10CFA18F}"
@@ -15,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pieline", "Pieline", "{5D88
 	ProjectSection(SolutionItems) = preProject
 		bitbucket-pipelines.yml = bitbucket-pipelines.yml
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionWeb.Tests", "FashionWeb.Tests\FashionWeb.Tests.csproj", "{E3B7BE19-E7FE-4F1D-ACE1-3FC241A0DEEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +24,6 @@ Global
 		{8E8A78E2-47CC-4429-B236-4777CED3D453}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E8A78E2-47CC-4429-B236-4777CED3D453}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E8A78E2-47CC-4429-B236-4777CED3D453}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5695131D-0B0A-4140-B551-87D190D07790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5695131D-0B0A-4140-B551-87D190D07790}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5695131D-0B0A-4140-B551-87D190D07790}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5695131D-0B0A-4140-B551-87D190D07790}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6D87B9C-A169-4838-998B-3387E6727C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6D87B9C-A169-4838-998B-3387E6727C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6D87B9C-A169-4838-998B-3387E6727C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,10 +32,6 @@ Global
 		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DD301C5-3A02-40E2-870F-F83D10CFA18F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3B7BE19-E7FE-4F1D-ACE1-3FC241A0DEEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3B7BE19-E7FE-4F1D-ACE1-3FC241A0DEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3B7BE19-E7FE-4F1D-ACE1-3FC241A0DEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3B7BE19-E7FE-4F1D-ACE1-3FC241A0DEEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
