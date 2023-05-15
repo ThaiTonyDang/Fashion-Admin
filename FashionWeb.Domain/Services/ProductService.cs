@@ -5,26 +5,23 @@ using FashionWeb.Utilities.GlobalHelpers;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http.Json;
-using System.Net.WebSockets;
 using System.Text;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.Services
 {
 	public class ProductService : IProductService
 	{
+		private readonly IUrlService _urlService;
+		private readonly IFileService _fileService;
 		private readonly HttpClient _httpClient;
-		private readonly APIConfig _hostAPIConfig;
 		public string _exceptionMessage;
-		public ProductService(HttpClient httpClient, IOptions<APIConfig> options)
+		public ProductService(IUrlService urlService, IFileService fileService, HttpClient httpClient)
 		{
+			_urlService = urlService;
 			_httpClient = httpClient;
-			_hostAPIConfig = options.Value;
+			_fileService = fileService;
 		}
 
 		public async Task<ProductViewModel> GetProductViewModel()
@@ -43,7 +40,7 @@ namespace FashionWeb.Domain.Services
 		{
 			try
 			{
-				var apiUrl = _hostAPIConfig.Url + "api/products";
+				var apiUrl = _urlService.GetBaseUrl() + "api/products";
 				var response = await _httpClient.GetAsync(apiUrl);
 
 				var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<ProductItemViewModel>>>
@@ -54,12 +51,11 @@ namespace FashionWeb.Domain.Services
 				{
 					return new List<ProductItemViewModel>();
 				}	
-
 				var products = responseList.Data;
 
 				foreach (var product in products)
 				{
-					product.ImageUrl = GetFileUrl(product.ImageName);
+					product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
 				}
 
 				return products;
@@ -69,13 +65,46 @@ namespace FashionWeb.Domain.Services
 				_exceptionMessage = exception.Message;
 				return null;
 			}
-			
-		}
+        }
 
-		private string GetFileUrl(string fileName)
+		public async Task<Tuple<HttpStatusCode, bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel)
 		{
-			var fileUrl = _hostAPIConfig.Url + "resource/" + fileName;
-			return fileUrl;
-		}
+			var message = "";
+			try
+			{
+				if (productItemViewModel != null)
+				{
+					var imageDafaultName = DISPLAY.IMAGE_PATH ;
+					var file = productItemViewModel.File;
+					if (file != null)
+					{
+                        var data = await _fileService.UploadFileAsync(file, _httpClient);
+
+						if (data != null)
+						{
+							productItemViewModel.ImageName = data[0];
+						}
+                    }
+                    productItemViewModel.ImageName = imageDafaultName;
+                    var apiUrl = _urlService.GetBaseUrl() + "api/products";
+                    var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
+                    var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
+                                       (await response.Content.ReadAsStringAsync());
+					message = responseList.Message;
+
+                    if (responseList.Success)
+					{
+						return Tuple.Create(responseList.StatusCode, true, message);
+					}
+				}
+			}
+			catch (Exception exception)
+			{
+
+                return Tuple.Create(HttpStatusCode.ServiceUnavailable, false, exception.Message);
+            }
+	
+			return Tuple.Create(HttpStatusCode.BadRequest, false, message);
+        }
 	}  
 }

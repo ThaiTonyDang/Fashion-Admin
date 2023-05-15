@@ -1,13 +1,8 @@
 ﻿using FashionWeb.Utilities.GlobalHelpers;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.ViewModels
 {
@@ -30,12 +25,11 @@ namespace FashionWeb.Domain.ViewModels
 
 		public string PriceDisplay { get => GetPriceFormat(); }
 
-		[RegularExpression($"{requiredString}",
-		ErrorMessage = "CATEGORY IS REQUIRED")]
 		public Guid CategoryId { get; set; }
 
 		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED")]
-		public IFormFile Image { get; set; }
+        [FromForm]
+        public IFormFile File { get; set; }
 
 		public string ImageName { get; set; }
 		public string ImageUrl { get; set; }
@@ -64,7 +58,7 @@ namespace FashionWeb.Domain.ViewModels
 		public string GetPriceFormat()
 		{
 			CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-			return string.Format(cultureInfo, "{0:C0}", this.Price);
+			return string.Format(cultureInfo, "{0:C2}", this.Price);
 		}
 	}
 
