@@ -25,6 +25,8 @@ namespace FashionWeb.Domain.ViewModels
 
 		public string PriceDisplay { get => GetPriceFormat(); }
 
+		[RegularExpression($"{requiredString}",
+		ErrorMessage = "CATEGORY IS REQUIRED")]
 		public Guid CategoryId { get; set; }
 
 		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED")]
@@ -38,22 +40,9 @@ namespace FashionWeb.Domain.ViewModels
 		public int QuantityInStock { get; set; }
 
 		public bool IsEnabled { get; set; }
-		public string EnableDisplay { get => GetEnableDisPlay(); }
 		public string Description { get; set; }
 		public List<CategoryItemViewModel> Categories { get; set; }
 		public string CategoryName { get; set; }
-
-		public bool GetEnable()
-		{
-			var value = this.EnableDisplay.GetBoolenFromStringFormat(DISPLAY.ENABLE);
-			return value;
-		}
-
-		public string GetEnableDisPlay()
-		{
-			var value = this.IsEnabled.GetStringFromBoolenFormat(DISPLAY.ENABLE, DISPLAY.DISABLE);
-			return value;
-		}
 
 		public string GetPriceFormat()
 		{

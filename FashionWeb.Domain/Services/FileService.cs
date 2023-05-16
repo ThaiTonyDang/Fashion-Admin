@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,19 +27,28 @@ namespace FashionWeb.Domain.Services
             try
             {
                 var uploadApiUrl = _urlService.GetBaseUrl() + "api/File/upload";
-                var readFileDate = await file.GetBytes();
-                var formContent = new MultipartFormDataContent();
-                formContent.Add(new StreamContent(new MemoryStream(readFileDate)));
-                var response = await httpClient.PostAsync(uploadApiUrl, formContent);
+                var fileName = file.FileName;
+                var content = new MultipartFormDataContent();
+                
+                content.Add(new StreamContent(file.OpenReadStream())
+                {
+                    Headers =
+                    {
+                        ContentLength = file.Length,
+                        ContentType = new MediaTypeHeaderValue(file.ContentType)
+                    }
+                }, "File", fileName);
+
+                var response = await httpClient.PostAsync(uploadApiUrl, content);
                 var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<string>>>
-                                   (await response.Content.ReadAsStringAsync());
+                                (await response.Content.ReadAsStringAsync());
 
                 var isSuccess = responseList.Success;
                 if (isSuccess)
                 {
                     return responseList.Data;
                 }
-
+                 
                 return new List<string>();
             }
             catch (Exception exception)

@@ -12,6 +12,7 @@ namespace FashionWeb.Domain.ResponseModel
         public HttpStatusCode StatusCode { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
+        public string[] ErrorsDetail { get; set; }
         public T Data { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace FashionWeb.Domain.Services
 	{
 		public Task<List<ProductItemViewModel>> GetListProducts();
 		public Task<ProductViewModel> GetProductViewModel();
-		public Task<Tuple<HttpStatusCode, bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel);
+		public Task<Tuple<bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel);
 	}
 }

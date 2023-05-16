@@ -67,44 +67,46 @@ namespace FashionWeb.Domain.Services
 			}
         }
 
-		public async Task<Tuple<HttpStatusCode, bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel)
+		public async Task<Tuple<bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel)
 		{
 			var message = "";
 			try
 			{
 				if (productItemViewModel != null)
 				{
-					var imageDafaultName = DISPLAY.IMAGE_PATH ;
+                    productItemViewModel.ImageName = DISPLAY.IMAGE_PATH ;
 					var file = productItemViewModel.File;
 					if (file != null)
 					{
-                        var data = await _fileService.UploadFileAsync(file, _httpClient);
-
-						if (data != null)
+                        var imageData = await _fileService.UploadFileAsync(file, _httpClient);
+						var imageName = imageData[0];
+						var imageLink = imageData[1];
+						if (imageData != null)
 						{
-							productItemViewModel.ImageName = data[0];
+							productItemViewModel.ImageName = imageData[0];
+							productItemViewModel.ImageUrl = imageData[1];
 						}
                     }
-                    productItemViewModel.ImageName = imageDafaultName;
+                  
                     var apiUrl = _urlService.GetBaseUrl() + "api/products";
                     var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
                     var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
-                                       (await response.Content.ReadAsStringAsync());
+						               (await response.Content.ReadAsStringAsync());
 					message = responseList.Message;
 
                     if (responseList.Success)
 					{
-						return Tuple.Create(responseList.StatusCode, true, message);
+						return Tuple.Create(true, message);
 					}
 				}
 			}
 			catch (Exception exception)
 			{
 
-                return Tuple.Create(HttpStatusCode.ServiceUnavailable, false, exception.Message);
+                return Tuple.Create(false, exception.Message);
             }
 	
-			return Tuple.Create(HttpStatusCode.BadRequest, false, message);
+			return Tuple.Create(false, message);
         }
 	}  
 }
