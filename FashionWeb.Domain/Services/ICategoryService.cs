@@ -9,6 +9,7 @@ namespace FashionWeb.Domain.Services
 {
     public interface ICategoryService
     {
-      
+        public Task<List<CategoryItemViewModel>> GetListCategories();
+        public Task<CategoryViewModel> GetCategoryViewModel();
     }
 }

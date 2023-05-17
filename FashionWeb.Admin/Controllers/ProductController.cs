@@ -30,13 +30,26 @@ namespace FashionWeb.Admin.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var productViewModel = await _productService.GetProductViewModel();
-			return View(productViewModel);
+			foreach (var productItemViewModel in productViewModel.ListProduct)
+			{
+                productItemViewModel.Categories = await _categoryService.GetListCategories();
+                foreach (var category in productItemViewModel.Categories)
+                {
+                    productItemViewModel.CategoryName = category.Name;
+                }
+            }             
+            return View(productViewModel);
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> Create()
 		{
 			var productItemViewModel = new ProductItemViewModel();
+			productItemViewModel.Categories = await _categoryService.GetListCategories();
+			foreach (var category in productItemViewModel.Categories)
+			{
+				productItemViewModel.CategoryName = category.Name;
+			}
 			return View(productItemViewModel);
 		}
 
@@ -60,5 +73,13 @@ namespace FashionWeb.Admin.Controllers
 			TempData["StatusWarning"] = $"{message}";
 			return RedirectToAction("Create", "Product");
 		}
-	}
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+         //   var productItemViewModel =  await _productService.GetProductItemByIdAsync(new Guid(id));
+        	//productItemViewModel.Categories = await _categoryService.GetListCategoryAsync();
+        	return View();
+        }
+    }
 }

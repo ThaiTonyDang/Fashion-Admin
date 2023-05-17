@@ -1,13 +1,8 @@
 ﻿using FashionWeb.Domain.HostConfig;
 using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.ViewModels;
-using FashionWeb.Utilities.GlobalHelpers;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 
 namespace FashionWeb.Domain.Services
 {
@@ -69,44 +64,45 @@ namespace FashionWeb.Domain.Services
 
 		public async Task<Tuple<bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel)
 		{
+            var responseMessage = "";
 			var message = "";
-			try
+			if (productItemViewModel != null)
 			{
-				if (productItemViewModel != null)
-				{
-                    productItemViewModel.ImageName = DISPLAY.IMAGE_PATH ;
-					var file = productItemViewModel.File;
-					if (file != null)
-					{
-                        var imageData = await _fileService.UploadFileAsync(file, _httpClient);
-						var imageName = imageData[0];
-						var imageLink = imageData[1];
-						if (imageData != null)
-						{
-							productItemViewModel.ImageName = imageData[0];
-							productItemViewModel.ImageUrl = imageData[1];
-						}
-                    }
-                  
-                    var apiUrl = _urlService.GetBaseUrl() + "api/products";
-                    var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
-                    var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
-						               (await response.Content.ReadAsStringAsync());
+                var file = productItemViewModel.File;
+                var result = await _fileService.GetResponeUploadFileAsync(file, _httpClient);
+                var responseUploadFileList = result.Item1;
+                if (responseUploadFileList != null)
+                {
+                    productItemViewModel.ImageName = responseUploadFileList.Data[0];
+                    productItemViewModel.ImageUrl = responseUploadFileList.Data[1];
+                }
+				responseMessage = result.Item2;
+                try
+                {
+					var apiUrl = _urlService.GetBaseUrl() + "api/products";
+					var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
+					var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
+									   (await response.Content.ReadAsStringAsync());
 					message = responseList.Message;
 
-                    if (responseList.Success)
+					if (responseList.Success)
 					{
-						return Tuple.Create(true, message);
+						return Tuple.Create(true, message + " ! " + responseMessage);
 					}
 				}
+				catch (Exception exception)
+				{
+					message = exception.InnerException.Message + "Create Product Fail !";
+                    return Tuple.Create(false, responseMessage + message);
+				}
 			}
-			catch (Exception exception)
-			{
-
-                return Tuple.Create(false, exception.Message);
-            }
 	
 			return Tuple.Create(false, message);
         }
-	}  
+
+        public Task<Tuple<bool, string>> EditProductAsync(ProductItemViewModel productItemViewModel)
+        {
+            throw new NotImplementedException();
+        }
+    }  
 }

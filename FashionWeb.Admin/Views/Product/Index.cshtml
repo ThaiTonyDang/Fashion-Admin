@@ -68,7 +68,8 @@ else
 						<th scope="col">
 							<input type="checkbox" name="select_all" value="1" class="checkBoxAll">
 						</th>
-						<th scope="col">Name</th>										
+						<th scope="col">Name</th>
+						<th scope="col">Category</th>					
 						<th scope="col">Provider</th>
 						<th scope="col">Price</th>
 						<th scope="col">Quantity In Stock</th>
@@ -86,6 +87,7 @@ else
 								<input asp-for="@Model.ListProduct[index].Id" id="product-id__@index" type="hidden" class="product__id" />
 							</th>
 							<td class="table-plus sorting_1" tabindex="0">@product.Name</td>
+							<td class="table-plus sorting_1" tabindex="0">@product.CategoryName</td>
 							<td>@product.Provider</td>
 							<td>@product.PriceDisplay</td>
 							<td>@product.QuantityInStock</td>

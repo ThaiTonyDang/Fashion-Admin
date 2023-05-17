@@ -22,7 +22,7 @@ namespace FashionWeb.Domain.Services
         {
             _urlService = urlService;
         }
-        public async Task<List<string>> UploadFileAsync(IFormFile file, HttpClient httpClient)
+        public async Task<Tuple<ResponseAPI<List<string>>, string>> GetResponeUploadFileAsync(IFormFile file, HttpClient httpClient)
         {
             try
             {
@@ -42,18 +42,14 @@ namespace FashionWeb.Domain.Services
                 var response = await httpClient.PostAsync(uploadApiUrl, content);
                 var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<string>>>
                                 (await response.Content.ReadAsStringAsync());
-
                 var isSuccess = responseList.Success;
-                if (isSuccess)
-                {
-                    return responseList.Data;
-                }
-                 
-                return new List<string>();
+                var message = responseList.Message;
+
+                return Tuple.Create(responseList, message);
             }
-            catch (Exception exception)
+            catch
             {
-                return null;
+                return Tuple.Create(default(ResponseAPI<List<string>>), "An Error Has Occurred Server Side ! Upload Image Fail");
             }         
         }
     }
