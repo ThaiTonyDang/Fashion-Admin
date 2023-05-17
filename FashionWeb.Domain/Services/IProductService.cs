@@ -1,4 +1,5 @@
-﻿using FashionWeb.Domain.ViewModels;
+﻿using FashionWeb.Domain.ResponseModel;
+using FashionWeb.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,7 @@ namespace FashionWeb.Domain.Services
 {
 	public interface IProductService
 	{
-		public Task<bool> AddProductAsync(ProductItemViewModel productItemViewModel);
-		public Task<List<ProductItemViewModel>> GetListProducts();
-		public Task<ProductViewModel> GetProductViewModel();
-		public Task<bool> EditProductAsync(ProductItemViewModel productItemViewModel);
-		public Task<bool> DeleteProductAsync(Guid id);
-		public Task<ProductItemViewModel> GetProductItemByIdAsync(Guid id);
+		public Task<ResponseAPI<List<ProductItemViewModel>>> GetResponseListProductsAsync();
+		public Task<ProductViewModel> GetProductViewModelAsync();
 	}
 }
