@@ -95,7 +95,8 @@
 				</div>
 			</div>
 			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
+				<a href="https://github.com/dropways/deskapp" target="_blank">
+					<img src="~/vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -126,7 +127,7 @@
 										</a>
 									</li>
 									<li>
-										<a href="~/Product/Index" class="dropdown-toggle no-arrow">
+										<a href="~/Products" class="dropdown-toggle no-arrow">
 											<span class="micon bi bi-amd"></span><span class="mtext">Product</span>
 										</a>
 									</li>
@@ -181,9 +182,11 @@
 	<script src="~/vendors/scripts/core.js"></script>
 	<script src="~/vendors/scripts/script.min.js"></script>
 	<script src="~/vendors/scripts/layout-settings.js"></script>
-	<script src="~/src/plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="~/src/plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="~/js/site.js"></script>
 	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/js/site.js"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
 </body>

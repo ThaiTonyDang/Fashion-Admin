@@ -2,69 +2,56 @@
 @model FashionWeb.Domain.ViewModels.ProductItemViewModel
 
 @{
-    ViewData["Title"] = "Product Add";
+    ViewData["Title"] = "Update";
     Layout = "_Layout";
 
     var selectList = Model.Categories.Select(c => new SelectListItem
                     {
-                        Value = c.CategoryId.ToString(),
+                        Value = c.Id.ToString(),
                         Text = c.Name.ToString(),
-                        Selected = (c.CategoryId == Model.CategoryId)
+                        Selected = (c.Id == Model.CategoryId)
                     }).ToList();
-
-    var listPermission = new Dictionary<bool, string>()
-    {
-        {true,  DISPLAY.ENABLE},
-        {false,  DISPLAY.DISABLE},
-    };
-
-    var listPer = listPermission.Select(s => new SelectListItem
-            {
-                Value =s.Key.ToString(),
-                Text = s.Value.ToString(),
-    }).ToList();
 }
 
 <partial name="_Alert" />
 
 @section Scripts {
-        <script src="@Url.Content("~/js/site.js")"></script>
         <script src="@Url.Content("~/js/validation.js")"></script>
 }
 
 <div class="main-container">
-   <div class="page-header">
-      <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="title">
-                            <h4>EDIT PRODUCT</h4>
-                        </div>
-                        <nav aria-label="breadcrumb" role="navigation">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="~/Home/Index">Home</a>
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">
-                                    <a href="~/Product/Index">Product Table</a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <div class="col-md-6 col-sm-12 text-right">
-                        <div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                April 11, 2023
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#">Export List</a>
-                                <a class="dropdown-item" href="#">Policies</a>
-                                <a class="dropdown-item" href="#">View Assets</a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="page-header">
+        <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="title">
+                    <h4>EDIT PRODUCT</h4>
                 </div>
+            <nav aria-label="breadcrumb" role="navigation">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="~/Home/Index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            <a href="~/Product/Index">Product Table</a>
+                        </li>
+                    </ol>
+                </nav>
+         </div>
+        <div class="col-md-6 col-sm-12 text-right">
+             <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        April 11, 2023
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#">Export List</a>
+                        <a class="dropdown-item" href="#">Policies</a>
+                        <a class="dropdown-item" href="#">View Assets</a>
+                    </div>
+                </div>           
+         </div>
    </div>
-    <div class="row">
+</div>
+   <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
@@ -72,7 +59,7 @@
                     <h4 class="card-title">PRODUCT INFORMATION</h4>
                     <p class="card-title-desc" style="color:firebrick">Fill all information below</p>
 
-                    <form asp-action="Edit" asp-controller="Product" id="frmProductEdit"
+                    <form asp-action="Update" asp-controller="Product" id="frmProductEdit"
                     method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-sm-6">
@@ -100,54 +87,44 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label asp-for="Type" class="control-label"></label>
-                                    <input asp-for="Type" class="form-control" placeholder="Product Type" />
-                                </div>
-                                <div class="form-group">
                                     <label asp-for="Price" class="control-label"></label>
                                     <input asp-for=Price class="form-control" placeholder="Price" />
                                     <span asp-validation-for="Price" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="UnitsInStock" class="control-label"></label>
-                                    <input asp-for=UnitsInStock class="form-control" placeholder="Quantity In Stock" />
-                                    <span asp-validation-for="UnitsInStock" class="text-danger"></span>
+                                    <label class="control-label">Quantity In Stock</label>
+                                    <input asp-for=QuantityInStock class="form-control" placeholder="Quantity In Stock" />
+                                    <span asp-validation-for="QuantityInStock" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="CategoryId" class="control-label">Category</label>
                                     <select asp-for="CategoryId" asp-items="@selectList"
-                                    class="custom-select  mr-sm-2">
-                                        
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="EnableDisplay" class="control-label"></label>
-                                    <select asp-for="Enable" class="custom-select mr-sm-2" asp-items="@listPer">
+                                            class="custom-select  mr-sm-2">                                       
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <input asp-for="@Model.ImagePath" type="hidden" />
+                                    <input asp-for="@Model.ImageName" type="hidden" />
                                     <label>Product Image</label> <br>
-                                    @if (Model.ImagePath == null)
+                                    @if (Model.ImageName == null)
                                     {
                                         <img src="~/vendors/images/product-defaut.png" alt="Logo Image"
                                          style=" width:277px; height:277px; margin-top:20px"/>
                                     }
                                     else
                                     {
-                                        <img src="~/Product/@Model.ImagePath" alt="Logo Image"
+                                        <img src="@Model.ImageUrl" alt="Logo Image"
                                              style=" width:277px; height:277px; margin-top:20px"
                                              id="previewImage" />
                                     }
                                     <br>
-                                    <input asp-for=Image type="file"
+                                    <input asp-for=File type="file"
                                     class="btn btn-info mt-2 waves-effect waves-light
                                     form-control-file form-control height-auto"
                                     onchange="loadImage(event)" />
-                                    <span asp-validation-for="Image" class="text-danger"></span>                                  
+                                    <span asp-validation-for="File" class="text-danger"></span>                                  
                                 </div>
                             </div>
                         </div>

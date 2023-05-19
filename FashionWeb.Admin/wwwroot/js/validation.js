@@ -4,26 +4,25 @@
             Name: {
                 required: true,
                 maxlength: 200,
-                minlength: 5
+                minlength: 3
             },          
             Provider: {
                 required: true,
                 maxlength: 200,
-                minlength: 5
+                minlength: 3
             },
             Price: {
                 required: true,
                 number: true,
                 min: 1
             },
-            UnitsInStock: {
+            QuantityInStock: {
                 required: true,
                 number: true,
                 min: 0
             },
-            Type: {
+            File: {
                 required: true,
-                maxlength: 200,
             }
         },
         messages: {
@@ -42,14 +41,13 @@
                 number: "PLEASE INPUT ONLY NUMBER",
                 min: "MINIMUM PRICE IS 1 DOLLAR"
             },
-            UnitsInStock: {
+            QuantityInStock: {
                 required: "QUANTITY IN STOCK IS REQUIRED",
                 number: "PLEASE INPUT ONLY NUMBER",
                 min: "MINIMUM QUANTITY IS 0"
             },
-            Type: {
-                required: "TYPE PRODUCT IS REQUIRED",
-                maxlength: "TOO LONG",
+            File: {
+                required: "UPLOAD IMAGE IS REQUIRED",
             }
         }
     });

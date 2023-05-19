@@ -2,18 +2,24 @@
 @model ProductViewModel
 
 @{
-	ViewData["Title"] = "Product Page";
-	Layout = "_Layout";
+    ViewData["Title"] = "Product Page";
+    Layout = "_Layout";
 }
 
 @{
-	var index = 0;
+    var index = 0;
 }
 
 <partial name="_Alert" />
 
 <link href="~/css/table.css" rel="stylesheet" />
 
+@if (Model.ListProduct == null)
+{
+	@await Html.PartialAsync("_503ErrorPage")
+}
+else
+{	
 <div class="main-container">
 	<div class="pd-ltr-20 xs-pd-20-10"> 
 		<div class="pd-20 card-box mb-30">
@@ -22,7 +28,7 @@
 					<h4 class="text-blue h4">PRODUCT TABLE</h4>
 					
 					<div class="pull-left">
-						<a href="~/Product/Add"class="btn btn-primary btn-sm" role="button">Add Product</a>
+						<a href="~/Product/Create"class="btn btn-primary btn-sm" role="button">Add Product</a>
 					</div>
 					
 				</div>
@@ -36,15 +42,13 @@
 						<th scope="col">
 							<input type="checkbox" name="select_all" value="1" class="checkBoxAll">
 						</th>
-						<th scope="col">Name</th>					
-						<th scope="col">Permission</th>					
+						<th scope="col">Name</th>
+						<th scope="col">Category</th>					
 						<th scope="col">Provider</th>
 						<th scope="col">Price</th>
 						<th scope="col">Quantity In Stock</th>
-						<th scope="col">Type</th>
-						<th scope="col">Category</th>
 						<th scope="col">Image</th>
-						<th scope="col">Edit</th>
+						<th scope="col">Update Product Information</th>
 						<th scope="col">Delete</th>
 					</tr>
 				</thead>
@@ -57,50 +61,49 @@
 								<input asp-for="@Model.ListProduct[index].Id" id="product-id__@index" type="hidden" class="product__id" />
 							</th>
 							<td class="table-plus sorting_1" tabindex="0">@product.Name</td>
-							<td >@product.EnableDisplay</td>
+							<td class="table-plus sorting_1" tabindex="0">@product.CategoryName</td>
 							<td>@product.Provider</td>
 							<td>@product.PriceDisplay</td>
-							<td>@product.UnitsInStock</td>
-							<td>@product.Type</td>
-							<td>@product.CategoryName</td>
+							<td>@product.QuantityInStock</td>
 							<td>
-								@if (string.IsNullOrEmpty(product.ImagePath))
+								@if (string.IsNullOrEmpty(product.ImageName))
 								{
-									<img src="~/img/product-defaut.png" class="product-image" style="height:100px; width:100px">
+									<img src="~/vendors/images/product-defaut.png" class="product-image" style="height:100px; width:100px">
 								}
 								else
 								{
-									<img src="~/Product/@product.ImagePath" clas="product-image" style="height:100px; width:100px">
-									<input type="hidden" asp-for="@product.ImagePath">
+									<img src="@product.ImageUrl" clas="product-image" style="height:100px; width:100px">
+									<input type="hidden" asp-for="@product.ImageName">
 								}
 							</td>
 							<td>
-								<a href="@Url.ActionLink("Edit", "Product", new {id = product.Id})" class="btn btn-primary" style=" border-radius:20%">
+								<a href="@Url.ActionLink("Update", "Product", new {id = product.Id})"
+								class="btn btn-primary" style=" border-radius:20%">
 									<i class="bi bi-pen"></i>
-									Edit
 								</a>
 							</td>
 							<td>
-								<a class="tm-product-delete-link"
+								<button class="tm-product-delete-link"
 								   data-toggle="modal"
-								   data-target="#DeleteModal"
-								   data-productid="@Model.ListProduct[index].Id">
-								   <i class="icon-copy bi bi-trash-fill"></i>
-								</a>
+								   data-target="@("#delete-product-"+product.Id)"
+								   type="button">
+								   <i class="icon-copy bi bi-trash-fill" style="cursor:pointer"></i>
+								</button>
 							</td>
+							@await Html.PartialAsync("_DeleteConfirmPartialView", product)
 						</tr>
 						index++;
 					}
 				</tbody>
 			</table>
 
-		</div>
-		<div class="footer-wrap pd-20 mb-20 card-box">
-			ADMIN - Admin Template By
-			<a href="https://bitbucket.org/dtranthai/fashion-admin/src/develop/" target="_blank" style="text-decoration:none">
-				TONY ĐẶNG AND APTECH TEAM
-			</a>
-		</div>
-	</div>
-	
-</div>
+            </div>
+            <div class="footer-wrap pd-20 mb-20 card-box">
+                ADMIN - Admin Template By
+                <a href="https://bitbucket.org/dtranthai/fashion-admin/src/develop/" target="_blank" style="text-decoration:none">
+                    TONY ĐẶNG AND APTECH TEAM
+                </a>
+            </div>
+        </div>
+    </div>
+}

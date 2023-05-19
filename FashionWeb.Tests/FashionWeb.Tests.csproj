@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FashionWeb.Domain\FashionWeb.Domain.csproj" />
-    <ProjectReference Include="..\FashionWeb.Infrastructure\FashionWeb.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
