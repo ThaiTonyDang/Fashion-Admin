@@ -1,7 +1,8 @@
-﻿@{
-    var mode = TempData["OpenMode"] as string;
-    var warning = TempData["StatusWarning"] as string;
-    var message = TempData["StatusMessage"] as string;
+﻿@using FashionWeb.Utilities.GlobalHelpers;
+@{
+    var mode = TempData[TEMPDATA.OPEN_MODE] as string;
+    var successMessage = TempData[TEMPDATA.SUCCESS_MESSAGE] as string;
+    var failMessage = TempData[TEMPDATA.FAIL_MESSAGE] as string;
 }
 
 
@@ -15,17 +16,17 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body text-center font-18">
-                    @if (!string.IsNullOrEmpty(message))
+                    @if (!string.IsNullOrEmpty(failMessage))
                     {
-                        <h3 class="mb-20" style="color:blue">@message</h3>
+                        <h3 class="mb-20" style="color:blue">@failMessage</h3>
                         <div class="mb-30 text-center">
                             <img src="~/vendors/images/success.png">
                         </div>
                         <p>CONGRATULATUON !</p>
                     }
-                    @if (!string.IsNullOrEmpty(warning))
+                    @if (!string.IsNullOrEmpty(successMessage))
                     {
-                        <h3 class="mb-20" style="color:red">@warning</h3>
+                        <h3 class="mb-20" style="color:red">@successMessage</h3>
                         <div class="mb-30 text-center">
                             <img src="~/vendors/images/cancel.png">
                         </div>

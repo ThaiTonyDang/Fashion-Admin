@@ -2,8 +2,11 @@
 using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Json;
+using System.Reflection;
 
 namespace FashionWeb.Domain.Services
 {
@@ -12,7 +15,9 @@ namespace FashionWeb.Domain.Services
 		private readonly IUrlService _urlService;
 		private readonly IFileService _fileService;
 		private readonly HttpClient _httpClient;
-		public string _exceptionMessage;
+		public string[] _exceptionMessage;
+		public HttpStatusCode _statusCode;
+		public bool _isSuccess;
 		public ProductService(IUrlService urlService, IFileService fileService, HttpClient httpClient)
 		{
 			_urlService = urlService;
@@ -24,11 +29,11 @@ namespace FashionWeb.Domain.Services
 		{
 			var productViewModel = new ProductViewModel();
 			productViewModel.ListProduct = await GetListProducts();
-			if (productViewModel.ListProduct == null)
-			{
-				productViewModel.ExceptionMessage = _exceptionMessage;
-			}	
 
+			productViewModel.ExceptionMessage = _exceptionMessage;
+			productViewModel.StatusCode = _statusCode;
+			productViewModel.IsSuccess = _isSuccess;
+			
 			return productViewModel;
 		}
 
@@ -41,25 +46,27 @@ namespace FashionWeb.Domain.Services
 
 				var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<ProductItemViewModel>>>
 								   (await response.Content.ReadAsStringAsync());
+				_isSuccess = responseList.Success;
+			    _exceptionMessage = responseList.ErrorsDetail;
+				_statusCode = responseList.StatusCode;
 
-				var isSuccess = responseList.Success;
-				if (!isSuccess)
-				{
-					return new List<ProductItemViewModel>();
-				}	
 				var products = responseList.Data;
-
-				foreach (var product in products)
+				if (products != null)
 				{
-					product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
-				}
-
+                    foreach (var product in products)
+                    {
+                        product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
+                    }
+                }	
+				
 				return products;
 			}
 			catch(Exception exception)
 			{
-				_exceptionMessage = exception.Message;
-				return null;
+				_exceptionMessage = new string[] { exception.InnerException.Message };
+				_statusCode = HttpStatusCode.ServiceUnavailable;
+
+                return null;
 			}
         }
 

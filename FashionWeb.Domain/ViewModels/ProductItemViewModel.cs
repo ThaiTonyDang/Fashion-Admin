@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Net;
 
 namespace FashionWeb.Domain.ViewModels
 {
@@ -53,7 +54,9 @@ namespace FashionWeb.Domain.ViewModels
 	public class ProductViewModel
 	{
 		public List<ProductItemViewModel> ListProduct { get; set; }
-		public string ExceptionMessage { get; set; }
+		public string[] ExceptionMessage { get; set; }
+		public HttpStatusCode StatusCode { get; set; }
+		public bool IsSuccess { get; set; }
 		public ProductViewModel()
 		{
 			this.ListProduct = new List<ProductItemViewModel>();
