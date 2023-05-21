@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Product Add";
+    Layout = "_Layout";
+}
+
+@model FashionWeb.Domain.ViewModels.ProductItemViewModel
+
+<partial name="_Alert" />
+
+ <div class="main-container">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="title">
+                        <h4>CREATE PRODUCT</h4>
+                    </div>
+                    <nav aria-label="breadcrumb" role="navigation">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="~/Home/Index">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <a href="~/Product/Index">Product Table</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-6 col-sm-12 text-right">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                            April 11, 2023
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Export List</a>
+                            <a class="dropdown-item" href="#">Policies</a>
+                            <a class="dropdown-item" href="#">View Assets</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pd-20 card-box mb-30">
+            <div class="clearfix">
+                <div class="pull-left">
+                    <h4 class="text-blue h4">Add Product Forms</h4>
+                    <p class="mb-30"></p>
+                </div>
+                <div class="pull-right">
+                </div>
+            </div>
+            <form asp-action="Create" asp-controller="Products" id="frmProductCreate"
+                  method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Product Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Provider"></label>
+                    <input asp-for="Provider" class="form-control" />
+                    <span asp-validation-for="Provider" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for=Price class="form-control" placeholder="Price" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label"> Quantity</label>
+                    <input asp-for="QuantityInStock" Price class="form-control" placeholder="Price" />
+                    <span asp-validation-for="QuantityInStock" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select asp-for="CategoryId" class="custom-select col-12">
+                    @if (Model.Categories != null)
+                    {
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Id">
+                                @category.Name
+                            </option>
+                        }
+                    }                   
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <input asp-for=File type="file" name="file"
+                           class="form-control-file form-control height-auto"
+                           onchange="loadImage(event)" />
+
+                </div>
+                <div class="form-group">
+                    <img src="~/vendors/images/product-defaut.png" alt="Logo Image"
+                         style=" width:250px; height:250px; margin-top:20px"
+                         id="previewImage" />
+                </div>
+                <span asp-validation-for="File" class="text-danger"></span>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">CREATE NEW PRODUCT</button>
+                    <a href="@Url.ActionLink("Index", "Products")" class="btn btn-secondary waves-effect">CANCEL</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

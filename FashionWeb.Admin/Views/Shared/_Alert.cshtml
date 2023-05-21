@@ -1,47 +1,37 @@
-﻿@{
-    var warning = TempData["StatusWarning"] as string;
-    var message = TempData["StatusMessage"] as string;
+﻿@using FashionWeb.Utilities.GlobalHelpers;
+@{
+    var mode = TempData[TEMPDATA.OPEN_MODE] as string;
+    var successMessage = TempData[TEMPDATA.SUCCESS_MESSAGE] as string;
+    var failMessage = TempData[TEMPDATA.FAIL_MESSAGE] as string;
 }
 
-@if (!string.IsNullOrEmpty(warning))
+
+@if (!string.IsNullOrEmpty(mode))
 {
-    <div class="modal fade show" id="fail-modal"
-    tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalCenterTitle"
-    style="display: block; padding-right: 15px;"
-    aria-modal="true">
+    <div class="modal fade show" id="confirm-modal"
+         tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle"
+         style="display: block; padding-right: 15px;"
+         aria-modal="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body text-center font-18">
-                    <h3 class="mb-20">@warning</h3>
-                    <div class="mb-30 text-center">
-                        <img src="~/vendors/images/cancel.png">
-                    </div>
-                    FAIL !!
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="closemodal">
-                        Done
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@if (!string.IsNullOrEmpty(message))
-{
-    <div class="modal fade show" id="success-modal"
-    tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    style="display: block; padding-right: 15px;" aria-modal="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body text-center font-18">
-                    <h3 class="mb-20">@message</h3>
-                    <div class="mb-30 text-center">
-                        <img src="~/vendors/images/success.png">
-                    </div>
-                    CONGRATULATUON !!
+                    @if (!string.IsNullOrEmpty(failMessage))
+                    {
+                        <h3 class="mb-20" style="color:blue">@failMessage</h3>
+                        <div class="mb-30 text-center">
+                            <img src="~/vendors/images/success.png">
+                        </div>
+                        <p>CONGRATULATUON !</p>
+                    }
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <h3 class="mb-20" style="color:red">@successMessage</h3>
+                        <div class="mb-30 text-center">
+                            <img src="~/vendors/images/cancel.png">
+                        </div>
+                        <p>FAIL !</p>
+                    }
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="closemodal">

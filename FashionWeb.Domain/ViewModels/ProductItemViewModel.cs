@@ -1,25 +1,24 @@
 ﻿using FashionWeb.Utilities.GlobalHelpers;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.ViewModels
 {
 	public class ProductItemViewModel
 	{
+		private const string requiredString =
+		"(^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$)";
+
 		public bool IsCheck { get; set; }
 		public Guid Id { set; get; }
 
 		[Required(ErrorMessage = "NAME IS REQUIRED")]
 		public string Name { set; get; }
 
+		[Required(ErrorMessage = "PROVIDER IS REQUIRED")]
 		public string Provider { set; get; }
 
 		[Range(0, Double.MaxValue, ErrorMessage = "PRICE IS REQUIRED")]
@@ -27,15 +26,17 @@ namespace FashionWeb.Domain.ViewModels
 
 		public string PriceDisplay { get => GetPriceFormat(); }
 
-	    [Required(ErrorMessage = "CATEGORY IS REQUIRED")]
-        public Guid CategoryId { get; set; }
+		[RegularExpression($"{requiredString}",
+		ErrorMessage = "CATEGORY IS REQUIRED")]
+		public Guid CategoryId { get; set; }
 
 		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED")]
-		public IFormFile Image { get; set; }
+        public IFormFile File { get; set; }
 
 		public string ImageName { get; set; }
 		public string ImageUrl { get; set; }
 
+		[Range(0, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
 		public int QuantityInStock { get; set; }
 
 		public bool IsEnabled { get; set; }
@@ -46,7 +47,7 @@ namespace FashionWeb.Domain.ViewModels
 		public string GetPriceFormat()
 		{
 			CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-			return string.Format(cultureInfo, "{0:C0}", this.Price);
+			return string.Format(cultureInfo, "{0:C2}", this.Price);
 		}
 	}
 
@@ -55,6 +56,7 @@ namespace FashionWeb.Domain.ViewModels
 		public List<ProductItemViewModel> ListProduct { get; set; }
 		public string[] ExceptionMessage { get; set; }
 		public HttpStatusCode StatusCode { get; set; }
+		public bool IsSuccess { get; set; }
 		public ProductViewModel()
 		{
 			this.ListProduct = new List<ProductItemViewModel>();

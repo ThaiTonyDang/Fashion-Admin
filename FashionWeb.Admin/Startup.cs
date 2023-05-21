@@ -23,6 +23,8 @@ namespace FashionWeb.Admin
 
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICategoryService, CategoryService>();
+			services.AddScoped<IUrlService, UrlService>();
+			services.AddScoped<IFileService, FileService>();
 			services.AddHttpClient();
 
 			services.Configure<APIConfig>(Configuration.GetSection("Api"));

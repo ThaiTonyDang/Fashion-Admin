@@ -10,6 +10,14 @@ namespace FashionWeb.Utilities.GlobalHelpers
     {
         public const string ENABLE = "ENABLE";
         public const string DISABLE = "DISABLE";
+        public const string OPEN_MODE = "OPEN MODE";
         public const string IMAGE_PATH = "product-defaut.png";
+    }
+
+    public struct TEMPDATA
+    {
+        public const string SUCCESS_MESSAGE = "SUCCESS";
+        public const string FAIL_MESSAGE = "FAIL";
+        public const string OPEN_MODE = "OPEN MODE";
     }
 }

@@ -1,0 +1,48 @@
+﻿@using FashionWeb.Domain.ViewModels;
+@model ProductViewModel
+
+<div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="error-page d-flex align-items-center flex-wrap justify-content-center pd-20">
+                <div class="pd-10">
+                    <div class="error-page-wrap text-center">
+                    @if (Model.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                    {
+                        <h1>500</h1>
+                        <h3>Error: 500 @Model.StatusCode</h3>
+                        @for (int i = 0; i < Model.ExceptionMessage.Length; i++)
+                        {
+                            <p style="font-size:20px">
+                                @Model.ExceptionMessage[i] <br/>
+                            </p>
+                        }
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+                               class="btn btn-primary btn-block btn-lg">Check error by link</a>
+                        </div>
+                    }
+                    @if (Model.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+                    {
+                        <h1>503</h1>
+                        <h3>Error: 503 @Model.StatusCode</h3>
+                        <p style="font-size:20px">
+                            @for (int i = 0; i < Model.ExceptionMessage.Length; i++)
+                            {
+                                @Model.ExceptionMessage[i]                           
+                            }
+                            <br />
+                        </p>
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503"
+                               class="btn btn-primary btn-block btn-lg">Check error by link</a>
+                        </div>
+                    }
+
+                        <div class="pt-20 mx-auto max-width-200">
+                            <a href="~/Home/Index" class="btn btn-primary btn-block btn-lg">Back To Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

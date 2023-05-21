@@ -1,5 +1,5 @@
 ﻿$(document).on("click", "#closemodal", function () {
-    $('#success-modal').hide();
+    $('#confirm-modal').hide();
 })
 
 function loadImage(event) {

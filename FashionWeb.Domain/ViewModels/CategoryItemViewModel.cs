@@ -10,7 +10,7 @@ namespace FashionWeb.Domain.ViewModels
 {
     public class CategoryItemViewModel
     {
-        public Guid CategoryId { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "CATEGORY NAME IS REQUIRED")]
         public string Name { get; set; }
@@ -19,8 +19,19 @@ namespace FashionWeb.Domain.ViewModels
         public string Description { get; set; }
 
         [Required(ErrorMessage = "IMAGE UPLOAD IS REQUIRED")]
-        public IFormFile Image { get; set; }
+        public IFormFile File { get; set; }
 
-        public string ImagePath { get; set; }
+        public string ImageName { get; set; }
+        public string ImageUrl { get; set; }
+    }
+
+    public class CategoryViewModel
+    {
+        public List<CategoryItemViewModel> ListCategory { get; set; }
+        public string ExceptionMessage { get; set; }
+        public CategoryViewModel()
+        {
+            this.ListCategory = new List<CategoryItemViewModel>();
+        }
     }
 }
