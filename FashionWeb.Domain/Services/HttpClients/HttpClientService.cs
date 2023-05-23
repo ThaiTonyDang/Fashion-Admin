@@ -1,4 +1,6 @@
 ﻿using FashionWeb.Domain.HostConfig;
+using FashionWeb.Domain.Model;
+using FashionWeb.Domain.ResponseModel;
 using Microsoft.Extensions.Options;
 using System.Net.Mime;
 using System.Text;
@@ -26,19 +28,35 @@ namespace FashionWeb.Domain.Services.HttpClients
             return fileUrl;
         }
 
-        public async Task<T> GetAsync<T>(string url)
+        public async Task<BaseReponseApi> GetAsync<T>(string url)
         {
             var response = await _httpClient.GetAsync(url);
             if(response != null && response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<T>(jsonString);
+                var result =  JsonSerializer.Deserialize<ResponseApi<T>>(jsonString);
+                return result;
             }
 
             return default;
         }
 
-        public async Task<TResult> PostAsync<TBody, TResult>(TBody body, string url, string contentType = MediaTypeNames.Application.Json)
+        public async Task<BaseReponseApi> GetDataAsync<T>(string url)
+        {
+            var response = await _httpClient.GetAsync(url);
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<ResponseApiData<T>>(jsonString);
+                return result;
+            }
+
+            var error =
+
+            return default;
+        }
+
+        public async Task<BaseReponseApi> PostAsync<TBody>(TBody body, string url, string contentType = MediaTypeNames.Application.Json)
         {
             var jsonBody = JsonSerializer.Serialize(body);
             var response = await _httpClient.PostAsync(url, new StringContent(jsonBody, Encoding.UTF8, contentType));

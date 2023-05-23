@@ -1,5 +1,6 @@
 using FashionWeb.Domain.HostConfig;
 using FashionWeb.Domain.Services;
+using FashionWeb.Domain.Services.HttpClients;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

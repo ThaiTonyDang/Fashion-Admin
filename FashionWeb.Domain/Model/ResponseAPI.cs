@@ -1,22 +1,7 @@
-﻿using System.Text.Json.Serialization;
-
-namespace FashionWeb.Domain.ResponseModel
+﻿namespace FashionWeb.Domain.Model
 {
-    public class ResponseApi<T>
+    public class ResponseApi<T> : BaseReponseApi
     {
-        [JsonPropertyName("statusCode")]
-        public int StatusCode { get; set; }
 
-        [JsonPropertyName("isSuccess")]
-        public bool IsSuccess { get; set; }
-
-        [JsonPropertyName("message")]
-        public string Message { get; set; }
-
-        [JsonPropertyName("errors")]
-        public string[] Errors { get; set; }
-
-        [JsonPropertyName("data")]
-        public T Data { get; set; }
     }
 }

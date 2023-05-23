@@ -14,7 +14,7 @@ namespace FashionWeb.Domain.Services
 		private readonly IFileService _fileService;
 		private readonly HttpClient _httpClient;
 		public string[] _exceptionMessage;
-		public HttpStatusCode _statusCode;
+		public int _statusCode;
 		public bool _isSuccess;
 		public ProductService(IHttpClientService urlService, IFileService fileService, HttpClient httpClient)
 		{
@@ -29,7 +29,7 @@ namespace FashionWeb.Domain.Services
 			productViewModel.ListProduct = await GetListProducts();
 
 			productViewModel.ExceptionMessage = _exceptionMessage;
-			productViewModel.StatusCode = _statusCode;
+			productViewModel.StatusCode = HttpStatusCode.Accepted;
 			productViewModel.IsSuccess = _isSuccess;
 			
 			return productViewModel;
@@ -42,10 +42,10 @@ namespace FashionWeb.Domain.Services
 				var apiUrl = _urlService.GetBaseUrl() + "api/products";
 				var response = await _httpClient.GetAsync(apiUrl);
 
-				var responseList = JsonConvert.DeserializeObject<ResponseApi<List<ProductItemViewModel>>>
+				var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
 								   (await response.Content.ReadAsStringAsync());
 				_isSuccess = responseList.IsSuccess;
-			    _exceptionMessage = responseList.Errors;
+			    _exceptionMessage = new string[] { };
 				_statusCode = responseList.StatusCode;
 
 				var products = responseList.Data;
@@ -62,7 +62,7 @@ namespace FashionWeb.Domain.Services
 			catch(Exception exception)
 			{
 				_exceptionMessage = new string[] { exception.InnerException.Message };
-				_statusCode = HttpStatusCode.ServiceUnavailable;
+				_statusCode = (int)HttpStatusCode.ServiceUnavailable;
 
                 return null;
 			}
@@ -87,7 +87,7 @@ namespace FashionWeb.Domain.Services
                 {
 					var apiUrl = _urlService.GetBaseUrl() + "api/products";
 					var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
-					var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
+					var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
 									   (await response.Content.ReadAsStringAsync());
 					message = responseList.Message;
 
@@ -136,7 +136,7 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "api/products";
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, productItemViewModel);
-                var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                     (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
                 return Tuple.Create(responseList.IsSuccess, message + " ! " + responseMessage);                  
@@ -154,7 +154,7 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "api/products/";
                 var response = await _httpClient.GetAsync(apiUrl + productId);
-                var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 var productDto = responseList.Data;
                 message = responseList.Message;
@@ -177,7 +177,7 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "api/products/";
                 var response = await _httpClient.DeleteAsync(apiUrl + productId);
-                var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
                 return Tuple.Create(responseList.IsSuccess, message);

@@ -1,4 +1,5 @@
-﻿using FashionWeb.Domain.Services.HttpClients;
+﻿using FashionWeb.Domain.Dtos;
+using FashionWeb.Domain.Services.HttpClients;
 
 namespace FashionWeb.Domain.Services.Users
 {
@@ -11,12 +12,12 @@ namespace FashionWeb.Domain.Services.Users
         public UserService(IHttpClientService httpClientService)
         {
             _httpClientService = httpClientService;
-            _apiPathUrl = _httpClientService.GetBaseUrl() + $"/{_apiPathUrl}";
+            _apiUrl = _httpClientService.GetBaseUrl() + $"/{_apiPathUrl}";
         }
 
-        public async Task<string> LoginAsync(string userName, string passWord)
+        public async Task<string> LoginAsync(User user)
         {
-            var loginApiUrl = $"{_apiPathUrl}/login";
+            var loginApiUrl = $"{_apiUrl}/login";
             return string.Empty;
         }
     }

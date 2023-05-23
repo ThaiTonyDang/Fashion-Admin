@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FashionWeb.Domain.Dtos;
 
 namespace FashionWeb.Domain.Services.Users
 {
     public interface IUserService
     {
-        Task<string> LoginAsync(string userName, string passWord);
+        Task<string> LoginAsync(User user);
     }
 }

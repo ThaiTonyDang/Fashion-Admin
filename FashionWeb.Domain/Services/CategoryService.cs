@@ -1,11 +1,7 @@
 ﻿using FashionWeb.Domain.ResponseModel;
+using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.Services
 {
@@ -29,7 +25,7 @@ namespace FashionWeb.Domain.Services
                 var apiUrl = _urlService.GetBaseUrl() + "api/categories";
                 var response = await _httpClient.GetAsync(apiUrl);
 
-                var responseList = JsonConvert.DeserializeObject<ResponseApi<List<CategoryItemViewModel>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<CategoryItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
 
                 var isSuccess = responseList.IsSuccess;
