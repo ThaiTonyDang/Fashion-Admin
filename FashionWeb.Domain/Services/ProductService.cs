@@ -42,10 +42,10 @@ namespace FashionWeb.Domain.Services
 				var apiUrl = _urlService.GetBaseUrl() + "api/products";
 				var response = await _httpClient.GetAsync(apiUrl);
 
-				var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<ProductItemViewModel>>>
+				var responseList = JsonConvert.DeserializeObject<ResponseApi<List<ProductItemViewModel>>>
 								   (await response.Content.ReadAsStringAsync());
-				_isSuccess = responseList.Success;
-			    _exceptionMessage = responseList.ErrorsDetail;
+				_isSuccess = responseList.IsSuccess;
+			    _exceptionMessage = responseList.Errors;
 				_statusCode = responseList.StatusCode;
 
 				var products = responseList.Data;
@@ -87,11 +87,11 @@ namespace FashionWeb.Domain.Services
                 {
 					var apiUrl = _urlService.GetBaseUrl() + "api/products";
 					var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
-					var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
+					var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
 									   (await response.Content.ReadAsStringAsync());
 					message = responseList.Message;
 
-					if (responseList.Success)
+					if (responseList.IsSuccess)
 					{
 						return Tuple.Create(true, message + " ! " + responseMessage);
 					}
@@ -136,10 +136,10 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "api/products";
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, productItemViewModel);
-                var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
                                     (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
-                return Tuple.Create(responseList.Success, message + " ! " + responseMessage);                  
+                return Tuple.Create(responseList.IsSuccess, message + " ! " + responseMessage);                  
             }
             catch (Exception exception)
             {
@@ -154,7 +154,7 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "api/products/";
                 var response = await _httpClient.GetAsync(apiUrl + productId);
-                var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 var productDto = responseList.Data;
                 message = responseList.Message;
@@ -177,10 +177,10 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "api/products/";
                 var response = await _httpClient.DeleteAsync(apiUrl + productId);
-                var responseList = JsonConvert.DeserializeObject<ResponseAPI<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApi<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
-                return Tuple.Create(responseList.Success, message);
+                return Tuple.Create(responseList.IsSuccess, message);
             }
             catch (Exception exception)
             {

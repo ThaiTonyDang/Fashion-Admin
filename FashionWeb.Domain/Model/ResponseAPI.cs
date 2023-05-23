@@ -1,18 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace FashionWeb.Domain.ResponseModel
 {
-    public class ResponseAPI<T>
+    public class ResponseApi<T>
     {
-        public HttpStatusCode StatusCode { get; set; }
-        public bool Success { get; set; }
+        [JsonPropertyName("statusCode")]
+        public int StatusCode { get; set; }
+
+        [JsonPropertyName("isSuccess")]
+        public bool IsSuccess { get; set; }
+
+        [JsonPropertyName("message")]
         public string Message { get; set; }
-        public string[] ErrorsDetail { get; set; }
+
+        [JsonPropertyName("errors")]
+        public string[] Errors { get; set; }
+
+        [JsonPropertyName("data")]
         public T Data { get; set; }
     }
 }

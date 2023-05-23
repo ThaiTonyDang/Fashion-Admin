@@ -29,10 +29,10 @@ namespace FashionWeb.Domain.Services
                 var apiUrl = _urlService.GetBaseUrl() + "api/categories";
                 var response = await _httpClient.GetAsync(apiUrl);
 
-                var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<CategoryItemViewModel>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApi<List<CategoryItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
 
-                var isSuccess = responseList.Success;
+                var isSuccess = responseList.IsSuccess;
                 if (!isSuccess)
                 {
                     return new List<CategoryItemViewModel>();
