@@ -11,11 +11,11 @@ namespace FashionWeb.Domain.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IUrlService _urlService;
+        private readonly IHttpClientService _urlService;
         private readonly IFileService _fileService;
         private readonly HttpClient _httpClient;
         public string _exceptionMessage;
-        public CategoryService(IUrlService urlService, IFileService fileService, HttpClient httpClient)
+        public CategoryService(IHttpClientService urlService, IFileService fileService, HttpClient httpClient)
         {
             _urlService = urlService;
             _fileService = fileService;

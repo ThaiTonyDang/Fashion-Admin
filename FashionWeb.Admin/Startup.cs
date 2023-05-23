@@ -23,11 +23,11 @@ namespace FashionWeb.Admin
 
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICategoryService, CategoryService>();
-			services.AddScoped<IUrlService, UrlService>();
+			services.AddScoped<IHttpClientService, HttpClientService>();
 			services.AddScoped<IFileService, FileService>();
 			services.AddHttpClient();
 
-			services.Configure<APIConfig>(Configuration.GetSection("Api"));
+			services.Configure<ApiConfig>(Configuration.GetSection("Api"));
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

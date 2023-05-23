@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FashionWeb.Domain.HostConfig
+﻿namespace FashionWeb.Domain.HostConfig
 {
-    public class APIConfig
+    public class ApiConfig
     {
         public string Url { get; set; }
     }

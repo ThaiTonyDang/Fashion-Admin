@@ -1,24 +1,15 @@
-﻿using FashionWeb.Domain.Extensions;
-using FashionWeb.Domain.ResponseModel;
-using FashionWeb.Utilities.GlobalHelpers;
+﻿using FashionWeb.Domain.ResponseModel;
+using FashionWeb.Domain.Services.HttpClients;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.Services
 {
     public class FileService : IFileService
     {
-        private readonly IUrlService _urlService;
-        public FileService(IUrlService urlService)
+        private readonly IHttpClientService _urlService;
+        public FileService(IHttpClientService urlService)
         {
             _urlService = urlService;
         }

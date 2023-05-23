@@ -1,24 +1,22 @@
-﻿using FashionWeb.Domain.HostConfig;
-using FashionWeb.Domain.ResponseModel;
+﻿using FashionWeb.Domain.ResponseModel;
+using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Json;
-using System.Reflection;
 
 namespace FashionWeb.Domain.Services
 {
-	public class ProductService : IProductService
+    public class ProductService : IProductService
 	{
-		private readonly IUrlService _urlService;
+		private readonly IHttpClientService _urlService;
 		private readonly IFileService _fileService;
 		private readonly HttpClient _httpClient;
 		public string[] _exceptionMessage;
 		public HttpStatusCode _statusCode;
 		public bool _isSuccess;
-		public ProductService(IUrlService urlService, IFileService fileService, HttpClient httpClient)
+		public ProductService(IHttpClientService urlService, IFileService fileService, HttpClient httpClient)
 		{
 			_urlService = urlService;
 			_httpClient = httpClient;

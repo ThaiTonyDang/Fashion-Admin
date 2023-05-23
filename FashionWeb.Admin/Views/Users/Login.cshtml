@@ -3,6 +3,8 @@
     Layout = "~/Views/Shared/_FullLayout.cshtml";
 }
 
+@model FashionWeb.Admin.ViewModels.Users.UserLogin
+
 <div class="login-wrap d-flex align-items-center flex-wrap justify-content-center">
     <div class="container">
         <div class="row align-items-center">
@@ -14,15 +16,15 @@
                     <div class="login-title">
                         <h2 class="text-center text-primary">Login To Fashion Shop</h2>
                     </div>
-                    <form>
+                    <form asp-controller="Users" method="post" enctype="multipart/form-data">
                         <div class="input-group custom">
-                            <input type="text" class="form-control form-control-lg" placeholder="Username" />
+                            <input asp-for="Email" type="text" class="form-control form-control-lg" placeholder="Email" />
                             <div class="input-group-append custom">
                                 <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
                             </div>
                         </div>
                         <div class="input-group custom">
-                            <input type="password" class="form-control form-control-lg" placeholder="**********" />
+                            <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="**********" />
                             <div class="input-group-append custom">
                                 <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
                             </div>
@@ -43,11 +45,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="input-group mb-0">
-                                    <!--
-                                        use code for form submit
-                                        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
-                                    -->
-                                    <a class="btn btn-primary btn-lg btn-block" href="index.html">Sign In</a>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block" asp-action="Login">Login</button>
                                 </div>
                             </div>
                         </div>
