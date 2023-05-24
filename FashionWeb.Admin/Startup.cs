@@ -33,6 +33,7 @@ namespace FashionWeb.Admin
 					.AddCookie(options =>
 					{
 						options.LoginPath = "/users/login";
+						options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
 					});
 
 
@@ -48,7 +49,7 @@ namespace FashionWeb.Admin
 
             services.AddSession(options =>
              {
-                 options.IdleTimeout = TimeSpan.FromSeconds(720);
+                 options.IdleTimeout = TimeSpan.FromMinutes(720);
                  options.Cookie.HttpOnly = true;
                  options.Cookie.IsEssential = true;
              });
@@ -71,10 +72,10 @@ namespace FashionWeb.Admin
 
             app.UseRouting();
 
-			app.UseAuthentication();
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-			app.UseSession();
+            app.UseSession();
 
 			app.UseEndpoints(endpoints =>
 			{

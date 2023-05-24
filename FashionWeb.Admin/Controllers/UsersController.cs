@@ -28,14 +28,24 @@ namespace FashionWeb.Admin.Controllers
 
         [HttpGet]
         [Route("login")]
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] string returnUrl)
         {
+            if(User.Identity.IsAuthenticated)
+            {
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return RedirectToAction("Index", "Home");
+            }
+
             return View("Login");
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromForm] UserLogin userLogin)
+        public async Task<IActionResult> Login([FromForm] UserLogin userLogin, [FromQuery] string returnUrl)
         {
             var user = new User
             {
@@ -65,6 +75,12 @@ namespace FashionWeb.Admin.Controllers
                     await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authenticateionProp);
 
                     HttpContext.Session.SetString("JwtToken", token);
+
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+
                 }
             }
 

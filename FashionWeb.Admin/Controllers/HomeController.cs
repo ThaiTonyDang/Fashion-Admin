@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace FashionWeb.Admin.Controllers
 {
@@ -16,6 +17,7 @@ namespace FashionWeb.Admin.Controllers
 
         public IActionResult Index()
         {
+            var user = User.Claims.ToArray();
             return View();
         }
 
