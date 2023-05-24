@@ -31,43 +31,44 @@ namespace FashionWeb.Domain.Services.HttpClients
         public async Task<BaseReponseApi> GetAsync<T>(string url)
         {
             var response = await _httpClient.GetAsync(url);
-            if(response != null && response.IsSuccessStatusCode)
+            var jsonString = await response.Content.ReadAsStringAsync();
+            if (response != null && response.IsSuccessStatusCode)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
                 var result =  JsonSerializer.Deserialize<ResponseApi<T>>(jsonString);
                 return result;
             }
 
-            return default;
+            var error = JsonSerializer.Deserialize<ErrorResponseApi<string[]>>(jsonString);
+            return error;
         }
 
         public async Task<BaseReponseApi> GetDataAsync<T>(string url)
         {
             var response = await _httpClient.GetAsync(url);
+            var jsonString = await response.Content.ReadAsStringAsync();
             if (response != null && response.IsSuccessStatusCode)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<ResponseApiData<T>>(jsonString);
                 return result;
             }
 
-            var error =
-
-            return default;
+            var error = JsonSerializer.Deserialize<ErrorResponseApi<string[]>>(jsonString);
+            return error;
         }
 
-        public async Task<BaseReponseApi> PostAsync<TBody>(TBody body, string url, string contentType = MediaTypeNames.Application.Json)
+        public async Task<BaseReponseApi> PostAsync<TBody,TResult>(TBody body, string url, string contentType = MediaTypeNames.Application.Json)
         {
             var jsonBody = JsonSerializer.Serialize(body);
             var response = await _httpClient.PostAsync(url, new StringContent(jsonBody, Encoding.UTF8, contentType));
+            var jsonString = await response.Content.ReadAsStringAsync();
             if (response != null && response.IsSuccessStatusCode)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<TResult>(jsonString);
+                var result = JsonSerializer.Deserialize<ResponseApiData<TResult>>(jsonString);
                 return result;
             }
 
-            return default;
+            var error = JsonSerializer.Deserialize<ErrorResponseApi<string[]>>(jsonString);
+            return error;
         }
     }
 }

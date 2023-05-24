@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using FashionWeb.Domain.Model;
+using System.Net.Mime;
 
 namespace FashionWeb.Domain.Services.HttpClients
 {
@@ -6,7 +7,7 @@ namespace FashionWeb.Domain.Services.HttpClients
     {
         string GetBaseUrl();
         string GetFileApiUrl(string fileName);
-        Task<T> GetAsync<T>(string url);
-        Task<TResult> PostAsync<TBody, TResult>(TBody body, string url, string contentType = MediaTypeNames.Application.Json);
+        Task<BaseReponseApi> GetAsync<T>(string url);
+        Task<BaseReponseApi> PostAsync<TBody, TResult>(TBody body, string url, string contentType = MediaTypeNames.Application.Json);
     }
 }

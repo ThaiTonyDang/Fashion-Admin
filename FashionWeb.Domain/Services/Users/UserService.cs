@@ -1,5 +1,8 @@
 ﻿using FashionWeb.Domain.Dtos;
+using FashionWeb.Domain.Model;
+using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.Services.HttpClients;
+using Microsoft.AspNetCore.Http;
 
 namespace FashionWeb.Domain.Services.Users
 {
@@ -15,10 +18,29 @@ namespace FashionWeb.Domain.Services.Users
             _apiUrl = _httpClientService.GetBaseUrl() + $"/{_apiPathUrl}";
         }
 
-        public async Task<string> LoginAsync(User user)
+        public async Task<IResponse> LoginAsync(User user)
         {
             var loginApiUrl = $"{_apiUrl}/login";
-            return string.Empty;
+            var response = await this._httpClientService.PostAsync<User, string>(user, loginApiUrl);
+            if (response.IsSuccess)
+            {
+                var result = (ResponseApiData<string>)response;
+                return new Response<string>
+                {
+                    IsSuccess = result.IsSuccess,
+                    Data = result.Data,
+                    Message = result.Message
+                };
+            }
+
+            var errorResult = (ErrorResponseApi<string[]>)response;
+
+            return new Response<string[]>
+            {
+                IsSuccess = errorResult.IsSuccess,
+                Message = errorResult.Message,
+                Data = errorResult.Errors
+            };
         }
     }
 }
