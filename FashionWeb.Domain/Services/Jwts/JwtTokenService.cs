@@ -19,9 +19,16 @@ namespace FashionWeb.Domain.Services.Jwts
         {
             var tokenOptions = GetTokenOptions();
             var tokenHandler = new JwtSecurityTokenHandler();
-            var result = tokenHandler.ValidateToken(token, tokenOptions, out _);
-            var isAuthenticated = result.Identity != null && result.Identity.IsAuthenticated;
-            return Task.FromResult(isAuthenticated);
+            try
+            {
+                var result = tokenHandler.ValidateToken(token, tokenOptions, out _);
+                var isAuthenticated = result.Identity != null && result.Identity.IsAuthenticated;
+                return Task.FromResult(isAuthenticated);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(false);
+            }
         }
 
         public Task<IEnumerable<Claim>> GetClaims(string token)

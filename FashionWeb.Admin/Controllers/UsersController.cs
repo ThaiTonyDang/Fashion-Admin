@@ -1,14 +1,12 @@
 ﻿using FashionWeb.Admin.ViewModels.Users;
 using FashionWeb.Domain.Dtos;
 using FashionWeb.Domain.Model;
-using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.Services.Jwts;
 using FashionWeb.Domain.Services.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Plugins;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -85,6 +83,16 @@ namespace FashionWeb.Admin.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
         }
     }
 }
