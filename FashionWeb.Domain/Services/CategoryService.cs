@@ -1,21 +1,17 @@
 ﻿using FashionWeb.Domain.ResponseModel;
+using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IUrlService _urlService;
+        private readonly IHttpClientService _urlService;
         private readonly IFileService _fileService;
         private readonly HttpClient _httpClient;
         public string _exceptionMessage;
-        public CategoryService(IUrlService urlService, IFileService fileService, HttpClient httpClient)
+        public CategoryService(IHttpClientService urlService, IFileService fileService, HttpClient httpClient)
         {
             _urlService = urlService;
             _fileService = fileService;
@@ -29,10 +25,10 @@ namespace FashionWeb.Domain.Services
                 var apiUrl = _urlService.GetBaseUrl() + "api/categories";
                 var response = await _httpClient.GetAsync(apiUrl);
 
-                var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<CategoryItemViewModel>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<CategoryItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
 
-                var isSuccess = responseList.Success;
+                var isSuccess = responseList.IsSuccess;
                 if (!isSuccess)
                 {
                     return new List<CategoryItemViewModel>();

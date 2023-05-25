@@ -1,28 +1,19 @@
-﻿using FashionWeb.Domain.Extensions;
-using FashionWeb.Domain.ResponseModel;
-using FashionWeb.Utilities.GlobalHelpers;
+﻿using FashionWeb.Domain.ResponseModel;
+using FashionWeb.Domain.Services.HttpClients;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.Services
 {
     public class FileService : IFileService
     {
-        private readonly IUrlService _urlService;
-        public FileService(IUrlService urlService)
+        private readonly IHttpClientService _urlService;
+        public FileService(IHttpClientService urlService)
         {
             _urlService = urlService;
         }
-        public async Task<Tuple<ResponseAPI<List<string>>, string>> GetResponeUploadFileAsync(IFormFile file, HttpClient httpClient)
+        public async Task<Tuple<ResponseApiData<List<string>>, string>> GetResponeUploadFileAsync(IFormFile file, HttpClient httpClient)
         {
             try
             {
@@ -41,16 +32,16 @@ namespace FashionWeb.Domain.Services
                 }, "File", fileName);
 
                 var response = await httpClient.PostAsync(uploadApiUrl, content);
-                var responseList = JsonConvert.DeserializeObject<ResponseAPI<List<string>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<string>>>
                                 (await response.Content.ReadAsStringAsync());
-                var isSuccess = responseList.Success;
+                var isSuccess = responseList.IsSuccess;
                 var message = responseList.Message;
 
                 return Tuple.Create(responseList, message);
             }
             catch
             {
-                return Tuple.Create(default(ResponseAPI<List<string>>), "An Error Has Occurred Server Side ! Upload Image Fail");
+                return Tuple.Create(default(ResponseApiData<List<string>>), "An Error Has Occurred Server Side ! Upload Image Fail");
             }         
         }
     }

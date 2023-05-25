@@ -1,10 +1,16 @@
+using FashionWeb.Admin.Extensions;
 using FashionWeb.Domain.HostConfig;
 using FashionWeb.Domain.Services;
+using FashionWeb.Domain.Services.HttpClients;
+using FashionWeb.Domain.Services.Jwts;
+using FashionWeb.Domain.Services.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace FashionWeb.Admin
 {
@@ -19,15 +25,36 @@ namespace FashionWeb.Admin
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews();
+			services.AddControllersWithViews().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-			services.AddScoped<IProductService, ProductService>();
+            services.AddIdentityTokenConfig(Configuration);
+
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+					.AddCookie(options =>
+					{
+						options.LoginPath = "/users/login";
+						options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
+					});
+
+
+            services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICategoryService, CategoryService>();
-			services.AddScoped<IUrlService, UrlService>();
+			services.AddScoped<IHttpClientService, HttpClientService>();
 			services.AddScoped<IFileService, FileService>();
+			services.AddScoped<IJwtTokenService, JwtTokenService>();
+			services.AddScoped<IUserService, UserService>();
 			services.AddHttpClient();
 
-			services.Configure<APIConfig>(Configuration.GetSection("Api"));
+			services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+             {
+                 options.IdleTimeout = TimeSpan.FromMinutes(720);
+                 options.Cookie.HttpOnly = true;
+                 options.Cookie.IsEssential = true;
+             });
+
+            services.Configure<ApiConfig>(Configuration.GetSection("Api"));
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,9 +70,12 @@ namespace FashionWeb.Admin
 
 			app.UseStaticFiles();
 
-			app.UseRouting();
+            app.UseRouting();
 
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseSession();
 
 			app.UseEndpoints(endpoints =>
 			{
