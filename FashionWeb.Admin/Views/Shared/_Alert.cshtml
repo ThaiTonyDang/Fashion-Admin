@@ -16,17 +16,17 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body text-center font-18">
-                    @if (!string.IsNullOrEmpty(failMessage))
+                    @if (!string.IsNullOrEmpty(successMessage))
                     {
-                        <h3 class="mb-20" style="color:blue">@failMessage</h3>
+                        <h3 class="mb-20" style="color:blue">@successMessage</h3>
                         <div class="mb-30 text-center">
                             <img src="~/vendors/images/success.png">
                         </div>
                         <p>CONGRATULATUON !</p>
                     }
-                    @if (!string.IsNullOrEmpty(successMessage))
+                    @if (!string.IsNullOrEmpty(failMessage))
                     {
-                        <h3 class="mb-20" style="color:red">@successMessage</h3>
+                        <h3 class="mb-20" style="color:red">@failMessage</h3>
                         <div class="mb-30 text-center">
                             <img src="~/vendors/images/cancel.png">
                         </div>

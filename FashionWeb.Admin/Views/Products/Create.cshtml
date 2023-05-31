@@ -92,9 +92,10 @@
                 </div>
                 <div class="form-group">
                     <label>Product Image</label>
-                    <input asp-for=File type="file" name="file"
+                    <input asp-for= "File" type="file"
                            class="form-control-file form-control height-auto"
                            onchange="loadImage(event)" />
+                <span asp-validation-for="File" class="text-danger"></span>
 
                 </div>
                 <div class="form-group">
@@ -102,7 +103,6 @@
                          style=" width:250px; height:250px; margin-top:20px"
                          id="previewImage" />
                 </div>
-                <span asp-validation-for="File" class="text-danger"></span>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">CREATE NEW PRODUCT</button>
                     <a href="@Url.ActionLink("Index", "Products")" class="btn btn-secondary waves-effect">CANCEL</a>

@@ -30,13 +30,13 @@ namespace FashionWeb.Domain.ViewModels
 		ErrorMessage = "CATEGORY IS REQUIRED")]
 		public Guid CategoryId { get; set; }
 
-		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED")]
+		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED ")]
         public IFormFile File { get; set; }
 
 		public string ImageName { get; set; }
 		public string ImageUrl { get; set; }
 
-		[Range(0, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
+		[Range(1, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
 		public int QuantityInStock { get; set; }
 
 		public bool IsEnabled { get; set; }
