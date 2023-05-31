@@ -11,6 +11,6 @@ namespace FashionWeb.Domain.Services
     {
         public Task<List<OrderItemViewModel>> GetListOrders();
         public Task<OrderViewModel> GetOrderViewModel();
-        public Task<Tuple<SingleOrderDetailItemModel, string>> GetSingleDetail(string orderId);
+        public Task<Tuple<OrderDetailItemModel, string>> GetOrdersDetail(string orderId);
     }
 }
