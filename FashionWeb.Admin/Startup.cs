@@ -36,9 +36,10 @@ namespace FashionWeb.Admin
 						options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
 					});
 
-
             services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICategoryService, CategoryService>();
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IJwtTokenService, JwtTokenService>();
 			services.AddScoped<IHttpClientService, HttpClientService>();
 			services.AddScoped<IFileService, FileService>();
             services.AddScoped<IOrderService, OrderService>();
