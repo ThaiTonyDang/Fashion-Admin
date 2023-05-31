@@ -1,4 +1,5 @@
 ﻿@using FashionWeb.Domain.ViewModels;
+@using Utilities.GlobalHelpers;
 @model ProductViewModel
 
 @{
@@ -63,7 +64,7 @@ else
                                 <td class="table-plus sorting_1" tabindex="0">@product.Name</td>
                                 <td class="table-plus sorting_1" tabindex="0">@product.CategoryName</td>
                                 <td>@product.Provider</td>
-                                <td>@product.PriceDisplay</td>
+                                <td>@product.Price.GetPriceFormat()</td>
                                 <td>@product.QuantityInStock</td>
                                 <td>
                                     @if (string.IsNullOrEmpty(product.ImageName))

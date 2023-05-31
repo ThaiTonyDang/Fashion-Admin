@@ -22,17 +22,13 @@ namespace FashionWeb.Domain.Services
         {
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/categories";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/categories";
                 var response = await _httpClient.GetAsync(apiUrl);
 
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<CategoryItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
 
                 var isSuccess = responseList.IsSuccess;
-                if (!isSuccess)
-                {
-                    return new List<CategoryItemViewModel>();
-                }
                 var categories = responseList.Data;
 
                 foreach (var category in categories)

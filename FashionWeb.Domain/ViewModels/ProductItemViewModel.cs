@@ -26,8 +26,6 @@ namespace FashionWeb.Domain.ViewModels
 		[Range(0, Double.MaxValue, ErrorMessage = "PRICE IS REQUIRED")]
 		public decimal Price { set; get; }
 
-		public string PriceDisplay { get; set; }
-
 		[RegularExpression($"{requiredString}",
 		ErrorMessage = "CATEGORY IS REQUIRED")]
 		public Guid CategoryId { get; set; }
@@ -46,14 +44,6 @@ namespace FashionWeb.Domain.ViewModels
 		public List<CategoryItemViewModel> Categories { get; set; }
 		public string CategoryName { get; set; }
         public int QuantityInOrder { get; set; }
-
-        public string GetPriceFormat(string number)
-		{
-			if (!number.IsConvertToNumber())
-			return decimal.Parse(number).GetPriceFormat();
-			return "$0";
-
-        }
 	}
 
 	public class ProductViewModel

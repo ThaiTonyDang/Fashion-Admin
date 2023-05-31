@@ -39,7 +39,7 @@ namespace FashionWeb.Domain.Services
 		{
 			try
 			{
-				var apiUrl = _urlService.GetBaseUrl() + "api/products";
+				var apiUrl = _urlService.GetBaseUrl() + "/api/products";
 				var response = await _httpClient.GetAsync(apiUrl);
 
 				var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
@@ -61,7 +61,7 @@ namespace FashionWeb.Domain.Services
 			}
 			catch(Exception exception)
 			{
-				_exceptionMessage = new string[] { exception.InnerException.Message };
+				_exceptionMessage = new string[] { exception.Message };
 				_statusCode = (int)HttpStatusCode.ServiceUnavailable;
 
                 return null;
@@ -85,7 +85,7 @@ namespace FashionWeb.Domain.Services
 				responseMessage = result.Item2;
                 try
                 {
-					var apiUrl = _urlService.GetBaseUrl() + "api/products";
+					var apiUrl = _urlService.GetBaseUrl() + "/api/products";
 					var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
 					var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
 									   (await response.Content.ReadAsStringAsync());
@@ -98,7 +98,7 @@ namespace FashionWeb.Domain.Services
 				}
 				catch (Exception exception)
 				{
-					message = exception.InnerException.Message + " ! " + "Create Product Fail !";
+					message = exception.Message + " ! " + "Create Product Fail !";
                     return Tuple.Create(false, responseMessage + message);
 				}
 			}
@@ -134,7 +134,7 @@ namespace FashionWeb.Domain.Services
 
 			try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/products";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/products";
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, productItemViewModel);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                     (await response.Content.ReadAsStringAsync());
@@ -143,7 +143,7 @@ namespace FashionWeb.Domain.Services
             }
             catch (Exception exception)
             {
-                message = exception.InnerException.Message + " ! " + "Updated Product Fail !";
+                message = exception.Message + " ! " + "Updated Product Fail !";
                 return Tuple.Create(false, responseMessage + message);
             }
         }
@@ -152,7 +152,7 @@ namespace FashionWeb.Domain.Services
 			var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/products/";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/products/";
                 var response = await _httpClient.GetAsync(apiUrl + productId);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
@@ -165,7 +165,7 @@ namespace FashionWeb.Domain.Services
             }
             catch (Exception exception)
             {
-                message = exception.InnerException.Message + " ! " + "Get Product Fail !";
+                message = exception.Message + " ! " + "Get Product Fail !";
                 return Tuple.Create(default(ProductItemViewModel), message);
             }
         }
@@ -175,7 +175,7 @@ namespace FashionWeb.Domain.Services
             var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/products/";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/products/";
                 var response = await _httpClient.DeleteAsync(apiUrl + productId);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
@@ -184,7 +184,7 @@ namespace FashionWeb.Domain.Services
             }
             catch (Exception exception)
             {
-                message = exception.InnerException.Message + " ! " + "Deleted Product Fail !";
+                message = exception.Message + " ! " + "Deleted Product Fail !";
                 return Tuple.Create(false, message);
             }
         }

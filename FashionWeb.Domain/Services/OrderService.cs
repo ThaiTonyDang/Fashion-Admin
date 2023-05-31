@@ -32,7 +32,7 @@ namespace FashionWeb.Domain.Services
         {
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/ordersinformation";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/ordersinformation";
                 var response = await _httpClient.GetAsync(apiUrl);
 
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<OrderItemViewModel>>>
@@ -47,7 +47,7 @@ namespace FashionWeb.Domain.Services
             }
             catch (Exception exception)
             {
-                _exceptionMessage = new string[] { exception.InnerException.Message };
+                _exceptionMessage = new string[] { exception.Message };
                 _statusCode = (int)HttpStatusCode.ServiceUnavailable;
 
                 return null;
@@ -71,14 +71,14 @@ namespace FashionWeb.Domain.Services
             var message = "";
             try
             {
-                var apiProductsUrl = _urlService.GetBaseUrl() + "api/ordersinformation/products/";
+                var apiProductsUrl = _urlService.GetBaseUrl() + "/api/ordersinformation/products/";
                 var response_products = await _httpClient.GetAsync(apiProductsUrl + orderId);
                 var responseList_products = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
                                    (await response_products.Content.ReadAsStringAsync());
                 var products = responseList_products.Data;
                 var message_products = responseList_products.Message;
 
-                var apiBaseInforUrl = _urlService.GetBaseUrl() + "api/ordersinformation/customers/";
+                var apiBaseInforUrl = _urlService.GetBaseUrl() + "/api/ordersinformation/customers/";
                 var response_baseInfor = await _httpClient.GetAsync(apiBaseInforUrl + orderId);
                 var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseApiData<BaseInformationItem>>
                                    (await response_baseInfor.Content.ReadAsStringAsync());

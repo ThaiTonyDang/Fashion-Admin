@@ -18,7 +18,7 @@ namespace FashionWeb.Domain.Services
             try
             {
                 var fileName = ""; 
-                var uploadApiUrl = _urlService.GetBaseUrl() + "api/File/upload";                
+                var uploadApiUrl = _urlService.GetBaseUrl() + "/api/File/upload";                
                 fileName = file.FileName;
                 var content = new MultipartFormDataContent();
                 
