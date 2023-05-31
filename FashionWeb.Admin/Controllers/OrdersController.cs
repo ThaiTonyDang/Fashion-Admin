@@ -16,18 +16,18 @@ namespace FashionWeb.Admin.Controllers
         [Route("/orders")]
         public async Task<IActionResult> Index()
         {
-            var orderViewModel = await _orderService.GetOrderViewModel();
+            var orderViewModel = await _orderService.GetOrderViewModel(); 
             return View(orderViewModel);
         }
 
         [HttpGet]
         [Route("{orderId}")]
-        public async Task<IActionResult> OrderDetail(string orderId)
+        public async Task<IActionResult> Detail(string orderId)
         {
-            var result = await _orderService.GetSingleDetail(orderId);
-            var singleOrderDetailItemModel = result.Item1;
+            var result = await _orderService.GetOrdersDetail(orderId);
+            var orderDetailItemModel = result.Item1;
 
-            return View(singleOrderDetailItemModel);
+            return View(orderDetailItemModel);
         }
 
     }

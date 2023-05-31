@@ -32,7 +32,7 @@ namespace FashionWeb.Domain.Services
         {
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/aggregateorders";
+                var apiUrl = _urlService.GetBaseUrl() + "api/ordersinformation";
                 var response = await _httpClient.GetAsync(apiUrl);
 
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<OrderItemViewModel>>>
@@ -66,34 +66,49 @@ namespace FashionWeb.Domain.Services
             return orderViewModel;
         }
 
-        public async Task<Tuple<SingleOrderDetailItemModel, string>> GetSingleDetail(string orderId)
+        public async Task<Tuple<OrderDetailItemModel, string>> GetOrdersDetail(string orderId)
         {
             var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "api/aggregateorders/";
-                var response = await _httpClient.GetAsync(apiUrl + orderId);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<SingleOrderDetailItemModel>>
-                                   (await response.Content.ReadAsStringAsync());
-                var singleOrderDetail = responseList.Data;
-                message = responseList.Message;
+                var apiProductsUrl = _urlService.GetBaseUrl() + "api/ordersinformation/products/";
+                var response_products = await _httpClient.GetAsync(apiProductsUrl + orderId);
+                var responseList_products = JsonConvert.DeserializeObject<ResponseAPI<List<ProductItemViewModel>>>
+                                   (await response_products.Content.ReadAsStringAsync());
+                var products = responseList_products.Data;
+                var message_products = responseList_products.Message;
 
-                if (singleOrderDetail != null)
+                var apiBaseInforUrl = _urlService.GetBaseUrl() + "api/ordersinformation/customers/";
+                var response_baseInfor = await _httpClient.GetAsync(apiBaseInforUrl + orderId);
+                var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseAPI<BaseInformationItem>>
+                                   (await response_baseInfor.Content.ReadAsStringAsync());
+                var baseInfor = responseList_baseInfor.Data;
+                var message_baseInfor = responseList_products.Message;
+                message = message_baseInfor + " " + message_products;
+
+                foreach (var product in products)
                 {
-                    foreach (var product in singleOrderDetail.Products)
-                    {
-                        product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
-                    }
-                }    
-               
-                return Tuple.Create(singleOrderDetail, message);
+                    product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
+                }
+
+                var orderDetail = new OrderDetailItemModel
+                {
+                    BaseInformationItem = baseInfor,
+                    Products = products
+                };
+                if(responseList_baseInfor.Success)
+                    if(responseList_products.Success)
+
+                        return Tuple.Create(orderDetail, "Load order detail success !");
 
             }
             catch (Exception exception)
             {
                 message = exception.InnerException.Message + " ! " + "Get Order Detail Fail !";
-                return Tuple.Create(default(SingleOrderDetailItemModel), message);
+                return Tuple.Create(default(OrderDetailItemModel), message);
             }
+
+            return Tuple.Create(default(OrderDetailItemModel), message);
         }
     }
 }
