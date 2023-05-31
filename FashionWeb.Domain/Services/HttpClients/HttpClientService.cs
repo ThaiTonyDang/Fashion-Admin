@@ -24,7 +24,7 @@ namespace FashionWeb.Domain.Services.HttpClients
 
         public string GetFileApiUrl(string fileName)
         {
-            var fileUrl = GetBaseUrl() + "resource/" + fileName;
+            var fileUrl = GetBaseUrl() + "/resource/" + fileName;
             return fileUrl;
         }
 
