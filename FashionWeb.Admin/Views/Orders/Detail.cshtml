@@ -1,0 +1,100 @@
+﻿@using FashionWeb.Domain.ViewModels;
+@using Utilities.GlobalHelpers;
+@model SingleOrderDetailItemModel
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "_Layout";
+}
+
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="pd-20 card-box mb-30">
+            <div class="clearfix mb-20">
+                <div class="pull-left">
+                    <h4 class="text-blue h4">ORDERS DETAIL</h4>
+
+                    <div class="pull-left">
+                        <a href="~/Products/Create" class="btn btn-primary btn-sm" role="button">Confirm All</a>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <a href="#border-table" class="btn btn-primary btn-sm scroll-click" role="button">Save File To Excel</a>
+                </div>
+            </div>
+            <h4 class="text-blue h4">CUSTOMER INFORMATION</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr style="text-align:center; font-weight:700">
+                        <th scope="col">ID</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align:center; font-size:15px">                
+                    <tr>
+                            <td class="table-plus sorting_1" tabindex="0">
+                                @Model.OrderId.ToString().Substring(0,8)
+                                <input asp-for="@Model.OrderId" type="hidden">
+                            </td>
+                            <td class="table-plus sorting_1" tabindex="0">@Model.CustomerName</td>
+                            <td>@Model.Phone</td>
+                            <td>@Model.OrderDate</td>
+                            <td>@Model.ShipAddress</td>
+                            <td>@Model.TotalPrice.GetPriceFormat()</td>
+                            @if (Model.IsPaid)
+                            {
+                                <td>
+                                    <i class="bi bi-check-circle-fill"
+                                       style="color:forestgreen; font-size:30px"></i>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <i class="bi bi-hourglass-split"
+                                       style="color:firebrick; font-size:30px"></i>
+                                </td>
+                            }
+                    </tr>                  
+                </tbody>
+            </table>
+            <h4 class="text-blue h4">PRODUCT INFORMATION</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr style="text-align:center; font-weight:700">
+                        <th scope="col">ID</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align:center; font-size:15px">
+                    <tr>
+                        @foreach (var product in Model.Products)
+                        {
+                            <td class="table-plus sorting_1" tabindex="0">
+                                @product.Id.ToString().Substring(0,8)
+                                <input asp-for="@product.Id" type="hidden">
+                            </td>
+                            <td class="table-plus sorting_1" tabindex="0" style="width:50px">@product.ImageUrl</td>
+                            <td>@product.Name</td>
+                            <td>@product.Price</td>
+                            <td>@product.QuantityInOrder</td>
+                        }                                          
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer-wrap pd-20 mb-20 card-box">
+            ADMIN - Admin Template By
+            <a href="https://bitbucket.org/dtranthai/fashion-admin/src/develop/" target="_blank" style="text-decoration:none">
+                TONY ĐẶNG AND APTECH TEAM
+            </a>
+        </div>
+    </div>
+</div>

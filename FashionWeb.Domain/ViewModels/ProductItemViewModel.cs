@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net;
+using System.Runtime.CompilerServices;
+using Utilities.GlobalHelpers;
 
 namespace FashionWeb.Domain.ViewModels
 {
@@ -24,31 +26,34 @@ namespace FashionWeb.Domain.ViewModels
 		[Range(0, Double.MaxValue, ErrorMessage = "PRICE IS REQUIRED")]
 		public decimal Price { set; get; }
 
-		public string PriceDisplay { get => GetPriceFormat(); }
+		public string PriceDisplay { get; set; }
 
 		[RegularExpression($"{requiredString}",
 		ErrorMessage = "CATEGORY IS REQUIRED")]
 		public Guid CategoryId { get; set; }
 
-		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED")]
+		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED ")]
         public IFormFile File { get; set; }
 
 		public string ImageName { get; set; }
 		public string ImageUrl { get; set; }
 
-		[Range(0, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
+		[Range(1, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
 		public int QuantityInStock { get; set; }
 
 		public bool IsEnabled { get; set; }
 		public string Description { get; set; }
 		public List<CategoryItemViewModel> Categories { get; set; }
 		public string CategoryName { get; set; }
+        public int QuantityInOrder { get; set; }
 
-		public string GetPriceFormat()
+        public string GetPriceFormat(string number)
 		{
-			CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-			return string.Format(cultureInfo, "{0:C2}", this.Price);
-		}
+			if (!number.IsConvertToNumber())
+			return decimal.Parse(number).GetPriceFormat();
+			return "$0";
+
+        }
 	}
 
 	public class ProductViewModel

@@ -41,9 +41,8 @@ namespace FashionWeb.Admin
 			services.AddScoped<ICategoryService, CategoryService>();
 			services.AddScoped<IHttpClientService, HttpClientService>();
 			services.AddScoped<IFileService, FileService>();
-			services.AddScoped<IJwtTokenService, JwtTokenService>();
-			services.AddScoped<IUserService, UserService>();
-			services.AddHttpClient();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddHttpClient();
 
 			services.AddDistributedMemoryCache();
 
