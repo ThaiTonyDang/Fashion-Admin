@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net;
+using System.Runtime.CompilerServices;
+using Utilities.GlobalHelpers;
 
 namespace FashionWeb.Domain.ViewModels
 {
@@ -24,7 +26,7 @@ namespace FashionWeb.Domain.ViewModels
 		[Range(0, Double.MaxValue, ErrorMessage = "PRICE IS REQUIRED")]
 		public decimal Price { set; get; }
 
-		public string PriceDisplay { get => GetPriceFormat(); }
+		public string PriceDisplay { get; set; }
 
 		[RegularExpression($"{requiredString}",
 		ErrorMessage = "CATEGORY IS REQUIRED")]
@@ -43,12 +45,15 @@ namespace FashionWeb.Domain.ViewModels
 		public string Description { get; set; }
 		public List<CategoryItemViewModel> Categories { get; set; }
 		public string CategoryName { get; set; }
+        public int QuantityInOrder { get; set; }
 
-		public string GetPriceFormat()
+        public string GetPriceFormat(string number)
 		{
-			CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-			return string.Format(cultureInfo, "{0:C2}", this.Price);
-		}
+			if (!number.IsConvertToNumber())
+			return decimal.Parse(number).GetPriceFormat();
+			return "$0";
+
+        }
 	}
 
 	public class ProductViewModel
