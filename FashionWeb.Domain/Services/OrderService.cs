@@ -73,14 +73,14 @@ namespace FashionWeb.Domain.Services
             {
                 var apiProductsUrl = _urlService.GetBaseUrl() + "api/ordersinformation/products/";
                 var response_products = await _httpClient.GetAsync(apiProductsUrl + orderId);
-                var responseList_products = JsonConvert.DeserializeObject<ResponseAPI<List<ProductItemViewModel>>>
+                var responseList_products = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
                                    (await response_products.Content.ReadAsStringAsync());
                 var products = responseList_products.Data;
                 var message_products = responseList_products.Message;
 
                 var apiBaseInforUrl = _urlService.GetBaseUrl() + "api/ordersinformation/customers/";
                 var response_baseInfor = await _httpClient.GetAsync(apiBaseInforUrl + orderId);
-                var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseAPI<BaseInformationItem>>
+                var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseApiData<BaseInformationItem>>
                                    (await response_baseInfor.Content.ReadAsStringAsync());
                 var baseInfor = responseList_baseInfor.Data;
                 var message_baseInfor = responseList_products.Message;
@@ -96,8 +96,8 @@ namespace FashionWeb.Domain.Services
                     BaseInformationItem = baseInfor,
                     Products = products
                 };
-                if(responseList_baseInfor.Success)
-                    if(responseList_products.Success)
+                if(responseList_baseInfor.IsSuccess)
+                    if(responseList_products.IsSuccess)
 
                         return Tuple.Create(orderDetail, "Load order detail success !");
 
