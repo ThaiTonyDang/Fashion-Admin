@@ -20,9 +20,6 @@
                 required: true,
                 number: true,
                 min: 0
-            },
-            File: {
-                required: true,
             }
         },
         messages: {
@@ -45,9 +42,6 @@
                 required: "QUANTITY IN STOCK IS REQUIRED",
                 number: "PLEASE INPUT ONLY NUMBER",
                 min: "MINIMUM QUANTITY IS 0"
-            },
-            File: {
-                required: "UPLOAD IMAGE IS REQUIRED",
             }
         }
     });
