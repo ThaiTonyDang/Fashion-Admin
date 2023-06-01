@@ -69,11 +69,12 @@ else
                                 <td>
                                     @if (string.IsNullOrEmpty(product.ImageName))
                                     {
-                                        <img src="~/img/product-defaut.png" class="product-image" style="height:100px; width:100px">
+                                        <img src="~/img/product-defaut.png" class="product-image"
+                                        style="width:90px">
                                     }
                                     else
                                     {
-                                        <img src="@product.ImageUrl" clas="product-image" style="height:100px; width:100px">
+                                        <img src="@product.ImageUrl" clas="product-image" style="width:90px">
                                         <input type="hidden" asp-for="@product.ImageName">
                                     }
                                 </td>
