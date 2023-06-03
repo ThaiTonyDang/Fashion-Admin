@@ -152,7 +152,7 @@ namespace FashionWeb.Domain.Services
 			var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/products/";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/categories/";
                 var response = await _httpClient.GetAsync(apiUrl + productId);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());

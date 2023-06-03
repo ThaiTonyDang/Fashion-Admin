@@ -1,7 +1,7 @@
-﻿@{
+﻿@*@{
     var firstName = User != null && User.Claims != null ? User.Claims.FirstOrDefault(x => x.Type == "firstName").Value : string.Empty;
 }
-
+*@
 
 <div class="header">
     <div class="header-left">
@@ -51,7 +51,7 @@
                     <span class="user-icon">
                         <img src="~/vendors/images/photo1.jpg" alt="">
                     </span>
-                    <span class="user-name">@firstName</span>
+                    <span class="user-name">Tony</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <form method="post">

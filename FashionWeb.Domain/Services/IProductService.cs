@@ -17,6 +17,5 @@ namespace FashionWeb.Domain.Services
 		public Task<Tuple<bool, string>> UpdateProductAsync(ProductItemViewModel productItemViewModel);
 		public Task<Tuple<ProductItemViewModel, string>> GetProductByIdAsync(string productId);
 		public Task<Tuple<bool, string>> DeleteProductAsync(string productId);
-
     }
 }
