@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,8 +30,11 @@ namespace FashionWeb.Domain.ViewModels
     {
         public List<CategoryItemViewModel> ListCategory { get; set; }
         public string ExceptionMessage { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public bool IsSuccess { get; set; }
         public CategoryViewModel()
         {
+
             this.ListCategory = new List<CategoryItemViewModel>();
         }
     }
