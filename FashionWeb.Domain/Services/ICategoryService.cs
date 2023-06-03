@@ -11,5 +11,9 @@ namespace FashionWeb.Domain.Services
     {
         public Task<List<CategoryItemViewModel>> GetListCategories();
         public Task<CategoryViewModel> GetCategoryViewModel();
+        public Task<Tuple<bool, string>> CreateCategoryAsync(CategoryItemViewModel categoryItemViewModel);
+        public Task<Tuple<bool, string>> UpdateCategoryAsync(CategoryItemViewModel categoryItemViewModel);
+        public Task<Tuple<bool, string>> DeleteCategoryAsync(string categoryId);
+        public Task<Tuple<CategoryItemViewModel, string>> GetCategoryByIdAsync(string categoryId);
     }
 }
