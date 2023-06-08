@@ -1,4 +1,5 @@
-﻿using FashionWeb.Domain.ResponseModel;
+﻿using FashionWeb.Domain.Model;
+using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
@@ -13,7 +14,8 @@ namespace FashionWeb.Domain.Services
 		private readonly IHttpClientService _urlService;
 		private readonly IFileService _fileService;
 		private readonly HttpClient _httpClient;
-		public string[] _exceptionMessage;
+		public string _message;
+		public string[] _errors;
 		public int _statusCode;
 		public bool _isSuccess;
 		public ProductService(IHttpClientService urlService, IFileService fileService, HttpClient httpClient)
@@ -28,10 +30,10 @@ namespace FashionWeb.Domain.Services
 			var productViewModel = new ProductViewModel();
 			productViewModel.ListProduct = await GetListProducts();
 
-			productViewModel.ExceptionMessage = _exceptionMessage;
-			productViewModel.StatusCode = HttpStatusCode.Accepted;
+			productViewModel.Message = _message;
+			productViewModel.StatusCode = (HttpStatusCode)_statusCode;
 			productViewModel.IsSuccess = _isSuccess;
-			
+			productViewModel.Errors = _errors;
 			return productViewModel;
 		}
 
@@ -45,10 +47,13 @@ namespace FashionWeb.Domain.Services
 				var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
 								   (await response.Content.ReadAsStringAsync());
 				_isSuccess = responseList.IsSuccess;
-			    _exceptionMessage = new string[] { };
+			    _message = responseList.Message;
 				_statusCode = responseList.StatusCode;
 
-				var products = responseList.Data;
+				var errors = JsonConvert.DeserializeObject<ErrorResponseApi<string[]>>(await response.Content.ReadAsStringAsync());
+				_errors = errors.Errors;
+
+                var products = responseList.Data;
 				if (products != null)
 				{
                     foreach (var product in products)
@@ -61,9 +66,8 @@ namespace FashionWeb.Domain.Services
 			}
 			catch(Exception exception)
 			{
-				_exceptionMessage = new string[] { exception.Message };
+				_message = exception.Message;
 				_statusCode = (int)HttpStatusCode.ServiceUnavailable;
-
                 return null;
 			}
         }
@@ -90,7 +94,7 @@ namespace FashionWeb.Domain.Services
 					var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
 									   (await response.Content.ReadAsStringAsync());
 					message = responseList.Message;
-
+					var product = responseList.Data;
 					if (responseList.IsSuccess)
 					{
 						return Tuple.Create(true, message + " ! " + responseMessage);
@@ -136,9 +140,10 @@ namespace FashionWeb.Domain.Services
             {
                 var apiUrl = _urlService.GetBaseUrl() + "/api/products";
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, productItemViewModel);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
                                     (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
+				var data = responseList.Data;
                 return Tuple.Create(responseList.IsSuccess, message + " ! " + responseMessage);                  
             }
             catch (Exception exception)
@@ -152,7 +157,7 @@ namespace FashionWeb.Domain.Services
 			var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/categories/";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/products/";
                 var response = await _httpClient.GetAsync(apiUrl + productId);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
@@ -180,6 +185,7 @@ namespace FashionWeb.Domain.Services
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
+				var data = responseList.Data;
                 return Tuple.Create(responseList.IsSuccess, message);
             }
             catch (Exception exception)

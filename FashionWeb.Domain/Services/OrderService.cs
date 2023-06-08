@@ -19,7 +19,8 @@ namespace FashionWeb.Domain.Services
         private readonly IHttpClientService _urlService;
         private readonly IFileService _fileService;
         private readonly HttpClient _httpClient;
-        public string[] _exceptionMessage;
+        public string _message;
+        public string[] _errors;
         public int _statusCode;
         public bool _isSuccess;
         public OrderService(IHttpClientService urlService, HttpClient httpClient, IFileService fileService)        
@@ -38,7 +39,7 @@ namespace FashionWeb.Domain.Services
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<OrderItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
                 _isSuccess = responseList.IsSuccess;
-                _exceptionMessage = new string[] { };
+                _message = responseList.Message;
                 _statusCode = responseList.StatusCode;
 
                 var orderItem = responseList.Data;
@@ -47,7 +48,7 @@ namespace FashionWeb.Domain.Services
             }
             catch (Exception exception)
             {
-                _exceptionMessage = new string[] { exception.Message };
+                _message =  exception.Message;
                 _statusCode = (int)HttpStatusCode.ServiceUnavailable;
 
                 return null;
@@ -59,7 +60,7 @@ namespace FashionWeb.Domain.Services
             var orderViewModel = new OrderViewModel();
             orderViewModel.ListOrder = await GetListOrders();
 
-            orderViewModel.ExceptionMessage = _exceptionMessage;
+            orderViewModel.ExceptionMessage = _message;
             orderViewModel.StatusCode = (HttpStatusCode)_statusCode;
             orderViewModel.IsSuccess = _isSuccess;
 
