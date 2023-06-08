@@ -49,7 +49,8 @@ namespace FashionWeb.Domain.ViewModels
 	public class ProductViewModel
 	{
 		public List<ProductItemViewModel> ListProduct { get; set; }
-		public string[] ExceptionMessage { get; set; }
+		public string Message { get; set; }
+		public string[] Errors { get; set; }
 		public HttpStatusCode StatusCode { get; set; }
 		public bool IsSuccess { get; set; }
 		public ProductViewModel()

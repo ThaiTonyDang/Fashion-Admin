@@ -16,7 +16,8 @@ namespace FashionWeb.Domain.ViewModels
     public class OrderViewModel
     {
         public List<OrderItemViewModel> ListOrder { get; set; }
-        public string[] ExceptionMessage { get; set; }
+        public string ExceptionMessage { get; set; }
+        public string[] Errors { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public bool IsSuccess { get; set; }
         public OrderViewModel()
