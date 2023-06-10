@@ -87,7 +87,7 @@ node {
             }
 
             stage("Running Image") {
-                sshCommand remote: server, command: "cd /media/source/admin/main && docker run --restart unless-stopped -d -p 81:81 --name fashion-admin fashion-admin"
+                sshCommand remote: server, command: "cd /media/source/admin/main && docker run --restart unless-stopped -d -p 81:80 --name fashion-admin fashion-admin"
             }
         }
     }
