@@ -1,4 +1,5 @@
 using FashionWeb.Admin.Extensions;
+using FashionWeb.Domain.Config;
 using FashionWeb.Domain.HostConfig;
 using FashionWeb.Domain.Services;
 using FashionWeb.Domain.Services.HttpClients;
@@ -7,6 +8,7 @@ using FashionWeb.Domain.Services.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,11 +31,12 @@ namespace FashionWeb.Admin
 
             services.AddIdentityTokenConfig(Configuration);
 
-			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            var expiredTime = Configuration.GetSection("Token").Get<TokenConfig>().Expired;
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 					.AddCookie(options =>
 					{
 						options.LoginPath = "/users/login";
-						options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
+						options.ExpireTimeSpan = TimeSpan.FromMinutes(expiredTime);
 					});
 
             services.AddScoped<IProductService, ProductService>();
@@ -47,11 +50,13 @@ namespace FashionWeb.Admin
 
 			services.AddDistributedMemoryCache();
 
-            services.AddSession(options =>
-             {
-                 options.IdleTimeout = TimeSpan.FromMinutes(720);
-                 options.Cookie.HttpOnly = true;
-                 options.Cookie.IsEssential = true;
+            services.AddSession(cfg =>
+			{
+                 cfg.Cookie.Name = "Fashion.Admin";
+                 cfg.Cookie.IsEssential = true;
+                 cfg.Cookie.HttpOnly = true;
+                 cfg.Cookie.SameSite = SameSiteMode.Strict;
+                 cfg.IdleTimeout = TimeSpan.FromMinutes(expiredTime);
              });
 
             services.Configure<ApiConfig>(Configuration.GetSection("Api"));
