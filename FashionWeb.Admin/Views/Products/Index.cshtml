@@ -67,7 +67,7 @@ else
                                 <td>@product.Price.GetPriceFormat()</td>
                                 <td>@product.QuantityInStock</td>
                                 <td>
-                                    @if (string.IsNullOrEmpty(product.ImageName))
+                                    @if (string.IsNullOrEmpty(product.MainImageName))
                                     {
                                         <img src="~/img/product-defaut.png" class="product-image"
                                         style="width:90px">
@@ -75,7 +75,7 @@ else
                                     else
                                     {
                                         <img src="@product.ImageUrl" clas="product-image" style="width:90px">
-                                        <input type="hidden" asp-for="@product.ImageName">
+                                        <input type="hidden" asp-for="@product.MainImageName">
                                     }
                                 </td>
                                 <td>

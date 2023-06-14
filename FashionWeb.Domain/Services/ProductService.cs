@@ -58,7 +58,7 @@ namespace FashionWeb.Domain.Services
 				{
                     foreach (var product in products)
                     {
-                        product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
+                        product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
                     }
                 }	
 				
@@ -83,7 +83,7 @@ namespace FashionWeb.Domain.Services
                 var responseUploadFileList = result.Item1;
                 if (responseUploadFileList != null)
                 {
-                    productItemViewModel.ImageName = responseUploadFileList.Data[0];
+                    productItemViewModel.MainImageName = responseUploadFileList.Data[0];
                     productItemViewModel.ImageUrl = responseUploadFileList.Data[1];
                 }
 				responseMessage = result.Item2;
@@ -128,11 +128,11 @@ namespace FashionWeb.Domain.Services
 				}
 				responseMessage = result.Item2;
 			}
-			if (!string.IsNullOrEmpty(productItemViewModel.ImageName) && file == null )
+			if (!string.IsNullOrEmpty(productItemViewModel.MainImageName) && file == null )
 			{
-				fileName = productItemViewModel.ImageName;							
+				fileName = productItemViewModel.MainImageName;							
 			}
-			productItemViewModel.ImageName = fileName;
+			productItemViewModel.MainImageName = fileName;
 			link = _urlService.GetFileApiUrl(fileName);
 			productItemViewModel.ImageUrl = link;
 
@@ -164,7 +164,7 @@ namespace FashionWeb.Domain.Services
                 var productDto = responseList.Data;
                 message = responseList.Message;
                
-                productDto.ImageUrl = _urlService.GetFileApiUrl(productDto.ImageName);
+                productDto.ImageUrl = _urlService.GetFileApiUrl(productDto.MainImageName);
                 return Tuple.Create(productDto, message);
                 
             }
