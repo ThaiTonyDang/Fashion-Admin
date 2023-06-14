@@ -106,9 +106,9 @@
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <input asp-for="@Model.ImageName" type="hidden" />
+                                    <input asp-for="@Model.MainImageName" type="hidden" />
                                     <label>Product Image</label> <br>
-                                    @if (Model.ImageName == null)
+                                    @if (Model.MainImageName == null)
                                     {
                                         <img src="~/vendors/images/product-defaut.png" alt="Logo Image"
                                              style=" width:277px; height:277px; margin-top:20px" />

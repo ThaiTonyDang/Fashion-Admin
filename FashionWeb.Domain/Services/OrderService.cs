@@ -89,7 +89,7 @@ namespace FashionWeb.Domain.Services
 
                 foreach (var product in products)
                 {
-                    product.ImageUrl = _urlService.GetFileApiUrl(product.ImageName);
+                    product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
                 }
 
                 var orderDetail = new OrderDetailItemModel

@@ -33,7 +33,7 @@ namespace FashionWeb.Domain.ViewModels
 		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED ")]
         public IFormFile File { get; set; }
 
-		public string ImageName { get; set; }
+		public string MainImageName { get; set; }
 		public string ImageUrl { get; set; }
 
 		[Range(0, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]
