@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -11,6 +12,7 @@ namespace FashionWeb.Domain.ViewModels
 {
     public class CategoryItemViewModel
     {
+        private string _hostUrl;
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "CATEGORY NAME IS REQUIRED")]
@@ -24,6 +26,11 @@ namespace FashionWeb.Domain.ViewModels
 
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
+        public string Slug { get; set; }
+        public ICollection<CategoryItemViewModel> CategoryChildren { get; set; }
+        public Guid? ParentCategoryId { get; set; }
+        [ForeignKey("ParentCategoryId")]
+        public CategoryItemViewModel ParentCategory { get; set; }
     }
 
     public class CategoryViewModel

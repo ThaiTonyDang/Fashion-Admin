@@ -31,11 +31,13 @@ namespace FashionWeb.Domain.Services.Jwts
             }
         }
 
-        public Task<IEnumerable<Claim>> GetClaims(string token)
+        public Task<List<Claim>> GetClaims(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = tokenHandler.ReadJwtToken(token);
-            return Task.FromResult(jwtSecurityToken.Claims);
+            var claims = jwtSecurityToken.Claims.ToList();
+            claims.Add(new Claim("token", token));
+            return Task.FromResult(claims);
         }
 
         private TokenValidationParameters GetTokenOptions()

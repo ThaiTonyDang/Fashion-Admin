@@ -72,7 +72,7 @@ namespace FashionWeb.Domain.Services
 			}
         }
 
-		public async Task<Tuple<bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel)
+		public async Task<Tuple<bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel, string token)
 		{
             var responseMessage = "";
 			var message = "";
@@ -90,8 +90,9 @@ namespace FashionWeb.Domain.Services
                 try
                 {
 					var apiUrl = _urlService.GetBaseUrl() + "/api/products";
-					var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);
-					var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
+                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                    var response = await _httpClient.PostAsJsonAsync(apiUrl, productItemViewModel);                   
+                    var responseList = JsonConvert.DeserializeObject<ResponseApiData<ProductItemViewModel>>
 									   (await response.Content.ReadAsStringAsync());
 					message = responseList.Message;
 					var product = responseList.Data;
@@ -110,7 +111,7 @@ namespace FashionWeb.Domain.Services
 			return Tuple.Create(false, message);
         }
 
-        public async Task<Tuple<bool, string>> UpdateProductAsync(ProductItemViewModel productItemViewModel)
+        public async Task<Tuple<bool, string>> UpdateProductAsync(ProductItemViewModel productItemViewModel, string token)
         {
             var responseMessage = "";
             var message = "";         
@@ -139,6 +140,7 @@ namespace FashionWeb.Domain.Services
 			try
             {
                 var apiUrl = _urlService.GetBaseUrl() + "/api/products";
+                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, productItemViewModel);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
                                     (await response.Content.ReadAsStringAsync());

@@ -52,7 +52,7 @@
                     <h4 class="card-title">PRODUCT INFORMATION</h4>
                     <p class="card-title-desc" style="color:firebrick">Fill all information below</p>
 
-                    <form asp-action="Update" asp-controller="Products" id="frmProductEdit"
+                    <form asp-action="Update" asp-controller="Categories" id="frmCategoryEdit"
                           method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-sm-6">
@@ -61,6 +61,11 @@
                                     <input asp-for="Name" class="form-control" placeholder="Product Name" />
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
+                                <div class="form-group">
+                                    <label>Parent Category</label>
+                                    <select asp-for="ParentCategoryId" class="form-control" asp-items="ViewBag.ParentId">
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -68,6 +73,7 @@
                                     <textarea asp-for="Description" class="form-control" id="productdesc" rows="5"
                                               style="height:146px">
                                     </textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
