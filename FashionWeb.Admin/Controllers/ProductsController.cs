@@ -1,14 +1,18 @@
 ﻿using FashionWeb.Domain.Services;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FashionWeb.Admin.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
@@ -36,7 +40,10 @@ namespace FashionWeb.Admin.Controllers
                         break;
                     }
                     var category = listCategory.Where(c => c.Id == productItemViewModel.CategoryId).FirstOrDefault();
-                    productItemViewModel.CategoryName = category.Name;
+                    foreach (var categoryItem in category.CategoryChildren)
+                    {
+                        productItemViewModel.CategoryName = categoryItem.Name;
+                    }                            
                 }
             }
 
@@ -49,13 +56,12 @@ namespace FashionWeb.Admin.Controllers
             var productItemViewModel = new ProductItemViewModel();
             var categories = await _categoryService.GetListCategories();
             productItemViewModel.Categories = categories;
-            if (categories != null)
-            {
-                foreach (var category in categories)
-                {
-                    productItemViewModel.CategoryName = category.Name;
-                }
-            }
+
+            var items = new List<CategoryItemViewModel>();
+            CreateSelectItems(categories, items, 0);
+
+            var selectLists = new SelectList(items, "Id", "Name");
+            ViewData["ParentId"] = selectLists;
 
             return View(productItemViewModel);
         }
@@ -64,10 +70,11 @@ namespace FashionWeb.Admin.Controllers
         public async Task<IActionResult> Create(ProductItemViewModel productItemViewModel)
         {
             var message = "";
+            var token = User.FindFirst("token").Value;
             if (ModelState.IsValid)
             {
                 productItemViewModel.Id = Guid.NewGuid();
-                var result = await _productService.CreateProductAsync(productItemViewModel);
+                var result = await _productService.CreateProductAsync(productItemViewModel, token);
                 var isSuccess = result.Item1;
                 message = result.Item2;
                 TempData[TEMPDATA.OPEN_MODE] = DISPLAY.OPEN_MODE;
@@ -99,9 +106,10 @@ namespace FashionWeb.Admin.Controllers
         public async Task<IActionResult> Update(ProductItemViewModel productItemViewModel)
         {
             ModelState.Remove("File");
+            var token = User.FindFirst("token").Value;
             if (ModelState.IsValid)
             {
-                var result = await _productService.UpdateProductAsync(productItemViewModel);
+                var result = await _productService.UpdateProductAsync(productItemViewModel, token);
                 var isSuccess = result.Item1;
                 var message = result.Item2;
                 TempData[TEMPDATA.OPEN_MODE] = DISPLAY.OPEN_MODE;
@@ -133,5 +141,18 @@ namespace FashionWeb.Admin.Controllers
             return RedirectToAction("Index", "Products");
         }
 
+        private void CreateSelectItems(List<CategoryItemViewModel> source, List<CategoryItemViewModel> des, int level)
+        {
+            string prefix = string.Concat(Enumerable.Repeat("----", level));
+            foreach (var category in source)
+            {
+                category.Name = prefix + " " + category.Name;
+                des.Add(category);
+                if (category.CategoryChildren?.Count > 0)
+                {
+                    CreateSelectItems(category.CategoryChildren.ToList(), des, level + 1);
+                }
+            }
+        }
     }
 }

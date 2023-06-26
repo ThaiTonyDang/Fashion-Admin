@@ -3,6 +3,7 @@ using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
 using Newtonsoft.Json;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace FashionWeb.Domain.Services
@@ -37,6 +38,10 @@ namespace FashionWeb.Domain.Services
                 foreach (var category in categories)
                 {
                     category.ImageUrl = _urlService.GetFileApiUrl(category.ImageName);
+                    foreach (var child in category.CategoryChildren)
+                    {
+                        child.ImageUrl = _urlService.GetFileApiUrl(child.ImageName);
+                    }                 
                 }
 
                 return categories;
@@ -62,7 +67,7 @@ namespace FashionWeb.Domain.Services
             return categoryViewModel;
         }
 
-        public async Task<Tuple<bool, string>> CreateCategoryAsync(CategoryItemViewModel categoryItemViewModel)
+        public async Task<Tuple<bool, string>> CreateCategoryAsync(CategoryItemViewModel categoryItemViewModel, string token)
         {
             var responseMessage = "";
             var message = "";
@@ -80,6 +85,8 @@ namespace FashionWeb.Domain.Services
                 try
                 {
                     var apiUrl = _urlService.GetBaseUrl() + "/api/categories";
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                               new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                     var response = await _httpClient.PostAsJsonAsync(apiUrl, categoryItemViewModel);
                     var responseList = JsonConvert.DeserializeObject<ResponseApiData<CategoryItemViewModel>>
                                        (await response.Content.ReadAsStringAsync());
@@ -100,7 +107,7 @@ namespace FashionWeb.Domain.Services
             return Tuple.Create(false, message);
         }
 
-        public async Task<Tuple<bool, string>> UpdateCategoryAsync(CategoryItemViewModel categoryItemViewModel)
+        public async Task<Tuple<bool, string>> UpdateCategoryAsync(CategoryItemViewModel categoryItemViewModel, string token)
         {
             var responseMessage = "";
             var message = "";
@@ -123,14 +130,15 @@ namespace FashionWeb.Domain.Services
                 fileName = categoryItemViewModel.ImageName;
             }
             categoryItemViewModel.ImageName = fileName;
-            link = _urlService.GetFileApiUrl(fileName);
             categoryItemViewModel.ImageUrl = link;
 
             try
             {
                 var apiUrl = _urlService.GetBaseUrl() + "/api/categories";
+                _httpClient.DefaultRequestHeaders.Authorization =
+                               new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, categoryItemViewModel);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<CategoryItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<CategoryItemViewModel>>>
                                     (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
                 return Tuple.Create(responseList.IsSuccess, message + " ! " + responseMessage);
@@ -142,12 +150,13 @@ namespace FashionWeb.Domain.Services
             }
         }
 
-        public async Task<Tuple<bool, string>> DeleteCategoryAsync(string categoryId)
+        public async Task<Tuple<bool, string>> DeleteCategoryAsync(string categoryId, string token)
         {
             var message = "";
             try
             {
                 var apiUrl = _urlService.GetBaseUrl() + "/api/categories/";
+                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 var response = await _httpClient.DeleteAsync(apiUrl + categoryId);
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<CategoryItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
