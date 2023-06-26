@@ -23,7 +23,7 @@
         <tr>
             @if(prefix == "")
             {
-                <td scope="row" style="color: blue; font-size:18px ">
+                <td scope="row" style="color: blue; font-size:20px ">
                     @category.Name
                 </td>
             }
@@ -35,16 +35,16 @@
             }
             
             <td>
-                @if (string.IsNullOrEmpty(category.ImageName))
+                @if (prefix == "")
                 {
-                    <img src="~/img/product-defaut.png" class="product-image"
-                     style="width:90px">
+                    <img src="@category.ImageUrl" clas="product-image" style="width:110px">
+                    <input type="hidden" asp-for="@category.ImageName">
                 }
                 else
                 {
-                    <img src="@category.ImageUrl" clas="product-image" style="width:90px">
+                    <img src="@category.ImageUrl" clas="product-image" style="width:80px">
                     <input type="hidden" asp-for="@category.ImageName">
-                }
+                }                                          
             </td>
             <td>
                 <a href="@Url.ActionLink("Update", "Categories", new {id = category.Id})"
