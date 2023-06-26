@@ -30,7 +30,7 @@ namespace FashionWeb.Domain.ViewModels
 		ErrorMessage = "CATEGORY IS REQUIRED")]
 		public Guid CategoryId { get; set; }
 
-		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED ")]
+		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED !")]
         public IFormFile File { get; set; }
 
 		public string MainImageName { get; set; }

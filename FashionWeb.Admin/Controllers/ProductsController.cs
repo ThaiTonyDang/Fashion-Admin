@@ -38,12 +38,7 @@ namespace FashionWeb.Admin.Controllers
                     {
                         productItemViewModel.CategoryName = categoryViewModel.ExceptionMessage;
                         break;
-                    }
-                    var category = listCategory.Where(c => c.Id == productItemViewModel.CategoryId).FirstOrDefault();
-                    foreach (var categoryItem in category.CategoryChildren)
-                    {
-                        productItemViewModel.CategoryName = categoryItem.Name;
-                    }                            
+                    }                         
                 }
             }
 
@@ -57,6 +52,11 @@ namespace FashionWeb.Admin.Controllers
             var categories = await _categoryService.GetListCategories();
             productItemViewModel.Categories = categories;
 
+            foreach (var item in productItemViewModel.Categories)
+            {
+                item.Id = default;
+            }
+
             var items = new List<CategoryItemViewModel>();
             CreateSelectItems(categories, items, 0);
 
@@ -69,23 +69,28 @@ namespace FashionWeb.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductItemViewModel productItemViewModel)
         {
+            TempData[TEMPDATA.OPEN_MODE] = DISPLAY.OPEN_MODE;
             var message = "";
             var token = User.FindFirst("token").Value;
             if (ModelState.IsValid)
             {
+                if (productItemViewModel.CategoryId == default)
+                {
+                    TempData[TEMPDATA.FAIL_MESSAGE] = "CHOOSE CATEGORY AGAIN !";
+                    return RedirectToAction("Create", "Products");
+                }    
                 productItemViewModel.Id = Guid.NewGuid();
                 var result = await _productService.CreateProductAsync(productItemViewModel, token);
                 var isSuccess = result.Item1;
-                message = result.Item2;
-                TempData[TEMPDATA.OPEN_MODE] = DISPLAY.OPEN_MODE;
+                message = result.Item2;              
                 if (isSuccess)
                 {
-                    TempData[TEMPDATA.SUCCESS_MESSAGE] = $"{message}";
+                    TempData[TEMPDATA.SUCCESS_MESSAGE] = message;
                     return RedirectToAction("Create", "Products");
                 }
             }
 
-            TempData[TEMPDATA.FAIL_MESSAGE] = $"{message}";
+            TempData[TEMPDATA.FAIL_MESSAGE] = message;
             return RedirectToAction("Create", "Products");
         }
 
@@ -94,10 +99,15 @@ namespace FashionWeb.Admin.Controllers
         {
             var result = await _productService.GetProductByIdAsync(id);
             var productItemViewModel = result.Item1;
-            if (productItemViewModel != null)
-            {
-                productItemViewModel.Categories = await _categoryService.GetListCategories();
-            }
+        
+            productItemViewModel.Categories = await _categoryService.GetListCategories();
+            
+
+            var items = new List<CategoryItemViewModel>();
+            CreateSelectItems(productItemViewModel.Categories, items, 0);
+
+            var selectLists = new SelectList(items, "Id", "Name");
+            ViewData["ParentId"] = selectLists;
 
             return View(productItemViewModel);
         }
