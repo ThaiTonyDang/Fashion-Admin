@@ -33,7 +33,7 @@ namespace FashionWeb.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var categoryItemViewModel = new CategoryItemViewModel();
-            var categories = await _categoryService.GetListCategories();
+            var categories = await _categoryService.GetCategories();
             categories.Insert(0, new CategoryItemViewModel()
             {
                 Id = default,
@@ -78,7 +78,7 @@ namespace FashionWeb.Admin.Controllers
             var result = await _categoryService.GetCategoryByIdAsync(id);
             var categoryItemViewModel = result.Item1;
 
-            var categories = await _categoryService.GetListCategories();
+            var categories = await _categoryService.GetCategories();
 
             categories.Insert(0, new CategoryItemViewModel()
             {
@@ -158,9 +158,9 @@ namespace FashionWeb.Admin.Controllers
                     Id  = category.Id,
                     Name = prefix + " " + category.Name
             });
-                if (category.CategoryChildren?.Count > 0)
+                if (category.CategoryChildrens?.Count > 0)
                 {
-                    CreateSelectItems(category.CategoryChildren.ToList(), des, level + 1);
+                    CreateSelectItems(category.CategoryChildrens.ToList(), des, level + 1);
                 }    
             }
         }

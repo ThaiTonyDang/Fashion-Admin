@@ -24,12 +24,12 @@ namespace FashionWeb.Domain.ViewModels
         [Required(ErrorMessage = "IMAGE UPLOAD IS REQUIRED")]
         public IFormFile File { get; set; }
 
+        [Required(ErrorMessage = "SLUG IS REQUIRED")]
+        public string Slug { get; set; }
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
-        public string Slug { get; set; }
-        public ICollection<CategoryItemViewModel> CategoryChildren { get; set; }
+        public ICollection<CategoryItemViewModel> CategoryChildrens { get; set; }
         public Guid? ParentCategoryId { get; set; }
-        [ForeignKey("ParentCategoryId")]
         public CategoryItemViewModel ParentCategory { get; set; }
     }
 
