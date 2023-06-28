@@ -13,6 +13,6 @@ function goto() {
         alert("NO PAGE SELECT");
         return;
     };
-    var url = '/products?page=' + page;
+    var url = '/products?currentpage=' + page;
     window.location.href = url;
 }
