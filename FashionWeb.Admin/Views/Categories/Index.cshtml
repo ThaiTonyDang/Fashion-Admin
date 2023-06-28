@@ -46,6 +46,7 @@
                     <input type="hidden" asp-for="@category.ImageName">
                 }                                          
             </td>
+            <td>@category.Slug</td>
             <td>
                 <a href="@Url.ActionLink("Update", "Categories", new {id = category.Id})"
                    class="btn btn-primary" style=" border-radius:20%">
@@ -62,9 +63,9 @@
                 </button>
             </td>
         </tr>
-        if (category.CategoryChildren?.Count > 0)
+        if (category.CategoryChildrens?.Count > 0)
         {
-            foreach (var categoryChild in category.CategoryChildren)
+            foreach (var categoryChild in category.CategoryChildrens)
             {
                 await RenderCategory(categoryChild, level + 1);
                 @await Html.PartialAsync("_DeleteConfirmPartialView", categoryChild)

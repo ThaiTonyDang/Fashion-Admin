@@ -49,7 +49,7 @@ namespace FashionWeb.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var productItemViewModel = new ProductItemViewModel();
-            var categories = await _categoryService.GetListCategories();
+            var categories = await _categoryService.GetCategories();
             productItemViewModel.Categories = categories;
 
             foreach (var item in productItemViewModel.Categories)
@@ -100,7 +100,7 @@ namespace FashionWeb.Admin.Controllers
             var result = await _productService.GetProductByIdAsync(id);
             var productItemViewModel = result.Item1;
         
-            productItemViewModel.Categories = await _categoryService.GetListCategories();
+            productItemViewModel.Categories = await _categoryService.GetCategories();
             
 
             var items = new List<CategoryItemViewModel>();
@@ -158,9 +158,9 @@ namespace FashionWeb.Admin.Controllers
             {
                 category.Name = prefix + " " + category.Name;
                 des.Add(category);
-                if (category.CategoryChildren?.Count > 0)
+                if (category.CategoryChildrens?.Count > 0)
                 {
-                    CreateSelectItems(category.CategoryChildren.ToList(), des, level + 1);
+                    CreateSelectItems(category.CategoryChildrens.ToList(), des, level + 1);
                 }
             }
         }

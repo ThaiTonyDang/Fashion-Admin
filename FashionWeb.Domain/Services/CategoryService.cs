@@ -22,7 +22,7 @@ namespace FashionWeb.Domain.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<CategoryItemViewModel>> GetListCategories()
+        public async Task<List<CategoryItemViewModel>> GetCategories()
         {
             try
             {
@@ -38,7 +38,7 @@ namespace FashionWeb.Domain.Services
                 foreach (var category in categories)
                 {
                     category.ImageUrl = _urlService.GetFileApiUrl(category.ImageName);
-                    foreach (var child in category.CategoryChildren)
+                    foreach (var child in category.CategoryChildrens)
                     {
                         child.ImageUrl = _urlService.GetFileApiUrl(child.ImageName);
                     }                 
@@ -56,7 +56,7 @@ namespace FashionWeb.Domain.Services
         public async Task<CategoryViewModel> GetCategoryViewModel()
         {
             var categoryViewModel = new CategoryViewModel();
-            categoryViewModel.ListCategory = await GetListCategories();
+            categoryViewModel.ListCategory = await GetCategories();
             categoryViewModel.IsSuccess = _isSuccess;
 
             if (categoryViewModel.ListCategory == null)
