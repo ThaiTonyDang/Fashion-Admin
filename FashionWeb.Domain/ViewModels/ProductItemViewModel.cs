@@ -1,4 +1,5 @@
-﻿using FashionWeb.Utilities.GlobalHelpers;
+﻿using FashionWeb.Domain.Dtos;
+using FashionWeb.Utilities.GlobalHelpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -49,7 +50,8 @@ namespace FashionWeb.Domain.ViewModels
 	public class ProductViewModel
 	{
 		public List<ProductItemViewModel> ListProduct { get; set; }
-		public string Message { get; set; }
+        public Paging Paging { get; set; }
+        public string Message { get; set; }
 		public string[] Errors { get; set; }
 		public HttpStatusCode StatusCode { get; set; }
 		public bool IsSuccess { get; set; }

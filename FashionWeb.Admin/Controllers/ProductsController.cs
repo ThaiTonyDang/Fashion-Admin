@@ -25,9 +25,9 @@ namespace FashionWeb.Admin.Controllers
 
         [HttpGet]
         [Route("/products")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage = 1)
         {
-            var productViewModel = await _productService.GetProductViewModel();
+            var productViewModel = await _productService.GetPagingProductViewModel(currentPage);
             var categoryViewModel = await _categoryService.GetCategoryViewModel();
             var listCategory = categoryViewModel.ListCategory;
             if (productViewModel.IsSuccess)
