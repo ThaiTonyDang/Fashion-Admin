@@ -35,3 +35,22 @@
     font-size: 1.5rem;
     color: white;
 }
+
+.paging {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #1b00ff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.page-number {
+    height: 37px;
+    width: 36px;
+    margin-left: 5px;
+    border: 1px;
+    font-size: 20px;
+}

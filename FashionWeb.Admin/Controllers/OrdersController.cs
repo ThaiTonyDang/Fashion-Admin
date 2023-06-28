@@ -21,7 +21,7 @@ namespace FashionWeb.Admin.Controllers
         }
 
         [HttpGet]
-        [Route("{orderId}")]
+        [Route("orders/{orderId}")]
         public async Task<IActionResult> Detail(string orderId)
         {
             var result = await _orderService.GetOrdersDetail(orderId);

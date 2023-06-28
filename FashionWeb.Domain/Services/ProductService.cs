@@ -1,8 +1,12 @@
-﻿using FashionWeb.Domain.Model;
+﻿using FashionWeb.Domain.Config;
+using FashionWeb.Domain.Dtos;
+using FashionWeb.Domain.HostConfig;
+using FashionWeb.Domain.Model;
 using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Json;
@@ -13,64 +17,20 @@ namespace FashionWeb.Domain.Services
 	{
 		private readonly IHttpClientService _urlService;
 		private readonly IFileService _fileService;
-		private readonly HttpClient _httpClient;
+        private readonly PageConfig _pageConfig;
+        private readonly HttpClient _httpClient;
 		public string _message;
 		public string[] _errors;
 		public int _statusCode;
 		public bool _isSuccess;
-		public ProductService(IHttpClientService urlService, IFileService fileService, HttpClient httpClient)
+		public ProductService(IHttpClientService urlService,
+                             IFileService fileService, HttpClient httpClient, IOptions<PageConfig> pageOptions)
 		{
 			_urlService = urlService;
 			_httpClient = httpClient;
 			_fileService = fileService;
+            _pageConfig = pageOptions.Value;
 		}
-
-		public async Task<ProductViewModel> GetProductViewModel()
-		{
-			var productViewModel = new ProductViewModel();
-			productViewModel.ListProduct = await GetListProducts();
-
-			productViewModel.Message = _message;
-			productViewModel.StatusCode = (HttpStatusCode)_statusCode;
-			productViewModel.IsSuccess = _isSuccess;
-			productViewModel.Errors = _errors;
-			return productViewModel;
-		}
-
-		public async Task<List<ProductItemViewModel>> GetListProducts()
-		{
-			try
-			{
-				var apiUrl = _urlService.GetBaseUrl() + "/api/products";
-				var response = await _httpClient.GetAsync(apiUrl);
-
-				var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
-								   (await response.Content.ReadAsStringAsync());
-				_isSuccess = responseList.IsSuccess;
-			    _message = responseList.Message;
-				_statusCode = responseList.StatusCode;
-
-				var errors = JsonConvert.DeserializeObject<ErrorResponseApi<string[]>>(await response.Content.ReadAsStringAsync());
-				_errors = errors.Errors;
-
-                var products = responseList.Data;
-				if (products != null)
-				{
-                    foreach (var product in products)
-                    {
-                        product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
-                    }
-                }	
-				
-				return products;
-			}
-			catch(Exception exception)
-			{
-				_message = exception.Message;
-				_statusCode = (int)HttpStatusCode.ServiceUnavailable;
-                return null;
-			}
-        }
 
 		public async Task<Tuple<bool, string>> CreateProductAsync(ProductItemViewModel productItemViewModel, string token)
 		{
@@ -195,6 +155,57 @@ namespace FashionWeb.Domain.Services
                 message = exception.Message + " ! " + "Deleted Product Fail !";
                 return Tuple.Create(false, message);
             }
+        }
+
+        public async Task<ProductViewModel> GetPagingProductViewModel(int currentPage)
+        {
+            var productViewModel = new ProductViewModel();
+            var pageSize = _pageConfig.PageSize;
+            productViewModel.ListProduct = await GetPagingProductListAsync(currentPage);
+            productViewModel.IsSuccess = _isSuccess;
+            productViewModel.Errors = _errors;
+            var totalItems = await GetTotalItems();
+            productViewModel.Paging = new Paging(currentPage, pageSize, totalItems);
+
+            return productViewModel;
+        }
+
+        public async Task<List<ProductItemViewModel>> GetPagingProductListAsync(int currentPage)
+        {
+            var apiUrl = _urlService.GetBaseUrl() + "/api/products";
+            var pageSize = _pageConfig.PageSize;
+            var response = await _httpClient.GetAsync(apiUrl + $"?currentpage={currentPage}&pagesize={pageSize}");
+            var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
+                                   (await response.Content.ReadAsStringAsync());
+
+            _isSuccess = responseList.IsSuccess;
+            _message = responseList.Message;
+            _statusCode = responseList.StatusCode;
+
+            var errors = JsonConvert.DeserializeObject<ErrorResponseApi<string[]>>(await response.Content.ReadAsStringAsync());
+            _errors = errors.Errors;
+
+            var products = responseList.Data;
+            if (products != null)
+            {
+                foreach (var product in products)
+                {
+                    product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
+                }
+            }
+
+            return products;
+        }
+
+        private async Task<int> GetTotalItems()
+        {
+            var apiUrl = _urlService.GetBaseUrl() + "/api/products/";
+            var response = await _httpClient.GetAsync(apiUrl + "total-products");
+            var responseList = JsonConvert.DeserializeObject<ResponseApiData<int>>
+                               (await response.Content.ReadAsStringAsync());
+            var totalItems = responseList.Data;
+
+            return totalItems;
         }
     }  
 }

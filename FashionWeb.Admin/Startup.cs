@@ -61,7 +61,8 @@ namespace FashionWeb.Admin
              });
 
             services.Configure<ApiConfig>(Configuration.GetSection("Api"));
-		}
+            services.Configure<PageConfig>(Configuration.GetSection("Page"));
+        }
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
