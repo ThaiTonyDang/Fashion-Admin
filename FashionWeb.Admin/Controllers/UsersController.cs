@@ -52,33 +52,22 @@ namespace FashionWeb.Admin.Controllers
             };
 
             var response = await this._userService.LoginAsync(user);
-            if(response.IsSuccess)
+            if (response.IsSuccess)
             {
-                var result = (Response<string>)response;
-                var token = result.Data;
-
-                var isValidToken = await this._jwtTokenService.ValidateToken(token);
-
-                // read claim
-                if(isValidToken)
+                var resultData = response.ToSuccessDataResult<string>();
+                var token = resultData.Data;
+                var claims = await this._jwtTokenService.GetClaims(token);
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties()
                 {
-                    var claims = await this._jwtTokenService.GetClaims(token);
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var authenticateionProp = new AuthenticationProperties
-                    {
-                        AllowRefresh = true,
-                        IsPersistent = true,
-                    };
+                    AllowRefresh = true,
+                    IsPersistent = true,
+                });
 
-                    await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authenticateionProp);
-
-                    HttpContext.Session.SetString("JwtToken", token);
-
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
                 }
             }
 
@@ -91,7 +80,6 @@ namespace FashionWeb.Admin.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
     }

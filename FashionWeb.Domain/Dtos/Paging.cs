@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
-
-namespace FashionWeb.Domain.Dtos
+﻿namespace FashionWeb.Domain.Dtos
 {
-	public class Paging
+    public class Paging
 	{
 		public int TotalPages { get; private set; }
 		public int CurrentPage { get; private set; }

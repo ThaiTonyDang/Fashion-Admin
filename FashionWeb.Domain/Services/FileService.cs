@@ -1,4 +1,6 @@
-﻿using FashionWeb.Domain.ResponseModel;
+﻿using FashionWeb.Domain.Dtos;
+using FashionWeb.Domain.Model.Files;
+using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.Services.HttpClients;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -8,41 +10,17 @@ namespace FashionWeb.Domain.Services
 {
     public class FileService : IFileService
     {
-        private readonly IHttpClientService _urlService;
-        public FileService(IHttpClientService urlService)
+        private readonly IHttpClientService _httpClientService;
+        private readonly string _apiResource = "file";
+        public FileService(IHttpClientService httpClientService)
         {
-            _urlService = urlService;
+            _httpClientService = httpClientService;
         }
-        public async Task<Tuple<ResponseApiData<List<string>>, string>> GetResponeUploadFileAsync(IFormFile file, HttpClient httpClient)
+        public async Task<ResultDto> UploadFileAsync(MultipartFormDataContent file, string token)
         {
-            try
-            {
-                var fileName = ""; 
-                var uploadApiUrl = _urlService.GetBaseUrl() + "/api/File/upload";                
-                fileName = file.FileName;
-                var content = new MultipartFormDataContent();
-                
-                content.Add(new StreamContent(file.OpenReadStream())
-                {
-                    Headers =
-                    {
-                        ContentLength = file.Length,
-                        ContentType = new MediaTypeHeaderValue(file.ContentType)
-                    }
-                }, "File", fileName);
-
-                var response = await httpClient.PostAsync(uploadApiUrl, content);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<string>>>
-                                (await response.Content.ReadAsStringAsync());
-                var isSuccess = responseList.IsSuccess;
-                var message = responseList.Message;
-
-                return Tuple.Create(responseList, message);
-            }
-            catch
-            {
-                return Tuple.Create(default(ResponseApiData<List<string>>), "An Error Has Occurred Server Side ! Upload Image Fail");
-            }         
+            var url = $"{_apiResource}/upload";
+            var response = await _httpClientService.UploadAsync<FileUpload>(file, url, token);
+            return response;
         }
     }
 }

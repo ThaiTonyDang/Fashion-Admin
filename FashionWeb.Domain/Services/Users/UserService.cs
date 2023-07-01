@@ -1,46 +1,56 @@
 ﻿using FashionWeb.Domain.Dtos;
 using FashionWeb.Domain.Model;
+using FashionWeb.Domain.Model.Users;
 using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.Services.HttpClients;
+using FashionWeb.Domain.Services.Jwts;
 using Microsoft.AspNetCore.Http;
+using static System.Net.WebRequestMethods;
 
 namespace FashionWeb.Domain.Services.Users
 {
     public class UserService : IUserService
     {
         private readonly IHttpClientService _httpClientService;
-        private readonly string _apiPathUrl = "api/users";
-        private readonly string _apiUrl;
+        private readonly IJwtTokenService _jwtTokenService;
+        private const string _apiResource = "users";
 
-        public UserService(IHttpClientService httpClientService)
+        public UserService(IHttpClientService httpClientService, IJwtTokenService jwtTokenService)
         {
             _httpClientService = httpClientService;
-            _apiUrl = _httpClientService.GetBaseUrl() + $"/{_apiPathUrl}";
+            _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<IResponse> LoginAsync(User user)
+        public async Task<ResultDto> LoginAsync(User loginUser)
         {
-            var loginApiUrl = $"{_apiUrl}/login";
-            var response = await this._httpClientService.PostAsync<User, string>(user, loginApiUrl);
+            var apiUrl = $"{_apiResource}/login";
+            var response = await _httpClientService.PostDataAsync<User, string>(loginUser, apiUrl);
             if (response.IsSuccess)
             {
-                var result = (ResponseApiData<string>)response;
-                return new Response<string>
+                var result = response.ToSuccessDataResult<string>();
+                var token = result.Data;
+                var isVerify = await _jwtTokenService.ValidateToken(token);
+                if (!isVerify)
                 {
-                    IsSuccess = result.IsSuccess,
-                    Data = result.Data,
-                    Message = result.Message
-                };
+                    return new ErrorResult("Token is invalid");
+                }
             }
 
-            var errorResult = (ErrorResponseApi<string[]>)response;
+            return response;
+        }
 
-            return new Response<string[]>
+        public async Task<ResultDto> GetUserProfileAsync(string token)
+        {
+            var apiUrl = $"{_apiResource}/profile";
+            var response = await _httpClientService.GetDataAsync<UserProfile>(apiUrl, token);
+            if (response.IsSuccess)
             {
-                IsSuccess = errorResult.IsSuccess,
-                Message = errorResult.Message,
-                Data = errorResult.Errors
-            };
+                var user = response.ToSuccessDataResult<UserProfile>().Data;
+                user.AvatarImage = _httpClientService.GetFileApiUrl(user.AvatarImage);
+                return new SuccessDataResult<UserProfile>(response.Message, user);
+            }
+
+            return response;
         }
     }
 }

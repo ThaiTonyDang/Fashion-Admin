@@ -3,7 +3,6 @@ using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace FashionWeb.Domain.Services
@@ -22,14 +21,14 @@ namespace FashionWeb.Domain.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<CategoryItemViewModel>> GetCategories()
+        public async Task<List<CategoryItemViewModel>> GetListCategories()
         {
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/categories";
+                var apiUrl = "/api/categories";
                 var response = await _httpClient.GetAsync(apiUrl);
 
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<CategoryItemViewModel>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseDataApi<List<CategoryItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
 
                 _isSuccess = responseList.IsSuccess;
@@ -37,11 +36,7 @@ namespace FashionWeb.Domain.Services
 
                 foreach (var category in categories)
                 {
-                    category.ImageUrl = _urlService.GetFileApiUrl(category.ImageName);
-                    foreach (var child in category.CategoryChildrens)
-                    {
-                        child.ImageUrl = _urlService.GetFileApiUrl(child.ImageName);
-                    }                 
+                    //category.ImageUrl = _urlService.GetFileApiUrl(category.ImageName);
                 }
 
                 return categories;
@@ -56,7 +51,7 @@ namespace FashionWeb.Domain.Services
         public async Task<CategoryViewModel> GetCategoryViewModel()
         {
             var categoryViewModel = new CategoryViewModel();
-            categoryViewModel.ListCategory = await GetCategories();
+            categoryViewModel.ListCategory = await GetListCategories();
             categoryViewModel.IsSuccess = _isSuccess;
 
             if (categoryViewModel.ListCategory == null)
@@ -67,7 +62,7 @@ namespace FashionWeb.Domain.Services
             return categoryViewModel;
         }
 
-        public async Task<Tuple<bool, string>> CreateCategoryAsync(CategoryItemViewModel categoryItemViewModel, string token)
+        public async Task<Tuple<bool, string>> CreateCategoryAsync(CategoryItemViewModel categoryItemViewModel)
         {
             var responseMessage = "";
             var message = "";
@@ -84,11 +79,9 @@ namespace FashionWeb.Domain.Services
                 responseMessage = result.Item2;
                 try
                 {
-                    var apiUrl = _urlService.GetBaseUrl() + "/api/categories";
-                    _httpClient.DefaultRequestHeaders.Authorization =
-                               new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                    var apiUrl =  "/api/categories";
                     var response = await _httpClient.PostAsJsonAsync(apiUrl, categoryItemViewModel);
-                    var responseList = JsonConvert.DeserializeObject<ResponseApiData<CategoryItemViewModel>>
+                    var responseList = JsonConvert.DeserializeObject<ResponseDataApi<CategoryItemViewModel>>
                                        (await response.Content.ReadAsStringAsync());
                     message = responseList.Message;
 
@@ -107,7 +100,7 @@ namespace FashionWeb.Domain.Services
             return Tuple.Create(false, message);
         }
 
-        public async Task<Tuple<bool, string>> UpdateCategoryAsync(CategoryItemViewModel categoryItemViewModel, string token)
+        public async Task<Tuple<bool, string>> UpdateCategoryAsync(CategoryItemViewModel categoryItemViewModel)
         {
             var responseMessage = "";
             var message = "";
@@ -130,15 +123,14 @@ namespace FashionWeb.Domain.Services
                 fileName = categoryItemViewModel.ImageName;
             }
             categoryItemViewModel.ImageName = fileName;
+            //link = _urlService.GetFileApiUrl(fileName);
             categoryItemViewModel.ImageUrl = link;
 
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/categories";
-                _httpClient.DefaultRequestHeaders.Authorization =
-                               new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var apiUrl =  "/api/categories";
                 var response = await _httpClient.PutAsJsonAsync(apiUrl, categoryItemViewModel);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<CategoryItemViewModel>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseDataApi<CategoryItemViewModel>>
                                     (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
                 return Tuple.Create(responseList.IsSuccess, message + " ! " + responseMessage);
@@ -150,15 +142,14 @@ namespace FashionWeb.Domain.Services
             }
         }
 
-        public async Task<Tuple<bool, string>> DeleteCategoryAsync(string categoryId, string token)
+        public async Task<Tuple<bool, string>> DeleteCategoryAsync(string categoryId)
         {
             var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/categories/";
-                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                var apiUrl =  "/api/categories/";
                 var response = await _httpClient.DeleteAsync(apiUrl + categoryId);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<CategoryItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseDataApi<CategoryItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
                 return Tuple.Create(responseList.IsSuccess, message);
@@ -175,14 +166,14 @@ namespace FashionWeb.Domain.Services
             var message = "";
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/categories/";
+                var apiUrl = "/api/categories/";
                 var response = await _httpClient.GetAsync(apiUrl + categoryId);
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<CategoryItemViewModel>>
+                var responseList = JsonConvert.DeserializeObject<ResponseDataApi<CategoryItemViewModel>>
                                    (await response.Content.ReadAsStringAsync());
                 var category = responseList.Data;
                 message = responseList.Message;
 
-                category.ImageUrl = _urlService.GetFileApiUrl(category.ImageName);
+                //category.ImageUrl = _urlService.GetFileApiUrl(category.ImageName);
                 return Tuple.Create(category, message);
 
             }
@@ -191,6 +182,26 @@ namespace FashionWeb.Domain.Services
                 message = exception.Message + " ! " + "Get Product Fail !";
                 return Tuple.Create(default(CategoryItemViewModel), message);
             }
+        }
+
+        public Task<List<CategoryItemViewModel>> GetCategories()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Tuple<bool, string>> CreateCategoryAsync(CategoryItemViewModel categoryItemViewModel, string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Tuple<bool, string>> UpdateCategoryAsync(CategoryItemViewModel categoryItemViewModel, string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Tuple<bool, string>> DeleteCategoryAsync(string categoryId, string token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

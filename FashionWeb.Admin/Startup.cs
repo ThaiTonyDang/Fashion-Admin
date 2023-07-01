@@ -28,7 +28,9 @@ namespace FashionWeb.Admin
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
+			services.AddControllersWithViews()
+					.AddRazorRuntimeCompilation()
+					.AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddIdentityTokenConfig(Configuration);
 

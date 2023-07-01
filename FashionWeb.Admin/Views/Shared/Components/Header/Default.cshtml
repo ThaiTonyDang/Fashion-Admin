@@ -1,7 +1,6 @@
-﻿@{
-    //var firstName = User != null && User.Claims != null ? User.Claims.FirstOrDefault(x => x.Type == "firstName").Value : string.Empty;
-}
+﻿@using FashionWeb.Admin.ViewComponents;
 
+@model HeaderComponentViewModel
 
 <div class="header">
     <div class="header-left">
@@ -48,10 +47,7 @@
         <div class="user-info-dropdown">
             <div class="dropdown">
                 <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                    <span class="user-icon">
-                        <img src="~/vendors/images/photo1.jpg" alt="">
-                    </span>
-                    <span class="user-name"></span>
+                    <span class="user-name">@Model.FullName</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <form method="post">

@@ -33,10 +33,10 @@ namespace FashionWeb.Domain.Services
         {
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/ordersinformation";
+                var apiUrl =  "/api/ordersinformation";
                 var response = await _httpClient.GetAsync(apiUrl);
 
-                var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<OrderItemViewModel>>>
+                var responseList = JsonConvert.DeserializeObject<ResponseDataApi<List<OrderItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
                 _isSuccess = responseList.IsSuccess;
                 _message = responseList.Message;
@@ -72,16 +72,16 @@ namespace FashionWeb.Domain.Services
             var message = "";
             try
             {
-                var apiProductsUrl = _urlService.GetBaseUrl() + "/api/ordersinformation/products/";
+                var apiProductsUrl =  "/api/ordersinformation/products/";
                 var response_products = await _httpClient.GetAsync(apiProductsUrl + orderId);
-                var responseList_products = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
+                var responseList_products = JsonConvert.DeserializeObject<ResponseDataApi<List<ProductItemViewModel>>>
                                    (await response_products.Content.ReadAsStringAsync());
                 var products = responseList_products.Data;
                 var message_products = responseList_products.Message;
 
-                var apiBaseInforUrl = _urlService.GetBaseUrl() + "/api/ordersinformation/customers/";
+                var apiBaseInforUrl = "/api/ordersinformation/customers/";
                 var response_baseInfor = await _httpClient.GetAsync(apiBaseInforUrl + orderId);
-                var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseApiData<BaseInformationItem>>
+                var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseDataApi<BaseInformationItem>>
                                    (await response_baseInfor.Content.ReadAsStringAsync());
                 var baseInfor = responseList_baseInfor.Data;
                 var message_baseInfor = responseList_products.Message;
@@ -89,7 +89,7 @@ namespace FashionWeb.Domain.Services
 
                 foreach (var product in products)
                 {
-                    product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
+                    //product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
                 }
 
                 var orderDetail = new OrderDetailItemModel

@@ -1,10 +1,11 @@
-﻿using FashionWeb.Domain.ResponseModel;
+﻿using FashionWeb.Domain.Dtos;
+using FashionWeb.Domain.ResponseModel;
 using Microsoft.AspNetCore.Http;
 
 namespace FashionWeb.Domain.Services
 {
     public interface IFileService
     {
-        public Task<Tuple<ResponseApiData<List<string>>, string>> GetResponeUploadFileAsync(IFormFile file, HttpClient httpClient);
+        Task<ResultDto> UploadFileAsync(MultipartFormDataContent file, string token);
     }
 }

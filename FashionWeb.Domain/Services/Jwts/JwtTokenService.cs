@@ -25,7 +25,7 @@ namespace FashionWeb.Domain.Services.Jwts
                 var isAuthenticated = result.Identity != null && result.Identity.IsAuthenticated;
                 return Task.FromResult(isAuthenticated);
             }
-            catch (Exception ex)
+            catch
             {
                 return Task.FromResult(false);
             }
