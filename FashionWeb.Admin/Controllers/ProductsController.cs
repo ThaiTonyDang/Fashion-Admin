@@ -11,8 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace FashionWeb.Admin.Controllers
-{
-    [Authorize]
+{ 
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
@@ -23,6 +22,7 @@ namespace FashionWeb.Admin.Controllers
             _productService = productService;
         }
 
+        [Authorize(Roles = "Admin, User")]
         [HttpGet]
         [Route("/products")]
         public async Task<IActionResult> Index(int currentPage = 1)
@@ -45,6 +45,7 @@ namespace FashionWeb.Admin.Controllers
             return View(productViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -66,6 +67,7 @@ namespace FashionWeb.Admin.Controllers
             return View(productItemViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(ProductItemViewModel productItemViewModel)
         {
@@ -94,6 +96,7 @@ namespace FashionWeb.Admin.Controllers
             return RedirectToAction("Create", "Products");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Update(string id)
         {
@@ -112,6 +115,7 @@ namespace FashionWeb.Admin.Controllers
             return View(productItemViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Update(ProductItemViewModel productItemViewModel)
         {
@@ -134,6 +138,7 @@ namespace FashionWeb.Admin.Controllers
             return RedirectToAction("Index", "Products");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

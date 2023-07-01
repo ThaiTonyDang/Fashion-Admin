@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FashionWeb.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

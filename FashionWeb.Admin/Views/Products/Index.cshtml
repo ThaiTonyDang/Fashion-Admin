@@ -1,4 +1,5 @@
 ﻿@using FashionWeb.Domain.ViewModels;
+@using System.Security.Claims;
 @using Utilities.GlobalHelpers;
 @model ProductViewModel
 
@@ -8,7 +9,8 @@
 }
 
 @{
-    var index = 0;
+    var index = 0;    
+    var role = User.FindFirstValue(ClaimTypes.Role);
 }
 
 <partial name="_Alert" />
@@ -16,6 +18,7 @@
 @if (!Model.IsSuccess)
 {
     @await Html.PartialAsync("_ErrorPage", Model)
+ 
 }
 else
 {
@@ -25,15 +28,74 @@ else
                 <div class="clearfix mb-20">
                     <div class="pull-left">
                         <h4 class="text-blue h4">PRODUCT TABLE</h4>
-
-                        <div class="pull-left">
-                            <a href="~/Products/Create" class="btn btn-primary btn-sm" role="button">Create Product</a>
-                        </div>
-
+                        @if (role.Contains("Admin"))
+                        {
+                            <div class="pull-left">
+                                <a href="~/Products/Create" class="btn btn-primary btn-sm" role="button">Create Product</a>
+                            </div>
+                        }
                     </div>
                     <div class="pull-right">
                         <a href="#border-table" class="btn btn-primary btn-sm scroll-click" role="button">Save File To Excel</a>
                     </div>
+                </div>
+                <div class="row">
+                    <ul class="pagination" style="float: right">
+
+                        @if (Model.Paging.CurrentPage > 1)
+                        {
+                            <li class="paginate_button">
+                                <a href="@Url.Action("Index", "Products", new {currentpage = Model.Paging.CurrentPage - 1})"
+                                   class="paging">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        }
+
+                        @for (var currentPage = 1; currentPage <= Model.Paging.TotalPages; currentPage++)
+                        {
+                            <li class="paginate_button page-item active">
+
+                                @if (currentPage != Model.Paging.CurrentPage)
+                                {
+                                    <a href="@Url.Action("Index", "Products", new {currentpage = currentPage})" class="paging">
+                                        @currentPage
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="page-link">
+                                        <span>@currentPage</span>
+                                    </a>
+                                }
+
+                            </li>
+                            
+                        }
+
+                        @if (Model.Paging.CurrentPage < Model.Paging.TotalPages)
+                        {
+                            <li class="paginate_button page-item next">
+                                <a href="@Url.Action("Index", "Products",
+							new {currentpage = Model.Paging.CurrentPage + 1, })" class="paging">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        }
+
+                        <li class="paginate_button page-item active">
+                            <input class="page-number" value="@Model.Paging.CurrentPage" />
+                        </li>
+
+                        <li class="paginate_button page-item active ">
+                            <a class="paging goto"
+                               style="margin-left:1px; width:100px; height: 40px;cursor:pointer; background-color:#1b6ec2"
+                               onclick="goto()">
+                                <p> GO TO <i class="fa-solid fa-chevron-right"></i> </p>
+                            </a>
+                        </li>
+
+                    </ul>
                 </div>
                 <table class="table table-bordered">
                     <thead>
@@ -46,8 +108,11 @@ else
                             <th scope="col">Price</th>
                             <th scope="col">Quantity In Stock</th>
                             <th scope="col">Image</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
+                            @if (role.Contains("Admin"))
+                            {
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            }
                         </tr>
                     </thead>
                     <tbody style="text-align:center; font-size:15px">
@@ -74,21 +139,25 @@ else
                                         <input type="hidden" asp-for="@product.MainImageName">
                                     }
                                 </td>
-                                <td>
-                                    <a href="@Url.ActionLink("Update", "Products", new {id = product.Id})"
-                                       class="btn btn-primary" style=" border-radius:20%">
-                                        <i class="bi bi-pen"></i>
-                                        Edit
-                                    </a>
-                                </td>
-                                <td>
-                                    <button class="tm-product-delete-link"
-                                            data-toggle="modal"
-                                            data-target="@("#delete-product-" + product.Id)"
-                                            type="button">
-                                        <i class="icon-copy bi bi-trash-fill" style="cursor:pointer"></i>
-                                    </button>
-                                </td>
+                                @if (role.Contains("Admin"))
+                                {
+                                    <td>
+                                        <a href="@Url.ActionLink("Update", "Products", new {id = product.Id})"
+                                           class="btn btn-primary" style=" border-radius:20%">
+                                            <i class="bi bi-pen"></i>
+                                            Edit
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button class="tm-product-delete-link"
+                                                data-toggle="modal"
+                                                data-target="@("#delete-product-" + product.Id)"
+                                                type="button">
+                                            <i class="icon-copy bi bi-trash-fill" style="cursor:pointer"></i>
+                                        </button>
+                                    </td>
+                                }
+
                                 @await Html.PartialAsync("_DeleteConfirmPartialView", product)
                             </tr>
                             index++;
@@ -108,20 +177,20 @@ else
                             </li>
                         }
 
-                        @for (int i = 1; i <= Model.Paging.TotalPages; i++)
+                        @for (var currentPage = 1; currentPage <= Model.Paging.TotalPages; currentPage++)
                         {
                             <li class="paginate_button page-item active">
 
-                                @if (i != Model.Paging.CurrentPage)
+                                @if (currentPage != Model.Paging.CurrentPage)
                                 {
-                                    <a href="@Url.Action("Index", "Products", new {currentpage = @i})" class="paging">
-                                        @i
+                                    <a href="@Url.Action("Index", "Products", new {currentpage = currentPage})" class="paging">
+                                        @currentPage
                                     </a>
                                 }
                                 else
                                 {
                                     <a class="page-link">
-                                        <span>@i</span>
+                                        <span>@currentPage</span>
                                     </a>
                                 }
 

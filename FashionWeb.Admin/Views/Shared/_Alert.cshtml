@@ -1,8 +1,11 @@
-﻿@using FashionWeb.Utilities.GlobalHelpers;
+﻿<link href="~/css/access.css" rel="stylesheet" />
+@using FashionWeb.Utilities.GlobalHelpers;
 @{
     var mode = TempData[TEMPDATA.OPEN_MODE] as string;
     var successMessage = TempData[TEMPDATA.SUCCESS_MESSAGE] as string;
     var failMessage = TempData[TEMPDATA.FAIL_MESSAGE] as string;
+    var label = TempData[TEMPDATA.LABEL_WARNING] as string;
+    var accessDenied = TempData[TEMPDATA.ACCESS_DENIED] as string;
 }
 
 
@@ -40,5 +43,27 @@
                 </div>
             </div>
         </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(label))
+{
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Fail !</h4>
+        <p>@label</p>
+        <hr>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(accessDenied))
+{
+    <div class="w3-display-middle">
+        <h1 class="w3-jumbo w3-animate-top w3-center"><code>403 FORBBIDEN : @accessDenied</code></h1>
+        <hr class="w3-border-white w3-animate-left" style="margin:auto;width:50%">
+        <h3 class="w3-center w3-animate-right">You dont have permission to view this site.</h3>
+        <h3 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h3>
     </div>
 }
