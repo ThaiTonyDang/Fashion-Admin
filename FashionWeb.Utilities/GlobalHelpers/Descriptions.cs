@@ -19,5 +19,7 @@ namespace FashionWeb.Utilities.GlobalHelpers
         public const string SUCCESS_MESSAGE = "SUCCESS";
         public const string FAIL_MESSAGE = "FAIL";
         public const string OPEN_MODE = "OPEN MODE";
+        public const string LABEL_WARNING = "LABEL WARNING"; 
+        public const string ACCESS_DENIED = "ACCESS DENIED"; 
     }
 }

@@ -1,5 +1,5 @@
 ﻿@{
-    var firstName = User != null && User.Claims != null ? User.Claims.FirstOrDefault(x => x.Type == "firstName").Value : string.Empty;
+    var firstName = User != null && User.Claims != null ? User.Claims.FirstOrDefault(x => x.Type == "firstName")?.Value : string.Empty;
 }
 
 

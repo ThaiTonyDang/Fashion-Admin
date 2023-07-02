@@ -3,8 +3,10 @@ using FashionWeb.Domain.Dtos;
 using FashionWeb.Domain.Model;
 using FashionWeb.Domain.Services.Jwts;
 using FashionWeb.Domain.Services.Users;
+using FashionWeb.Utilities.GlobalHelpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace FashionWeb.Admin.Controllers
 {
+    [AllowAnonymous]
     [Route("[controller]")]
     public class UsersController : Controller
     {
@@ -79,12 +82,18 @@ namespace FashionWeb.Admin.Controllers
                         return Redirect(returnUrl);
                     }
 
+                    return RedirectToAction("Index", "Home");
                 }
             }
-
-            return RedirectToAction("Index", "Home");
+            var errors = response.Message;
+            if (!errors.Contains("Access Denied"))
+            {
+                TempData[TEMPDATA.LABEL_WARNING] = errors;
+            }
+            else
+            TempData[TEMPDATA.ACCESS_DENIED] = errors;
+            return RedirectToAction("Login", "Users");
         }
-
 
         [HttpPost]
         [Route("logout")]
@@ -93,6 +102,13 @@ namespace FashionWeb.Admin.Controllers
             await HttpContext.SignOutAsync();
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Route("access-denied")]
+        public async Task<IActionResult> AccessDenied()
+        {         
+            return View();
         }
     }
 }

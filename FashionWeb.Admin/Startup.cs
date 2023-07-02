@@ -1,5 +1,6 @@
 using FashionWeb.Admin.Extensions;
 using FashionWeb.Domain.Config;
+using FashionWeb.Domain.Dtos;
 using FashionWeb.Domain.HostConfig;
 using FashionWeb.Domain.Services;
 using FashionWeb.Domain.Services.HttpClients;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NuGet.Protocol.Plugins;
 using System;
 
 namespace FashionWeb.Admin
@@ -35,9 +37,10 @@ namespace FashionWeb.Admin
             var expiredTime = Configuration.GetSection("Token").Get<TokenConfig>().Expired;
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 					.AddCookie(options =>
-					{
+                    {
 						options.LoginPath = "/users/login";
-						options.ExpireTimeSpan = TimeSpan.FromMinutes(expiredTime);
+						options.AccessDeniedPath = "/users/access-denied";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(expiredTime);
 					});
 
             services.AddScoped<IProductService, ProductService>();

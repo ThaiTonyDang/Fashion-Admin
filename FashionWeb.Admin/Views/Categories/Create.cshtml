@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Security.Claims;
+@{
     ViewData["Title"] = "Category Add";
     Layout = "_Layout";
 }
@@ -65,7 +66,7 @@
 
             <div class="form-group">
                 <label>Slug</label>
-                <input asp-for="Slug" class="form-control"></input>
+                <input asp-for="Slug" class="form-control">
                 <span asp-validation-for="Slug" class="text-danger"></span>
             </div>
 
@@ -88,7 +89,11 @@
                      id="previewImage" />
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">CREATE NEW CATEGORY</button>
+              
+                <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">
+                    CREATE NEW CATEGORY
+                </button>
+                
                 <a href="@Url.ActionLink("Index", "Categories")" class="btn btn-secondary waves-effect">CANCEL</a>
             </div>
         </form>
