@@ -1,13 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Access Denied";
-    Layout = "_Layout";
+    Layout = "";
 }
 <link href="~/css/access.css" rel="stylesheet" />
 
-<div id="container">
-
-    <div class="toph"><h1>ERROR </h1><h1 class="number">403</h1></div>
-
+<body class="body_access">
+    <div id="container_access">
+        <div class="toph"><h1>ERROR </h1><h1 class="number">403</h1></div>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1278 1080">
 
         <g id="Layer_2" data-name="Layer 2">
@@ -87,11 +86,12 @@
     </svg>
     <h1>FORBIDDEN</h1>
     <div id="details">
-        <ul>
-            <li><span class="font-24">You dont have permission to view this site</span>
-            <li><span class="w3-center w3-animate-zoom">🚫🚫🚫🚫</span></li>
+        <ul class="access-ul">
+            <li class="access-li"><span class="font-24">You dont have permission to view this site</span>
+            <li><span class="w3-center w3-animate-zoom" style="font-size:25px">🚫🚫🚫🚫</span></li>
         </ul>
 
     </div>
 
 </div>
+</body>
