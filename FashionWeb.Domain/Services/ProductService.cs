@@ -6,7 +6,6 @@ using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.Services.HttpClients;
 using FashionWeb.Domain.ViewModels;
 using FashionWeb.Utilities.GlobalHelpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net;
@@ -74,24 +73,31 @@ namespace FashionWeb.Domain.Services
 
         public async Task<Tuple<bool, string>> UpdateProductAsync(ProductItemViewModel productItemViewModel, string token)
         {
+            var responseMessage = "";
             var message = "";         
 			var link = "";
 			var fileName = DISPLAY.IMAGE_PATH;
-
-            fileName = await UploadFileName(productItemViewModel);
+			var file = productItemViewModel.File;
+			if (file != null )
+			{
+				var result = await _fileService.GetResponeUploadFileAsync(file, _httpClient);
+				var responseUploadFileList = result.Item1;
+				if (responseUploadFileList != null)
+				{
+					fileName = responseUploadFileList.Data[0];
+					link = responseUploadFileList.Data[1];
+				}
+				responseMessage = result.Item2;
+			}
+			if (!string.IsNullOrEmpty(productItemViewModel.MainImageName) && file == null )
+			{
+				fileName = productItemViewModel.MainImageName;							
+			}
 			productItemViewModel.MainImageName = fileName;
 			link = _urlService.GetFileApiUrl(fileName);
 			productItemViewModel.ImageUrl = link;
 
-            var subImages = await UploadSubImages(productItemViewModel);
-            productItemViewModel.SubImages = subImages;
-
-            foreach (var item in productItemViewModel.SubImages)
-            {
-                item.ImageUrl = _urlService.GetFileApiUrl(item.ImageName);
-            }
-
-            try
+			try
             {
                 var apiUrl = _urlService.GetBaseUrl() + "/api/products";
                 _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
@@ -100,12 +106,12 @@ namespace FashionWeb.Domain.Services
                                     (await response.Content.ReadAsStringAsync());
                 message = responseList.Message;
 				var data = responseList.Data;
-                return Tuple.Create(responseList.IsSuccess, message);                  
+                return Tuple.Create(responseList.IsSuccess, message + " ! " + responseMessage);                  
             }
             catch (Exception exception)
             {
                 message = exception.Message + " ! " + "Updated Product Fail !";
-                return Tuple.Create(false, message);
+                return Tuple.Create(false, responseMessage + message);
             }
         }
         public async Task<Tuple<ProductItemViewModel, string>> GetProductByIdAsync(string productId)
@@ -121,14 +127,6 @@ namespace FashionWeb.Domain.Services
                 message = responseList.Message;
                
                 productDto.ImageUrl = _urlService.GetFileApiUrl(productDto.MainImageName);
-                if(productDto.SubImages.Count > 0)
-                {
-                    foreach (var item in productDto.SubImages)
-                    {
-                        item.ImageUrl = _urlService.GetFileApiUrl(item.ImageName);
-                    }
-                }    
-       
                 return Tuple.Create(productDto, message);
                 
             }
@@ -208,54 +206,6 @@ namespace FashionWeb.Domain.Services
             var totalItems = responseList.Data;
 
             return totalItems;
-        }
-
-        private async Task<string> UploadFileName(ProductItemViewModel productItemViewModel)
-        {
-            var fileName = "";
-            var file = productItemViewModel.File;
-            if (file != null)
-            {
-                var result = await _fileService.GetResponeUploadFileAsync(file, _httpClient);
-                var responseUploadFileList = result.Item1;
-                if (responseUploadFileList != null)
-                {
-                    fileName = responseUploadFileList.Data[0];
-                }
-            }
-            if (!string.IsNullOrEmpty(productItemViewModel.MainImageName) && file == null)
-            {
-                fileName = productItemViewModel.MainImageName;
-            }
-
-            return fileName;
-        }
-
-        private async Task<List<SubImage>> UploadSubImages(ProductItemViewModel productItemViewModel)
-        {
-            var subFiles = productItemViewModel.SubFiles;
-            var subImages = new List<SubImage>();
-            foreach (var file in subFiles)
-            {
-                if (file != null)
-                {
-                    var result = await _fileService.GetResponeUploadFileAsync(file, _httpClient);
-                    var responseUploadFileList = result.Item1;
-                    if (responseUploadFileList != null)
-                    {
-                        var fileName = responseUploadFileList.Data[0];
-                        var subImage = new SubImage()
-                        {
-                            ImageName = fileName,
-                            ProductId = productItemViewModel.Id,     
-                        };
-
-                        subImages.Add(subImage);
-                    }
-                }
-            }
-
-            return subImages;
         }
     }  
 }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net;
+using System.Runtime.CompilerServices;
+using Utilities.GlobalHelpers;
 
 namespace FashionWeb.Domain.ViewModels
 {
@@ -32,12 +34,7 @@ namespace FashionWeb.Domain.ViewModels
 		[Required(ErrorMessage = "UPLOAD IMAGE IS REQUIRED !")]
         public IFormFile File { get; set; }
 
-        [Required(ErrorMessage = "UPLOAD SUB IMAGE IS REQUIRED !")]
-        public List<IFormFile> SubFiles { get; set; }
-
-        public List<SubImage> SubImages { get; set; }
-
-        public string MainImageName { get; set; }
+		public string MainImageName { get; set; }
 		public string ImageUrl { get; set; }
 
 		[Range(0, Double.MaxValue, ErrorMessage = "QUANTITY IN STOCK IS REQUIRED")]

@@ -16,11 +16,10 @@ namespace FashionWeb.Admin.Controllers
         }
 
         [HttpGet]
-        [Route("/orders-information")]
+        [Route("/orders")]
         public async Task<IActionResult> Index()
         {
-            var token = User.FindFirst("token").Value;
-            var orderViewModel = await _orderService.GetOrderViewModel(token); 
+            var orderViewModel = await _orderService.GetOrderViewModel(); 
             return View(orderViewModel);
         }
 
@@ -28,8 +27,7 @@ namespace FashionWeb.Admin.Controllers
         [Route("orders/{orderId}")]
         public async Task<IActionResult> Detail(string orderId)
         {
-            var token = User.FindFirst("token").Value;
-            var result = await _orderService.GetOrdersDetail(orderId, token);
+            var result = await _orderService.GetOrdersDetail(orderId);
             var orderDetailItemModel = result.Item1;
 
             return View(orderDetailItemModel);
