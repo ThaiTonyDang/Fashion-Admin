@@ -10,7 +10,6 @@ namespace FashionWeb.Domain.ViewModels
     public class OrderItemViewModel : BaseInformationItem
     {
         public int OrderProductsQuantity { get; set; }
-        public double Discount { get; set; }
     }
 
     public class OrderViewModel
