@@ -51,6 +51,8 @@
     height: 37px;
     width: 36px;
     margin-left: 5px;
-    border: 1px;
     font-size: 20px;
+    border-radius: 5px;
+    border-color: lightgray;
+    margin-bottom: 10px;
 }
