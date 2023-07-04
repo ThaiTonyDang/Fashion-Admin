@@ -1,23 +1,14 @@
-﻿@using FashionWeb.Utilities.GlobalHelpers;
+﻿@using FashionWeb.Domain.ViewModels;
+@using FashionWeb.Utilities.GlobalHelpers;
 @model FashionWeb.Domain.ViewModels.ProductItemViewModel
 
 @{
     ViewData["Title"] = "Product Add";
     Layout = "_Layout";
-
-    var selectList = Model.Categories.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.Name.ToString(),
-                Selected = (c.Id == Model.CategoryId)
-            }).ToList();
 }
 
 <partial name="_Alert" />
 
-@section Scripts {
-    <script src="@Url.Content("~/js/validation.js")"></script>
-}
 
 <div class="main-container">
     <div class="page-header">
@@ -73,6 +64,7 @@
                                     <input asp-for="Provider" class="form-control" />
                                     <span asp-validation-for="Provider" class="text-danger"></span>
                                 </div>
+
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -98,16 +90,81 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="CategoryId" class="control-label">Category</label>
+                                    @{
+                                       
+                                    }
                                     <select asp-for="CategoryId" asp-items=ViewBag.ParentId
                                             class="custom-select  mr-sm-2">
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <input asp-for=SubFiles type="hidden" />
+                                    <label>Product Sub Image :</label>
+                                    <label style="color:brown">Maximum 3 files</label>
+
+                                    <input asp-for="@Model.SubFiles" type="file"
+                                           class="btn btn-info mt-2 waves-effect waves-light
+                                    form-control-file form-control height-auto" multiple="multiple" onchange="loadSubImage(event)" />
+                                    <span asp-validation-for="SubFiles" class="text-danger"></span>
+
+                                </div>
+
+                                @{
+                                    var subList = new List<SubImage>();
+                                    if (Model.SubImages != null)
+                                    {
+                                        subList = Model.SubImages;
+                                    }                                   
+                                }
+
+                                @if(subList.Count > 0)
+                                {
+                                    <div style="display:flex">
+                                        <div style="margin-right: 10px">
+                                            <img src="@subList[0].ImageUrl"
+                                                 style="height:150px; margin-top:20px"
+                                                 id="image_1" />
+                                        </div>
+                                        <div style="margin-right: 10px">
+                                            <img src="@subList[1].ImageUrl"
+                                                 style="height:150px; margin-top:20px"
+                                                 id="image_2" />
+                                        </div>
+                                        <div style="margin-right: 10px">
+                                            <img src="@subList[2].ImageUrl"
+                                                 style="height:150px; margin-top:20px"
+                                                 id="image_3" />
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="display:flex">
+                                        <div style="margin-right: 10px">
+                                            <img src="~/vendors/images/product-defaut.png"
+                                                 style="height:150px; margin-top:20px"
+                                                 id="image_1" />
+                                        </div>
+                                        <div style="margin-right: 10px">
+                                            <img src="~/vendors/images/product-defaut.png"
+                                                 style="height:150px; margin-top:20px"
+                                                 id="image_2" />
+                                        </div>
+                                        <div style="margin-right: 10px">
+                                            <img src="~/vendors/images/product-defaut.png"
+                                                 style="height:150px; margin-top:20px"
+                                                 id="image_3" />
+                                        </div>
+                                    </div>
+                                }
+
+                                
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <input asp-for="@Model.MainImageName" type="hidden" />
-                                    <label>Product Image</label> <br>
+                                    <label>Product Main Image</label> <br>
                                     @if (Model.MainImageName == null)
                                     {
                                         <img src="~/vendors/images/product-defaut.png" alt="Logo Image"
@@ -137,3 +194,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="@Url.Content("~/js/validation.js")"></script>
+}

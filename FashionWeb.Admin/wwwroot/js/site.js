@@ -16,3 +16,9 @@ function goto() {
     var url = '/products?currentpage=' + page;
     window.location.href = url;
 }
+
+function loadSubImage(event) {
+    document.getElementById('image_1').src = window.URL.createObjectURL(event.target.files[0]);
+    document.getElementById('image_2').src = window.URL.createObjectURL(event.target.files[1]);
+    document.getElementById('image_3').src = window.URL.createObjectURL(event.target.files[2]);
+}

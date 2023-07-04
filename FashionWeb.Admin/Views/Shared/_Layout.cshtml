@@ -23,6 +23,7 @@
 	<link rel="stylesheet" type="text/css" href="~/src/plugins/datatables/css/responsive.bootstrap4.min.css" />
     <link href="~/css/table.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/validationcss/validation-style.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/vendors/styles/style.css" />
     
 
@@ -69,7 +70,7 @@
 										</a>
 									</li>
 									<li>
-										<a href="~/Orders" target="_blank" class="dropdown-toggle no-arrow">
+										<a href="~/Orders-Information" target="_blank" class="dropdown-toggle no-arrow">
 											<span class="micon bi bi-layout-text-window-reverse"></span>
 											<span class="mtext">
 												Orders
@@ -122,6 +123,8 @@
 	<script src="~/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 	<script src="~/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
     <script src="~/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/js/site.js"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)

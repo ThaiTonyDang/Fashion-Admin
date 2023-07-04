@@ -94,6 +94,35 @@
                          style="height:400px; margin-top:20px"
                          id="previewImage" />
                 </div>
+
+                <div class="form-group">
+                    <input asp-for=SubFiles type="hidden" />
+                    <label>Product Sub Image :</label>
+                    <label style="color:brown">Maximum 3 files</label>
+
+                    <input asp-for="@Model.SubFiles" type="file"
+                           class="btn btn-info mt-2 waves-effect waves-light
+                                        form-control-file form-control height-auto" multiple="multiple" onchange="loadSubImage(event)" />
+                    <span asp-validation-for="SubFiles" class="text-danger"></span>
+                </div>
+                <div style="display:flex; margin-bottom:20px">
+                    <div style="margin-right: 10px">
+                        <img src="~/vendors/images/product-defaut.png"
+                                style="height:150px; margin-top:20px"
+                                id="image_1" />
+                    </div>
+                    <div style="margin-right: 10px">
+                        <img src="~/vendors/images/product-defaut.png"
+                                style="height:150px; margin-top:20px"
+                                id="image_2" />
+                    </div>
+                    <div style="margin-right: 10px">
+                        <img src="~/vendors/images/product-defaut.png"
+                                style="height:150px; margin-top:20px"
+                                id="image_3" />
+                        </div>
+                </div>
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">CREATE NEW PRODUCT</button>
                     <a href="@Url.ActionLink("Index", "Products")" class="btn btn-secondary waves-effect">CANCEL</a>
