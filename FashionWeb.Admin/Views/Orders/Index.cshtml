@@ -9,18 +9,18 @@
 @if (Model.ListOrder == null || Model.ListOrder.Count == 0)
 {
     <div class="main-container">
-    <div class="pd-ltr-20 xs-pd-20-10">
-        <div class="pd-20 card-box mb-30">
-            <div class="clearfix mb-20">
-                <div class="pull-left">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="pd-20 card-box mb-30">
+                <div class="clearfix mb-20">
+                    <div class="pull-left">
                         <h4 class="text-blue h4">ORDER IS EMPTY NOW</h4>
                         <div class="pull-left">
                             <a href="~/Home/Index" class="btn btn-primary btn-sm" role="button">Back To Order</a>
                         </div>
                     </div>
-                    </div>
-                    </div>
-                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -37,9 +37,6 @@ else
                                 <a href="~/Orders/Index" class="btn btn-primary btn-sm" role="button">Back To Order</a>
                             </div>
                         </div>
-                        <div class="pull-right">
-                            <a href="#border-table" class="btn btn-primary btn-sm scroll-click" role="button">Save File To Excel</a>
-                        </div>
                     </div>
 
                     <table class="table table-bordered">
@@ -47,12 +44,10 @@ else
                             <tr style="text-align:center; font-weight:700">
                                 <th scope="col">Order ID</th>
                                 <th scope="col">Customer Name</th>
-                                <th scope="col">Phone</th>
                                 <th scope="col">Order Date</th>
-                                <th scope="col">Address</th>
+                                <th scope="col">Ordered Product Quantity</th>
                                 <th scope="col">Total Price</th>
                                 <th scope="col">Payment Status</th>
-                                <th scope="col">Order Processings</th>
                                 <th scope="col">Detail</th>
                             </tr>
                         </thead>
@@ -66,9 +61,8 @@ else
                                         <input asp-for="@orderItemView.OrderId" type="hidden">
                                     </td>
                                     <td class="table-plus sorting_1" tabindex="0">@orderItemView.CustomerName</td>
-                                    <td>@orderItemView.Phone</td>
-                                    <td>@orderItemView.OrderDate</td>
-                                    <td>@orderItemView.ShipAddress</td>
+                                    <td>@orderItemView.OrderDate.ToString("dd/MM/yyyy") @orderItemView.OrderDate.ToShortTimeString()</td>
+                                    <td>@orderItemView.OrderProductsQuantity</td>
                                     <td>@orderItemView.TotalPrice.GetPriceFormat()</td>
                                     @if (@orderItemView.IsPaid)
                                     {
@@ -86,19 +80,6 @@ else
                                             Wating...
                                         </td>
                                     }
-
-                                    <td>
-                                        <a href=""
-                                           class="btn btn-success"
-                                           style=" border-radius:20%; font-size:11px">
-                                            Order Browsing
-                                        </a>
-                                        <a href=""
-                                           class="btn btn-danger"
-                                           style="border-radius:20%; font-size:11px; margin-left:15px">
-                                            Cancel
-                                        </a>
-                                    </td>
                                     <td>
                                         <button class="btn btn-secondary"
                                                 formaction="@Url.ActionLink("Detail", "Orders", new {orderId = @orderItemView.OrderId})"

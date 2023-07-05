@@ -1,16 +1,11 @@
 ﻿using FashionWeb.Domain.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FashionWeb.Domain.Services
 {
     public interface IOrderService
     {
-        public Task<List<OrderItemViewModel>> GetListOrders();
-        public Task<OrderViewModel> GetOrderViewModel();
-        public Task<Tuple<OrderDetailItemModel, string>> GetOrdersDetail(string orderId);
+        public Task<List<OrderItemViewModel>> GetListOrders(string token);
+        public Task<OrderViewModel> GetOrderViewModel(string token);
+        public Task<Tuple<OrderDetailItemModel, string>> GetOrdersDetail(string orderId, string token);
     }
 }

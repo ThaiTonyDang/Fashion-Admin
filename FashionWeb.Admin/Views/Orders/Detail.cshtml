@@ -13,7 +13,7 @@
                     <h4 class="text-blue h4">ORDERS DETAIL</h4>
 
                     <div class="pull-left">
-                        <a href="~/Products/Create" class="btn btn-primary btn-sm" role="button">Confirm All</a>
+                        <a href="~/orders-information/" class="btn btn-primary btn-sm" role="button">Back To Order List</a>
                     </div>
                 </div>
                 <div class="pull-right">
@@ -33,12 +33,12 @@
                         <th scope="col">Payment Status</th>
                     </tr>
                 </thead>
-                <tbody style="text-align:center; font-size:15px">                
+                <tbody style="text-align:center; font-size:15px">
                     <tr>
-                            <td class="table-plus sorting_1" tabindex="0">
+                        <td class="table-plus sorting_1" tabindex="0">
                             @Model.BaseInformationItem.OrderId.ToString().Substring(0,8)
                             <input asp-for="@Model.BaseInformationItem.OrderId" type="hidden">
-                            </td>
+                        </td>
                         <td class="table-plus sorting_1" tabindex="0">@Model.BaseInformationItem.CustomerName</td>
                         <td>@Model.BaseInformationItem.Phone</td>
                         <td>@Model.BaseInformationItem.OrderDate</td>
@@ -46,23 +46,24 @@
                         <td>@Model.BaseInformationItem.TotalPrice.GetPriceFormat()</td>
                         @if (@Model.BaseInformationItem.IsPaid)
                         {
-                                <td>
-                                    <i class="bi bi-check-circle-fill"
-                                       style="color:forestgreen; font-size:30px"></i>
-                                       <p>Paid Invoice</p>
-                                </td>
+                            <td>
+                                <i class="bi bi-check-circle-fill"
+                                   style="color:forestgreen; font-size:30px"></i>
+                                <p>Paid Invoice</p>
+                            </td>
                         }
                         else
-                            {
-                                <td>
-                                    <i class="bi bi-hourglass-split"
-                                       style="color:firebrick; font-size:30px"></i>
+                        {
+                            <td>
+                                <i class="bi bi-hourglass-split"
+                                   style="color:firebrick; font-size:30px"></i>
                                 <p>Wating...</p>
-                                </td>
-                            }
-                    </tr>                  
+                            </td>
+                        }
+                    </tr>
                 </tbody>
             </table>
+
             <h4 class="text-blue h4" style="color:blue">PRODUCT INFORMATION</h4>
             <table class="table table-bordered">
                 <thead>
@@ -77,19 +78,19 @@
                 <tbody style="text-align:center; font-size:15px">
                     @foreach (var product in Model.Products)
                     {
-                    <tr>
-                        
-                        <td class="table-plus sorting_1" tabindex="0">
-                            @product.Id.ToString().Substring(0,8)
-                            <input asp-for="@product.Id" type="hidden">
-                        </td>
-                        <td class="table-plus sorting_1" tabindex="0">
+                        <tr>
+
+                            <td class="table-plus sorting_1" tabindex="0">
+                                @product.Id.ToString().Substring(0,8)
+                                <input asp-for="@product.Id" type="hidden">
+                            </td>
+                            <td class="table-plus sorting_1" tabindex="0">
                                 <img src="@product.ImageUrl" class="product-image" style="width:100px">
-                        </td>
-                        <td>@product.Name</td>
-                        <td>@product.Price.GetPriceFormat()</td>
-                        <td>@product.QuantityInOrder</td>                                                                 
-                    </tr>
+                            </td>
+                            <td>@product.Name</td>
+                            <td>@product.Price.GetPriceFormat()</td>
+                            <td>@product.QuantityInOrder</td>
+                        </tr>
                     }
                 </tbody>
             </table>
