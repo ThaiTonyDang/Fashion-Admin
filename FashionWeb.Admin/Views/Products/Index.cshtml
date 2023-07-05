@@ -28,19 +28,18 @@ else
                 <div class="clearfix mb-20">
                     <div class="pull-left">
                         <h4 class="text-blue h4">PRODUCT TABLE</h4>
-                        @if (role.Contains("Admin"))
-                        {
-                            <div class="pull-left">
-                                <a href="~/Products/Create" class="btn btn-primary btn-sm" role="button">Create Product</a>
-                            </div>
-                        }
+                        
                     </div>
-                    <div class="pull-right">
-                        <a href="#border-table" class="btn btn-primary btn-sm scroll-click" role="button">Save File To Excel</a>
-                    </div>
+                    @if (role.Contains("Admin"))
+                    {
+                        <div class="pull-right">
+                            <a href="~/Products/Create" class="btn btn-primary btn-lg" role="button">Create Product</a>
+                        </div>
+                    }
                 </div>
-                <div class="row">
-                    <ul class="pagination" style="float: right">
+
+                <div class="pull-left mb-10">
+                    <ul class="pagination">
 
                         @if (Model.Paging.CurrentPage > 1)
                         {
@@ -97,6 +96,7 @@ else
 
                     </ul>
                 </div>
+
                 <table class="table table-bordered">
                     <thead>
                         <tr style="text-align:center; font-weight:700">
@@ -104,9 +104,11 @@ else
                                 <input type="checkbox" name="select_all" value="1" class="checkBoxAll">
                             </th>
                             <th scope="col">Name</th>
+                            <th scope="col">Category</th>
                             <th scope="col">Provider</th>
                             <th scope="col">Price</th>
                             <th scope="col">Quantity In Stock</th>
+                            <th scope="col">Created Date</th>
                             <th scope="col">Image</th>
                             @if (role.Contains("Admin"))
                             {
@@ -124,9 +126,11 @@ else
                                     <input asp-for="@Model.ListProduct[index].Id" id="product-id__@index" type="hidden" class="product__id" />
                                 </th>
                                 <td class="table-plus sorting_1" tabindex="0">@product.Name</td>
+                                <td>@product.CategoryName</td>
                                 <td>@product.Provider</td>
                                 <td>@product.Price.GetPriceFormat()</td>
                                 <td>@product.QuantityInStock</td>
+                                <td>@(product.CreateDate.ToString("dd/MM/yyyy HH:mm"))</td>
                                 <td>
                                     @if (string.IsNullOrEmpty(product.MainImageName))
                                     {
@@ -164,63 +168,65 @@ else
                         }
                     </tbody>
                 </table>
-                <div class="row">
-                    <ul class="pagination" style="float: right">
 
-                        @if (Model.Paging.CurrentPage > 1)
-                        {
-                            <li class="paginate_button">
-                                <a href="@Url.Action("Index", "Products", new {currentpage = Model.Paging.CurrentPage - 1})"
-                                   class="paging">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </a>
-                            </li>
-                        }
+                <div class="clearfix mt-1">
+                    <div class="pull-left">
+                        <ul class="pagination">
 
-                        @for (var currentPage = 1; currentPage <= Model.Paging.TotalPages; currentPage++)
-                        {
-                            <li class="paginate_button page-item active">
-
-                                @if (currentPage != Model.Paging.CurrentPage)
-                                {
-                                    <a href="@Url.Action("Index", "Products", new {currentpage = currentPage})" class="paging">
-                                        @currentPage
+                            @if (Model.Paging.CurrentPage > 1)
+                            {
+                                <li class="paginate_button">
+                                    <a href="@Url.Action("Index", "Products", new {currentpage = Model.Paging.CurrentPage - 1})"
+                                       class="paging">
+                                        <i class="fa-solid fa-chevron-left"></i>
                                     </a>
-                                }
-                                else
-                                {
-                                    <a class="page-link">
-                                        <span>@currentPage</span>
-                                    </a>
-                                }
+                                </li>
+                            }
 
-                            </li>
-                        }
+                            @for (var currentPage = 1; currentPage <= Model.Paging.TotalPages; currentPage++)
+                            {
+                                <li class="paginate_button page-item active">
 
-                        @if (Model.Paging.CurrentPage < Model.Paging.TotalPages)
-                        {
-                            <li class="paginate_button page-item next">
-                                <a href="@Url.Action("Index", "Products",
+                                    @if (currentPage != Model.Paging.CurrentPage)
+                                    {
+                                        <a href="@Url.Action("Index", "Products", new {currentpage = currentPage})" class="paging">
+                                            @currentPage
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="page-link">
+                                            <span>@currentPage</span>
+                                        </a>
+                                    }
+
+                                </li>
+                            }
+
+                            @if (Model.Paging.CurrentPage < Model.Paging.TotalPages)
+                            {
+                                <li class="paginate_button page-item next">
+                                    <a href="@Url.Action("Index", "Products",
 							new {currentpage = Model.Paging.CurrentPage + 1, })" class="paging">
-                                    <i class="fa-solid fa-chevron-right"></i>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="paginate_button page-item active">
+                                <input class="page-number" value="@Model.Paging.CurrentPage" />
+                            </li>
+
+                            <li class="paginate_button page-item active ">
+                                <a class="paging goto" style="margin-left:1px; width:100px; height: 40px;cursor:pointer"
+                                   onclick="goto()">
+                                    <p> GO TO <i class="fa-solid fa-chevron-right"></i> </p>
                                 </a>
                             </li>
-                        }
 
-                        <li class="paginate_button page-item active">
-                            <input class="page-number" value="1" />
-                        </li>
-
-                        <li class="paginate_button page-item active ">
-                            <a class="paging goto" style="margin-left:1px; width:100px; height: 40px;cursor:pointer"
-                               onclick="goto()">
-                                <p> GO TO <i class="fa-solid fa-chevron-right"></i> </p>
-                            </a>
-                        </li>
-
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-               
             </div>
            
             <div class="footer-wrap pd-20 mb-20 card-box">

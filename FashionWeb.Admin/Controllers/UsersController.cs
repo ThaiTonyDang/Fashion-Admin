@@ -62,7 +62,6 @@ namespace FashionWeb.Admin.Controllers
 
                 var isValidToken = await this._jwtTokenService.ValidateToken(token);
 
-                // read claim
                 if(isValidToken)
                 {
                     var claims = await this._jwtTokenService.GetClaims(token);
@@ -75,8 +74,6 @@ namespace FashionWeb.Admin.Controllers
 
                     await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authenticateionProp);
 
-                    HttpContext.Session.SetString("JwtToken", token);
-
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -85,13 +82,17 @@ namespace FashionWeb.Admin.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+
             var errors = response.Message;
             if (!errors.Contains("Access Denied"))
             {
                 TempData[TEMPDATA.LABEL_WARNING] = errors;
             }
             else
-            TempData[TEMPDATA.ACCESS_DENIED] = errors;
+            {
+                TempData[TEMPDATA.ACCESS_DENIED] = errors;
+            }
+
             return RedirectToAction("Login", "Users");
         }
 
@@ -100,7 +101,6 @@ namespace FashionWeb.Admin.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
 
@@ -108,7 +108,7 @@ namespace FashionWeb.Admin.Controllers
         [Route("access-denied")]
         public async Task<IActionResult> AccessDenied()
         {         
-            return View();
+            return await Task.FromResult(View());
         }
     }
 }

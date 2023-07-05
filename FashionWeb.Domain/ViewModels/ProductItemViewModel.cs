@@ -45,6 +45,7 @@ namespace FashionWeb.Domain.ViewModels
 		public List<CategoryItemViewModel> Categories { get; set; }
 		public string CategoryName { get; set; }
         public int QuantityInOrder { get; set; }
+		public DateTime CreateDate { get; set; }
 	}
 
 	public class ProductViewModel
