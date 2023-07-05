@@ -16,6 +16,5 @@ namespace FashionWeb.Domain.ViewModels
         public decimal TotalPrice { get; set; }
         public string ShipAddress { get; set; }
         public bool  IsPaid{ get; set; }
-        public string PaidStatus { get => this.IsPaid ? "Orders Paid" : "Orders Awaiting Payment"; }
     }
 }

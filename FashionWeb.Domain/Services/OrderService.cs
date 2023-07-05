@@ -1,16 +1,8 @@
 ﻿using FashionWeb.Domain.ResponseModel;
 using FashionWeb.Domain.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using FashionWeb.Domain.Services.HttpClients;
-using FashionWeb.Domain.Model;
 
 namespace FashionWeb.Domain.Services
 {
@@ -23,19 +15,20 @@ namespace FashionWeb.Domain.Services
         public string[] _errors;
         public int _statusCode;
         public bool _isSuccess;
-        public OrderService(IHttpClientService urlService, HttpClient httpClient, IFileService fileService)        
+        public OrderService(IHttpClientService urlService, HttpClient httpClient, IFileService fileService)
         {
             _urlService = urlService;
             _httpClient = httpClient;
             _fileService = fileService;
         }
-        public async Task<List<OrderItemViewModel>> GetListOrders()
+
+        public async Task<List<OrderItemViewModel>> GetListOrders(string token)
         {
             try
             {
-                var apiUrl = _urlService.GetBaseUrl() + "/api/ordersinformation";
+                var apiUrl = _urlService.GetBaseUrl() + "/api/orders/order-information";
+                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 var response = await _httpClient.GetAsync(apiUrl);
-
                 var responseList = JsonConvert.DeserializeObject<ResponseApiData<List<OrderItemViewModel>>>
                                    (await response.Content.ReadAsStringAsync());
                 _isSuccess = responseList.IsSuccess;
@@ -48,17 +41,17 @@ namespace FashionWeb.Domain.Services
             }
             catch (Exception exception)
             {
-                _message =  exception.Message;
+                _message = exception.Message;
                 _statusCode = (int)HttpStatusCode.ServiceUnavailable;
 
                 return null;
             }
         }
 
-        public async Task<OrderViewModel> GetOrderViewModel()
+        public async Task<OrderViewModel> GetOrderViewModel(string token)
         {
             var orderViewModel = new OrderViewModel();
-            orderViewModel.ListOrder = await GetListOrders();
+            orderViewModel.ListOrder = await GetListOrders(token);
 
             orderViewModel.ExceptionMessage = _message;
             orderViewModel.StatusCode = (HttpStatusCode)_statusCode;
@@ -67,49 +60,38 @@ namespace FashionWeb.Domain.Services
             return orderViewModel;
         }
 
-        public async Task<Tuple<OrderDetailItemModel, string>> GetOrdersDetail(string orderId)
+        public async Task<Tuple<OrderDetailItemModel, string>> GetOrdersDetail(string orderId, string token)
         {
-            var message = "";
-            try
+            var apiProductsUrl = _urlService.GetBaseUrl() + "/api/orders/products/";
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            var response_products = await _httpClient.GetAsync(apiProductsUrl + orderId);
+            var responseList_products = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
+                                        (await response_products.Content.ReadAsStringAsync());
+            var products = responseList_products.Data;
+
+            var apiBaseInforUrl = _urlService.GetBaseUrl() + "/api/orders/base-information/";
+            var response_baseInfor = await _httpClient.GetAsync(apiBaseInforUrl + orderId);
+            var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseApiData<BaseInformationItem>>
+                                         (await response_baseInfor.Content.ReadAsStringAsync());
+            var baseInfor = responseList_baseInfor.Data;
+
+            if (products != null)
             {
-                var apiProductsUrl = _urlService.GetBaseUrl() + "/api/ordersinformation/products/";
-                var response_products = await _httpClient.GetAsync(apiProductsUrl + orderId);
-                var responseList_products = JsonConvert.DeserializeObject<ResponseApiData<List<ProductItemViewModel>>>
-                                   (await response_products.Content.ReadAsStringAsync());
-                var products = responseList_products.Data;
-                var message_products = responseList_products.Message;
-
-                var apiBaseInforUrl = _urlService.GetBaseUrl() + "/api/ordersinformation/customers/";
-                var response_baseInfor = await _httpClient.GetAsync(apiBaseInforUrl + orderId);
-                var responseList_baseInfor = JsonConvert.DeserializeObject<ResponseApiData<BaseInformationItem>>
-                                   (await response_baseInfor.Content.ReadAsStringAsync());
-                var baseInfor = responseList_baseInfor.Data;
-                var message_baseInfor = responseList_products.Message;
-                message = message_baseInfor + " " + message_products;
-
                 foreach (var product in products)
                 {
                     product.ImageUrl = _urlService.GetFileApiUrl(product.MainImageName);
                 }
-
-                var orderDetail = new OrderDetailItemModel
-                {
-                    BaseInformationItem = baseInfor,
-                    Products = products
-                };
-                if(responseList_baseInfor.IsSuccess)
-                    if(responseList_products.IsSuccess)
-
-                        return Tuple.Create(orderDetail, "Load order detail success !");
-
             }
-            catch (Exception exception)
+
+            var orderDetail = new OrderDetailItemModel
             {
-                message = exception.InnerException.Message + " ! " + "Get Order Detail Fail !";
-                return Tuple.Create(default(OrderDetailItemModel), message);
-            }
+                BaseInformationItem = baseInfor,
+                Products = products
+            };
 
-            return Tuple.Create(default(OrderDetailItemModel), message);
+            if (!responseList_baseInfor.IsSuccess || !responseList_products.IsSuccess)
+                return Tuple.Create(default(OrderDetailItemModel), "Load order detail fail !");
+            return Tuple.Create(orderDetail, "Load order detail success !");
         }
     }
 }
