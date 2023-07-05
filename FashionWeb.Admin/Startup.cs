@@ -40,8 +40,9 @@ namespace FashionWeb.Admin
                     {
 						options.LoginPath = "/users/login";
 						options.AccessDeniedPath = "/users/access-denied";
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(expiredTime);
-					});
+						options.ExpireTimeSpan = TimeSpan.FromMinutes(expiredTime);
+                        options.Cookie.Name = "Admin.Authentication";
+                    });
 
             services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ICategoryService, CategoryService>();
